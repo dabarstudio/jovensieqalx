@@ -475,7 +475,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   <section class="aba" id="aba-equipe" hidden>
     <div class="eb">Nosso time</div>
     <h1>Organograma</h1>
-    <p class="lead">Toque na foto de cada pessoa para ver a bio.</p>
+    <p class="lead">Toque na foto de cada pessoa para ver a bio. As equipes de serviço estão em definição e serão apresentadas em breve.</p>
     <div class="card"><div class="org" id="org"></div></div>
     <div><button class="btn so-editor" id="add-pessoa">Adicionar integrante</button></div>
   </section>
@@ -927,9 +927,9 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   var filtroAg='todos';
   document.querySelectorAll('.ag-ctrl .chip').forEach(function(b){b.onclick=function(){filtroAg=b.dataset.f;document.querySelectorAll('.ag-ctrl .chip').forEach(function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',String(on))});desenharAgenda()}});
   var RET_PROG={'Sábado 06/02':[['17h30','Chegada e acomodação'],['18h30','Abertura e louvor'],['19h30','Montagem das barracas'],['20h30','Palavra: Identidade Cristã'],['21h30','Lanche e conversa']],
-    'Domingo 07/02':[['08h30','Café da manhã'],['09h30','Louvor'],['10h00','Palavra: Quem eu sirvo? · Pr. Pedro'],['12h00','Almoço e descanso'],['14h00','Gincana'],['19h00','Louvor'],['19h30','Palavra: O preço da salvação · Pr. Sebastião'],['21h00','Fogueira com marshmallow']],
-    'Segunda 08/02':[['09h00','Café da manhã'],['10h00','Louvor'],['10h30','Mesa redonda: Responsabilidade Cristã · Pra. Camila e Pr. Fábio'],['14h00','Tempo livre direcionado'],['18h30','Louvor'],['18h40','Palavra: Ser ou parecer? · Pra. Lurdes'],['19h40','Noite do cinema e do pijama']],
-    'Terça 09/02':[['08h30','Café da manhã'],['09h30','Louvor'],['10h00','Palavra: Afinal, para onde eu vou? · Pra. Ivadeth'],['13h30','Quiz do retiro'],['16h30','Organização para voltar'],['17h30','Saída']]};
+    'Domingo 07/02':[['08h30','Café da manhã'],['09h30','Louvor'],['10h00','Palavra: Quem eu sirvo?'],['12h00','Almoço e descanso'],['14h00','Gincana'],['19h00','Louvor'],['19h30','Palavra: O preço da salvação'],['21h00','Fogueira com marshmallow']],
+    'Segunda 08/02':[['09h00','Café da manhã'],['10h00','Louvor'],['10h30','Mesa redonda: Responsabilidade Cristã'],['14h00','Tempo livre direcionado'],['18h30','Louvor'],['18h40','Palavra: Ser ou parecer?'],['19h40','Noite do cinema e do pijama']],
+    'Terça 09/02':[['08h30','Café da manhã'],['09h30','Louvor'],['10h00','Palavra: Afinal, para onde eu vou?'],['13h30','Quiz do retiro'],['16h30','Organização para voltar'],['17h30','Saída']]};
   var LEVAR=['Bíblia, caderno e caneta','Barraca (meninos) e colchonete','Saco de dormir ou roupa de cama','Travesseiro','Toalha de banho','Itens de higiene','Roupas para 4 dias e agasalho','Roupa de banho para a piscina','Protetor solar e repelente','Chinelo e tênis','Lanterna','Garrafinha de água','Remédios de uso contínuo'];
   function montarRetiro(){var dias=$('#ret-dias');if(!dias||dias.childElementCount)return;Object.keys(RET_PROG).forEach(function(k,i){var b=document.createElement('button');b.type='button';b.className='chip'+(i===0?' on':'');b.setAttribute('role','tab');b.setAttribute('aria-selected',String(i===0));b.textContent=k;b.onclick=function(){dias.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x===b);x.setAttribute('aria-selected',String(x===b))});prog(k)};dias.appendChild(b)});prog(Object.keys(RET_PROG)[0]);
     function prog(k){var ol=$('#ret-prog');ol.replaceChildren();RET_PROG[k].forEach(function(x){var li=document.createElement('li');var h=document.createElement('b');h.textContent=x[0];var t=document.createElement('span');t.textContent=x[1];if(/Palavra|Mesa/.test(x[1]))li.className='palavra';li.append(h,t);ol.appendChild(li)})}
@@ -1201,7 +1201,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
         if(ps.length)ps.forEach(function(p){m.appendChild(noPessoa(p))});else{var v=document.createElement('span');v.className='vazio';v.style.fontSize='12px';v.style.padding='10px';v.textContent='A definir';m.appendChild(v)}
         box.appendChild(m);nv.appendChild(box)});
       org.appendChild(nv)}
-    nivel(['pastora']);nivel(['lideranca']);nivel(['louvor','intercessao','midia','recepcao']);nivel(['tesouraria','secretaria','comite']);nivel(['apoio','cozinha']);}
+    nivel(['pastora']);nivel(['lideranca']);if(editor){var av=document.createElement('p');av.className='aviso';av.textContent='🔒 As equipes abaixo aparecem só para a liderança enquanto estão em definição.';org.appendChild(av);nivel(['louvor','intercessao','midia','recepcao']);nivel(['tesouraria','secretaria','comite']);nivel(['apoio','cozinha'])}}
 
   // ---------- diálogo de perfil ----------
   var atual=null,novo=false;
@@ -1660,7 +1660,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     var prox=lista.filter(function(c){return (c.fim||c.data)>=hoje})[0];
     var porMes={};lista.forEach(function(c){var m=c.data.slice(0,7);(porMes[m]=porMes[m]||[]).push(c)});var anoVisto={};
     Object.keys(porMes).sort().forEach(function(m){var cs=porMes[m];var ano=m.slice(0,4);var card=document.createElement('div');card.className='mes';
-      if(!anoVisto[ano]&&Object.keys(porMes).some(function(k){return k.slice(0,4)!==ano})){anoVisto[ano]=1;var ha=document.createElement('h2');ha.className='titulo-sec ag-ano';ha.textContent=ano==='2026'?'Ainda em 2026':'Programação '+ano;card.dataset.ano=ano;card.ano=ha}
+      if(!anoVisto[ano]&&Object.keys(porMes).some(function(k){return k.slice(0,4)!==ano})){anoVisto[ano]=1;var ha=document.createElement('h2');ha.className='titulo-sec ag-ano';ha.textContent=ano==='2026'?'Ainda em 2026':'Programação '+ano;if(ano!=='2026'){var hw=document.createElement('div');hw.className='ag-ano';hw.appendChild(ha);var nt=document.createElement('p');nt.className='aviso';nt.textContent='⏳ Os temas de '+ano+' estão sendo definidos e revistos pela liderança e podem mudar.';hw.appendChild(nt);ha=hw}card.dataset.ano=ano;card.ano=ha}
       var h=document.createElement('h2');h.textContent=MES_NOME[+m.slice(5,7)]+(ano!=='2027'?' de '+ano:'');var sr=document.createElement('div');sr.className='serie';sr.textContent=cs[0].serie||'';card.append(h,sr);
       cs.forEach(function(c){if(filtroAg==='esp'&&!(c.evento||ESPECIAL.test(c.tema)))return;if(filtroAg==='prox'&&(c.fim||c.data)<hoje)return;var r=document.createElement('button');r.type='button';r.setAttribute('aria-expanded','false');r.className='culto'+((c.fim||c.data)<hoje?' passado':'')+(c===prox?' prox':'')+((c.evento||ESPECIAL.test(c.tema))?' esp':'');
         var d=document.createElement('div');d.className='d';d.textContent=c.data.slice(8,10);var sm=document.createElement('small');sm.textContent=c.fim?'a '+c.fim.slice(8,10):'sáb';d.appendChild(sm);
@@ -1735,7 +1735,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     db=await window.claude.use('db');user=await window.claude.use('user');
     if(user){try{editor=await user.canEdit()}catch(e){}}
     if(user){try{meuId=await user.id()}catch(e){}try{var w=await user.can('data.write');podeLancarProprio=w!==false&&!!meuId}catch(e){podeLancarProprio=!!meuId}}
-    podeLancar=editor;if(user&&user.tipo){try{tipoConta=await user.tipo()||'';deJovemConta=(user.deJovem&&await user.deJovem())||''}catch(e){}}if(user&&user.email){try{meuEmail=(await user.email())||''}catch(e){}}if(user&&user.ehDono){try{souDono=!!(await user.ehDono())}catch(e){}}ativarGestao();
+    podeLancar=editor;if(user&&user.tipo){try{tipoConta=await user.tipo()||'';deJovemConta=(user.deJovem&&await user.deJovem())||''}catch(e){}}if(user&&user.email){try{meuEmail=(await user.email())||''}catch(e){}}if(user&&user.ehDono){try{souDono=!!(await user.ehDono())}catch(e){}}ativarGestao();try{desenharOrg()}catch(e){}
     if(editor){document.body.classList.add('editor');try{assets=await window.claude.use('assets')}catch(e){}}
     if(!db){clearTimeout(timer);return}
     db.collection('perfis').onSnapshot(function(s){clearTimeout(timer);aplicarPerfis(resolverFotos(s.docs.map(function(d){return Object.assign({id:d.id},d.data())}))) },function(){});
