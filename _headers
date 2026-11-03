@@ -1,0 +1,13 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+/sw.js
+  Cache-Control: no-cache
+/agenda.ics
+  Content-Type: text/calendar; charset=utf-8
+  Cache-Control: max-age=3600
+/leitura.ics
+  Content-Type: text/calendar; charset=utf-8
+  Cache-Control: max-age=3600
+/index.html
+  Cache-Control: no-cache

@@ -1,0 +1,1 @@
+window.JOVENS_CFG={url:'https://fwoozhefsahtsgdlnvdr.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3b296aGVmc2FodHNnZGxudmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1ODYxODIsImV4cCI6MjEwOTE2MjE4Mn0.NnuXx06xOYFoP_wUeSM55XWwz5PNRCLZ6h79rSQwTPs'};
