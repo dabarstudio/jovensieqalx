@@ -101,6 +101,33 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 .campo input,.campo textarea,.campo select{font:15px var(--corpo);color:var(--texto);background:var(--fundo);border:1px solid var(--linha);border-radius:10px;padding:9px 10px}
 .campo textarea{min-height:110px;resize:vertical}
 .acoes{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+/* eventos (gestão) + avisos + galeria */
+.hero-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:stretch}
+.hero-wrap.sem-fotos{grid-template-columns:1fr}.hero-wrap.sem-fotos .hero-fotos{display:none}
+@media (max-width:760px){.hero-wrap{grid-template-columns:1fr}}
+.hero-txt{display:flex;flex-direction:column;gap:8px;min-width:0}
+.hero-fotos{position:relative;border-radius:16px;overflow:hidden;min-height:260px;background:var(--fundo2);border:1px solid var(--linha)}
+@media (max-width:760px){.hero-fotos{min-height:0;aspect-ratio:4/3}}
+.hero-fotos figure{position:absolute;inset:0;margin:0;opacity:0;transition:opacity 1s}.hero-fotos figure.on{opacity:1}
+.hero-fotos img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-fotos figcaption{position:absolute;left:0;right:0;bottom:0;padding:26px 12px 10px;font-size:13px;font-weight:800;background:linear-gradient(transparent,rgba(15,13,22,.85))}
+.hf-dots{position:absolute;top:10px;right:10px;display:flex;gap:5px}.hf-dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,253,246,.4)}.hf-dots i.on{background:var(--amar)}
+.avisos-home{display:flex;flex-direction:column;gap:10px}
+.aviso-h{border-left:4px solid var(--amar)}.aviso-h.destaque{border-color:var(--verm);background:linear-gradient(135deg,rgba(224,38,63,.16),var(--card) 70%)}
+.aviso-h h2{margin:4px 0 2px;font-size:22px}.aviso-h p{margin:0;color:var(--apagado);white-space:pre-line}
+.ev-sec h2{margin-bottom:4px}.ev-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.ev-bar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:rgba(255,253,246,.1);margin:10px 0 4px}.ev-bar i{display:block;height:100%}
+.ev-leg{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--apagado)}.ev-leg span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;background:var(--c)}
+.ev-lin{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;background:var(--fundo2);border-radius:12px;padding:10px 12px;font-size:14px;text-align:left;border:1px solid transparent;color:var(--texto);font-family:var(--corpo);cursor:pointer;width:100%}
+.ev-lin:hover{border-color:var(--linha)}.ev-lin small{display:block;color:var(--apagado);font-size:12px;margin-top:2px}
+.ev-st{font-size:11px;font-weight:800;padding:4px 9px;border-radius:99px;white-space:nowrap}
+.ev-st.quitado{background:rgba(60,179,113,.18);color:var(--ok)}.ev-st.parcial{background:rgba(242,183,5,.18);color:var(--amar)}.ev-st.pendente{background:rgba(224,38,63,.18);color:#FF8A9A}
+.ev-lista{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.ev-fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px}
+.ev-fotos div{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--fundo2)}.ev-fotos img{width:100%;height:100%;object-fit:cover}
+.ev-fotos button{position:absolute;top:4px;right:4px;border:0;border-radius:99px;background:rgba(15,13,22,.8);color:#fff;font-size:12px;padding:4px 8px;cursor:pointer}
+.ev-acoes-fin{display:flex;flex-direction:column;gap:6px;margin-top:8px}.ev-acoes-fin div{display:grid;grid-template-columns:1fr 110px auto;gap:6px}
+.ev-acoes-fin input{font:14px var(--corpo);color:var(--texto);background:var(--fundo);border:1px solid var(--linha);border-radius:10px;padding:8px}
 /* missão cardápio */
 .missao .mt{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
 @media (max-width:520px){.missao .mt{grid-template-columns:1fr}}
@@ -159,7 +186,7 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 .aviso{font-size:12px;color:var(--apagado);margin:0}
 
 .leg-ag{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--apagado)}.leg-ag i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
-.meses{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:14px}
+.ag-ano{grid-column:1/-1;margin:10px 0 -4px}.meses{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:14px}
 .mes{background:var(--card);border:1px solid var(--linha);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px}
 .mes h2,.mes h3{margin:0;font-family:var(--display);font-weight:400;font-size:26px;line-height:1}
 .mes .serie{font-size:12px;font-weight:800;color:var(--amar);letter-spacing:.06em;text-transform:uppercase}
@@ -342,7 +369,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       <a href="#biblia" data-aba="biblia">Bíblia</a>
       <a href="#rolagem" data-aba="rolagem">Rolagem bíblica</a>
       <a href="#leitura" data-aba="leitura">Plano de leitura</a>
-      <a href="#agenda" data-aba="agenda">Agenda 2027</a>
+      <a href="#agenda" data-aba="agenda">Agenda</a>
       <a href="#mural" data-aba="mural">Mural</a>
       <a href="#gincana" data-aba="gincana">Gincana</a>
       <a href="#lideranca" data-aba="lideranca">Liderança</a>
@@ -375,7 +402,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
 
 <main>
   <section class="aba" id="aba-inicio">
-    <div class="hero card" aria-labelledby="hero-titulo">
+    <div class="hero card" aria-labelledby="hero-titulo"><div class="hero-wrap sem-fotos" id="hero-wrap"><div class="hero-txt">
       <div class="eb">Culto de jovens · todo sábado</div>
       <h1 id="hero-titulo" class="hero-hora">19h30 <span>às 21h00</span></h1>
       <p class="hero-data" id="hero-data">Próximo: sábado</p>
@@ -388,7 +415,8 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       </div>
       <p class="hero-evento" id="hero-evento" hidden></p>
       <p class="hero-lid" id="hero-lid" hidden>Em 2026, os cultos de jovens são conduzidos pela liderança de <a href="#lideranca" id="hero-lid-nomes">Fábio e Gabriel</a>. A nova liderança assume em 2027.</p>
-    </div>
+    </div><div class="hero-fotos" id="hero-fotos" aria-label="Fotos dos últimos cultos e ações"></div></div></div>
+    <div class="avisos-home" id="avisos-home"></div>
     <a class="card retiro-cd" id="retiro-cd" href="#financas" aria-label="Retiro de Carnaval: ver detalhes e garantir vaga">
       <div class="eb">⛺ Retiro de Carnaval · 06 a 09/02</div>
       <h2>Cheios do Espírito Santo</h2>
@@ -519,6 +547,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
         <form id="form-ret" hidden>
           <label class="campo">Nome completo<input id="ri-nome" required maxlength="80" autocomplete="name"></label>
           <label class="campo">Data de nascimento<input id="ri-nasc" type="date" required></label>
+          <label class="campo">Gênero<select id="ri-genero" required><option value="">Escolha</option><option value="M">Masculino</option><option value="F">Feminino</option></select></label>
           <label class="campo">Seu WhatsApp<input id="ri-tel" type="tel" required maxlength="20" placeholder="(62) 9 0000-0000" autocomplete="tel"></label>
           <div id="ri-menor" hidden>
             <label class="campo">Nome do responsável<input id="ri-resp" maxlength="80"></label>
@@ -600,8 +629,8 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   </section>
 
   <section class="aba" id="aba-agenda" hidden>
-    <div class="eb">Programação de cultos 2027 · sábados às 19h30</div>
-    <h1>Agenda do ano</h1>
+    <div class="eb">Programação de cultos · sábados às 19h30</div>
+    <h1>Agenda</h1>
     <p class="lead">Cada mês tem uma série de mensagens. O culto em destaque é o próximo.</p>
     <div class="leg-ag"><span><i style="background:var(--amar)"></i>Próximo culto</span><span><i style="background:var(--verm)"></i>Evento especial</span><span><i style="background:rgba(255,253,246,.25)"></i>Já aconteceu</span></div>
     <div class="ag-ctrl"><div class="chips" role="group" aria-label="Filtrar agenda"><button type="button" class="chip on" data-f="todos" aria-pressed="true">Todos</button><button type="button" class="chip" data-f="esp" aria-pressed="false">Só eventos especiais</button><button type="button" class="chip" data-f="prox" aria-pressed="false">Daqui pra frente</button></div><span class="assinar" data-feed="agenda.ics" data-rot="cultos"></span></div>
@@ -641,12 +670,35 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     <h1>Gestão do ministério</h1>
     <div id="gestao-bloqueio" class="card"><h2>Acesso restrito</h2><p class="lead">Esta área é só para a liderança aprovada. Se você serve na liderança, peça acesso em “Meu perfil”.</p><a class="btn forte" href="#perfil">Ir para Meu perfil</a></div>
     <div id="gestao-conteudo" hidden>
-      <div class="chips gestao-tabs" role="tablist" aria-label="Seções da gestão"><button type="button" class="chip on" data-g="acoes" role="tab" aria-selected="true">Plano de ações</button><button type="button" class="chip" data-g="dados" role="tab" aria-selected="false">Painel de dados</button><button type="button" class="chip" data-g="acessos" role="tab" aria-selected="false" id="g-tab-acessos">Acessos <span class="badge" id="g-badge" hidden></span></button></div>
+      <div class="chips gestao-tabs" role="tablist" aria-label="Seções da gestão"><button type="button" class="chip on" data-g="acoes" role="tab" aria-selected="true">Plano de ações</button><button type="button" class="chip" data-g="eventos" role="tab" aria-selected="false">Eventos</button><button type="button" class="chip" data-g="dados" role="tab" aria-selected="false">Painel de dados</button><button type="button" class="chip" data-g="acessos" role="tab" aria-selected="false" id="g-tab-acessos">Acessos <span class="badge" id="g-badge" hidden></span></button></div>
       <div class="g-sec" id="g-acoes">
         <div class="kp g-kp" id="ac-kp"></div>
         <div class="card"><div class="ac-topo"><h2>Andamento geral</h2><button type="button" class="btn forte" id="ac-nova">+ Nova ação</button></div><div class="ac-prog" id="ac-prog"></div><div class="ac-filtros"><label class="campo">Responsável<select id="ac-f-resp"><option value="">Todos</option></select></label><label class="campo">Área<select id="ac-f-area"><option value="">Todas</option></select></label></div></div>
         <div class="ac-board" id="ac-board"></div>
         <div class="grid2"><div class="card"><h2>Por área</h2><div class="hb" id="ac-areas"></div></div><div class="card"><h2>Por responsável</h2><div class="hb" id="ac-resps"></div></div></div>
+      </div>
+      <div class="g-sec" id="g-eventos" hidden>
+        <div class="kp g-kp" id="ev-kp"></div>
+        <div class="card ev-sec"><h2>Retiro: inscritos e pagamentos</h2><p class="aviso">Toque em um nome para registrar o pagamento ou remover uma inscrição de teste.</p>
+          <div class="ev-bar" id="ev-bar"></div><div class="ev-leg" id="ev-leg"></div>
+          <div class="chips" id="ev-filtro" style="margin-top:12px"><button type="button" class="chip on" data-f="">Todos</button><button type="button" class="chip" data-f="pendente">Pendentes</button><button type="button" class="chip" data-f="quitado">Quitados</button><button type="button" class="chip" data-f="M">Rapazes</button><button type="button" class="chip" data-f="F">Moças</button><button type="button" class="chip" data-f="termo">Menor sem termo</button></div>
+          <div class="ev-lista" id="ev-lista"></div></div>
+        <div class="grid2">
+          <div class="card ev-sec"><h2>Retiro: valores e vagas</h2><p class="aviso">Aparece para todos na aba Rumo ao Retiro e na contagem do início.</p>
+            <div class="ev-2"><label class="campo">Valor da inscrição (R$)<input id="ev-valor" type="number" min="0" step="10"></label><label class="campo">Vagas<input id="ev-vagas" type="number" min="1" step="1"></label></div>
+            <div class="ev-2"><label class="campo">Pagar até<input id="ev-prazo" type="date"></label><label class="campo">Pré-inscrições<select id="ev-aberto"><option value="1">Abertas</option><option value="0">Encerradas</option></select></label></div>
+            <label class="campo">Como pagar (PIX, parcelas etc.)<textarea id="ev-pix" maxlength="300" style="min-height:70px"></textarea></label>
+            <div class="acoes"><button type="button" class="btn forte" id="ev-salvar-ret">Salvar</button></div></div>
+          <div class="card ev-sec"><h2>Caixa da arrecadação</h2><p class="aviso">Alimenta a “Jornada até o acampamento”.</p>
+            <div class="ev-2"><label class="campo">Pago à chácara (R$)<input id="ev-pago" type="number" step="1"></label><label class="campo">Em caixa (R$)<input id="ev-caixa" type="number" step="1"></label></div>
+            <div class="ev-2"><label class="campo">Locação total (R$)<input id="ev-meta" type="number" step="1"></label><label class="campo">Estimativa do retiro (R$)<input id="ev-est" type="number" step="1"></label></div>
+            <p class="aviso" style="margin-top:10px">Resultado de cada ação</p><div class="ev-acoes-fin" id="ev-fin-acoes"></div>
+            <div class="acoes"><button type="button" class="btn" id="ev-fin-add">+ Ação</button><button type="button" class="btn forte" id="ev-salvar-fin">Salvar</button></div></div>
+        </div>
+        <div class="card ev-sec"><div class="ac-topo"><h2>Avisos do início</h2><button type="button" class="btn forte" id="ev-aviso-novo">+ Novo aviso</button></div><p class="aviso">Aparecem logo abaixo do horário do culto até a data que você escolher.</p><div class="ev-lista" id="ev-avisos"></div></div>
+        <div class="card ev-sec"><div class="ac-topo"><h2>Agenda de cultos e eventos</h2><button type="button" class="btn forte" id="ev-culto-novo">+ Novo</button></div>
+          <label class="campo" style="max-width:220px">Mês<select id="ev-mes"></select></label><div class="ev-lista" id="ev-cultos"></div></div>
+        <div class="card ev-sec"><div class="ac-topo"><h2>Fotos do início</h2><label class="btn forte" for="ev-foto-arq">+ Fotos</label><input id="ev-foto-arq" type="file" accept="image/*" multiple hidden></div><p class="aviso">Passam ao lado do horário do culto. Use só fotos com autorização de imagem.</p><div class="ev-fotos" id="ev-fotos"></div></div>
       </div>
       <div class="g-sec" id="g-dados" hidden>
         <p class="aviso">Dados pessoais dos cadastros. Só a liderança vê esta área. Use para planejar o cuidado com cada jovem.</p>
@@ -701,6 +753,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
         <div style="display:flex;flex-direction:column;gap:0;min-width:0">
           <label class="campo">Tipo de perfil<select id="pf-tipo" required><option value="">Escolha</option><option value="jovem">Sou jovem</option><option value="pastor">Pastor(a)</option><option value="pais">Pai, mãe ou responsável</option><option value="colaborador">Colaborador(a)</option></select></label>
           <label class="campo">Nome<input id="pf-nome" type="text" maxlength="60" required></label>
+          <label class="campo">Gênero<select id="pf-genero" required><option value="">Escolha</option><option value="M">Masculino</option><option value="F">Feminino</option></select></label>
           <label class="campo" id="pf-dejovem-l" hidden>Responsável por qual jovem?<input id="pf-dejovem" type="text" list="lista-jovens" maxlength="120" placeholder="Nome do(s) jovem(ns)"></label>
           <label class="campo">Sobre mim<textarea id="pf-bio" maxlength="400" placeholder="Conte um pouco sobre você"></textarea></label>
           <label class="campo">Versículo favorito<input id="pf-vers" type="text" maxlength="160" placeholder="Ex.: Filipenses 4:13"></label>
@@ -769,6 +822,31 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   </div>
 </dialog>
 
+<dialog id="dlg-pag"><form id="form-pag" method="dialog">
+  <h3 class="dlg-tit" id="pag-tit">Pagamento</h3><p class="aviso" id="pag-info"></p>
+  <div class="ac-2"><label class="campo">Valor pago (R$)<input id="pag-valor" type="number" min="0" step="1"></label><label class="campo">Forma<select id="pag-forma"><option>PIX</option><option>Dinheiro</option><option>Cartão</option><option>Isento</option></select></label></div>
+  <label class="campo">Observação<input id="pag-obs" maxlength="120" placeholder="Ex.: 2 parcelas de R$ 100"></label>
+  <div class="acoes"><button type="button" class="btn" id="pag-excluir">Remover inscrição</button><button type="button" class="btn" id="pag-cancelar">Cancelar</button><button type="submit" class="btn forte">Salvar</button></div>
+</form></dialog>
+<dialog id="dlg-aviso"><form id="form-aviso" method="dialog">
+  <h3 class="dlg-tit" id="av-tit">Novo aviso</h3>
+  <label class="campo">Título<input id="av-titulo" required maxlength="70"></label>
+  <label class="campo">Texto<textarea id="av-texto" maxlength="400" style="min-height:80px"></textarea></label>
+  <div class="ac-2"><label class="campo">Mostrar até<input id="av-ate" type="date"></label><label class="campo">Tipo<select id="av-dest"><option value="0">Normal</option><option value="1">Destaque (urgente)</option></select></label></div>
+  <label class="campo">Link (opcional)<input id="av-link" maxlength="200" placeholder="#financas ou https://..."></label>
+  <div class="acoes"><button type="button" class="btn" id="av-excluir" hidden>Excluir</button><button type="button" class="btn" id="av-cancelar">Cancelar</button><button type="submit" class="btn forte">Salvar</button></div>
+</form></dialog>
+<dialog id="dlg-culto"><form id="form-culto" method="dialog">
+  <h3 class="dlg-tit" id="cu-tit">Culto ou evento</h3>
+  <div class="ac-2"><label class="campo">Data<input id="cu-data" type="date" required></label><label class="campo">Termina em (eventos)<input id="cu-fim" type="date"></label></div>
+  <label class="campo">Tema<input id="cu-tema" required maxlength="90"></label>
+  <label class="campo">Série do mês<input id="cu-serie" maxlength="60"></label>
+  <div class="ac-2"><label class="campo">Começa às (se não for 19h30)<input id="cu-hora" type="time"></label><label class="campo">Termina às<input id="cu-horafim" type="time"></label></div>
+  <label class="campo">Local (se não for a Sede)<input id="cu-local" maxlength="120"></label>
+  <label class="campo">Observação (opcional)<input id="cu-obs" maxlength="160" placeholder="Ex.: inscrições pelo WhatsApp da liderança"></label>
+  <label class="chk"><input type="checkbox" id="cu-evento"> É um evento especial (retiro, encontro, louvorzão…)</label>
+  <div class="acoes"><button type="button" class="btn" id="cu-excluir" hidden>Excluir</button><button type="button" class="btn" id="cu-cancelar">Cancelar</button><button type="submit" class="btn forte">Salvar</button></div>
+</form></dialog>
 <dialog id="dlg-m">
   <h3 style="font-family:var(--display);font-weight:400;font-size:30px;margin:0">Registrar entrega</h3>
   <p class="aviso">Missão Cardápio do retiro.</p>
@@ -839,11 +917,11 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     document.querySelectorAll('.assinar').forEach(function(sp){var f=sp.dataset.feed;var g=document.createElement('a');g.className='btn';g.target='_blank';g.rel='noopener';g.href='https://calendar.google.com/calendar/r?cid='+encodeURIComponent('webcal://'+host+'/'+f);g.textContent='📅 Google Agenda';
       var i2=document.createElement('a');i2.className='btn';i2.href='webcal://'+host+'/'+f;i2.textContent='📅 iPhone';sp.append(g,i2);sp.title=sp.dataset.rot==='leitura'?'Adiciona a leitura de cada dia na sua agenda, com aviso às 7h':'Adiciona todos os cultos e eventos na sua agenda, com aviso 2h antes. Se a agenda mudar, atualiza sozinho.'})})();
   function detalheCulto(c){var d=document.createElement('div');d.className='culto-det';var esp=!!c.fim;
-    var p=document.createElement('p');p.textContent=esp?('De '+c.data.split('-').reverse().slice(0,2).join('/')+' a '+c.fim.split('-').reverse().slice(0,2).join('/')+' · Casa de Eventos Mundial'):('Sábado, '+c.data.split('-').reverse().slice(0,2).join('/')+' · 19h30 às 21h00 · IEQ Alexânia, Sede');d.appendChild(p);
+    var dsem=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'][new Date(c.data+'T12:00:00').getDay()];var p=document.createElement('p');p.textContent=esp?('De '+c.data.split('-').reverse().slice(0,2).join('/')+' a '+c.fim.split('-').reverse().slice(0,2).join('/')+' · '+(c.local||'Casa de Eventos Mundial')):(dsem+', '+c.data.split('-').reverse().slice(0,2).join('/')+' · '+(c.hora?c.hora.replace(':','h')+(c.horaFim?' às '+c.horaFim.replace(':','h'):''):(c.evento?'horário a confirmar':'19h30 às 21h00'))+' · '+(c.local||(c.evento?'local a confirmar':'IEQ Alexânia, Sede')));d.appendChild(p);if(c.obs){var ob=document.createElement('p');ob.textContent=c.obs;d.appendChild(ob)}
     if(c.serie){var sr=document.createElement('p');sr.className='aviso';sr.textContent='Série: '+c.serie;d.appendChild(sr)}
     var ac=document.createElement('div');ac.className='acoes';ac.style.justifyContent='flex-start';
     if(esp){var a0=document.createElement('a');a0.className='btn forte';a0.href='#financas';a0.textContent='Ver o retiro';ac.appendChild(a0)}
-    var ini=esp?dtc(c.data,'173000'):dtc(c.data,'193000'),fim=esp?dtc(c.fim,'173000'):dtc(c.data,'210000'),loc=esp?'Casa de Eventos Mundial, Alexânia-GO':LOCAL_SEDE,tit=(esp?'':'Culto de Jovens: ')+c.tema;
+    var hh=function(x,dft){return x?x.replace(':','')+'00':dft};var ini=esp?dtc(c.data,'173000'):dtc(c.data,hh(c.hora,'193000')),fim=esp?dtc(c.fim,'173000'):dtc(c.data,hh(c.horaFim,c.hora?hh(String(Math.min(23,+c.hora.slice(0,2)+3)).padStart(2,'0')+':'+c.hora.slice(3,5)):'210000')),loc=c.local||(esp?'Casa de Eventos Mundial, Alexânia-GO':LOCAL_SEDE),tit=(esp||c.evento?'':'Culto de Jovens: ')+c.tema;
     var a1=document.createElement('a');a1.className='btn';a1.target='_blank';a1.rel='noopener';a1.href=gcal(tit,ini,fim,loc,'Jovens IEQ Alexânia-GO');a1.textContent='Google Agenda';
     var a2=document.createElement('a');a2.className='btn';a2.href=ics(tit,ini,fim,loc);a2.download='jovens27-'+c.data+'.ics';a2.textContent='iPhone / outros';ac.append(a1,a2);d.appendChild(ac);return d}
   var filtroAg='todos';
@@ -887,16 +965,17 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     $('#ret-entrar').hidden=logado;$('#form-ret').hidden=!logado||!!(minha&&!$('#form-ret').dataset.editar);
     var ok=$('#ret-ok');ok.hidden=!minha;if(minha){ok.replaceChildren();var b=document.createElement('b');b.textContent='Pré-inscrição enviada ✓ ';var e=document.createElement('button');e.type='button';e.className='link';e.textContent='Editar';e.onclick=function(){$('#form-ret').dataset.editar='1';preencher(minha);desenharRetiro()};ok.append(b,'A liderança vai confirmar sua vaga e passar o valor. ',e)}
     var menor=minha&&idadeEm(minha.nasc,'2027-02-06')<18;$('#btn-autoriz').hidden=!menor;
-    if(logado&&!minha&&!$('#ri-nome').value){var j=jovens[meuId];if(j&&j.nome)$('#ri-nome').value=j.nome}
+    if(logado&&!minha&&!$('#ri-nome').value){var j=jovens[meuId];if(j&&j.nome)$('#ri-nome').value=j.nome;var cg=cadastros[meuId];if(cg&&cg.genero)$('#ri-genero').value=cg.genero}
+    if(retConf.aberto===false&&!minha){$('#form-ret').hidden=true;$('#ret-entrar').hidden=false;$('#ret-entrar').textContent='As pré-inscrições estão encerradas no momento. Fale com a liderança.'}
     var box=$('#ret-lista');box.hidden=!editor;if(!editor)return;var ids=Object.keys(inscricoes);if(!window.jovensConta&&db&&ids.length!==(+retStatus.inscritos||0)){retStatus.inscritos=ids.length;db.doc('retiro/status').set({vagas:+retStatus.vagas||40,inscritos:ids.length,atualizado:hojeISO()}).catch(function(){})}var nm=ids.filter(function(u){return idadeEm(inscricoes[u].nasc,'2027-02-06')<18}).length;
     var kp=$('#ret-kp');kp.replaceChildren();[[ids.length,'pré-inscritos'],[nm,'menores de idade'],[ids.filter(function(u){return idadeEm(inscricoes[u].nasc,'2027-02-06')<18&&termoDe(inscricoes[u].nome)}).length,'termos assinados'],[Object.keys(termos).length,'termos recebidos']].forEach(function(x){var d=document.createElement('div');d.className='k';var b=document.createElement('b');b.textContent=x[0];var s2=document.createElement('span');s2.textContent=x[1];d.append(b,s2);kp.appendChild(d)});
     var tab=$('#ret-tab');tab.replaceChildren();ids.sort(function(a,b){return (inscricoes[a].nome||'').localeCompare(inscricoes[b].nome||'')}).forEach(function(u){var r=inscricoes[u];var id=idadeEm(r.nasc,'2027-02-06');var d=document.createElement('div');d.className='ret-linha';var n=document.createElement('b');n.textContent=r.nome+(id!=null?' · '+id+' anos':'');var t=document.createElement('span');t.textContent='WhatsApp '+r.tel+(id<18?' · responsável: '+(r.resp||'?')+' '+(r.respTel||''):'');d.append(n,t);if(r.saude){var sd=document.createElement('em');sd.textContent='Saúde: '+r.saude;d.appendChild(sd)}if(id<18){var tm=termoDe(r.nome);var st=document.createElement('b');st.className=tm?'ok-txt':'pend-txt';st.textContent=tm?'✓ Termo assinado por '+tm.nome+' ('+tm.par+')':'⏳ Falta o termo do responsável';d.appendChild(st)}tab.appendChild(d)});
     var tt=$('#termo-tab');tt.replaceChildren();var ks=Object.keys(termos);if(!ks.length){var v=document.createElement('p');v.className='vazio';v.textContent='Nenhum termo assinado ainda.';tt.appendChild(v)}
     ks.forEach(function(u){var r=termos[u];var d=document.createElement('div');d.className='ret-linha';var n=document.createElement('b');n.textContent=r.jovem+' · autorizado por '+r.nome+' ('+r.par+')';var t=document.createElement('span');t.textContent='WhatsApp '+r.tel+' · emergência: '+r.emerg+' · '+new Date(r.quando).toLocaleDateString('pt-BR');d.append(n,t);if(r.saude){var sd=document.createElement('em');sd.textContent='Saúde: '+r.saude;d.appendChild(sd)}var pr=document.createElement('button');pr.type='button';pr.className='link';pr.textContent='Imprimir';pr.onclick=function(){imprimirTermo(r)};d.appendChild(pr);tt.appendChild(d)})}
-  function preencher(r){$('#ri-nome').value=r.nome||'';$('#ri-nasc').value=r.nasc||'';$('#ri-tel').value=r.tel||'';$('#ri-resp').value=r.resp||'';$('#ri-resp-tel').value=r.respTel||'';$('#ri-saude').value=r.saude||'';$('#ri-regras').checked=true;checarMenor()}
+  function preencher(r){$('#ri-nome').value=r.nome||'';$('#ri-genero').value=r.genero||'';$('#ri-nasc').value=r.nasc||'';$('#ri-tel').value=r.tel||'';$('#ri-resp').value=r.resp||'';$('#ri-resp-tel').value=r.respTel||'';$('#ri-saude').value=r.saude||'';$('#ri-regras').checked=true;checarMenor()}
   function checarMenor(){var i=idadeEm($('#ri-nasc').value,'2027-02-06');var m=i!=null&&i<18;$('#ri-menor').hidden=!m;$('#ri-resp').required=m;$('#ri-resp-tel').required=m}
   $('#ri-nasc').addEventListener('change',checarMenor);
-  $('#form-ret').addEventListener('submit',async function(ev){ev.preventDefault();if(!db||!meuId)return;var r={nome:$('#ri-nome').value.trim(),nasc:$('#ri-nasc').value,tel:$('#ri-tel').value.trim(),resp:$('#ri-resp').value.trim(),respTel:$('#ri-resp-tel').value.trim(),saude:$('#ri-saude').value.trim(),quando:new Date().toISOString()};
+  $('#form-ret').addEventListener('submit',async function(ev){ev.preventDefault();if(!db||!meuId)return;var r={nome:$('#ri-nome').value.trim(),nasc:$('#ri-nasc').value,genero:$('#ri-genero').value,tel:$('#ri-tel').value.trim(),resp:$('#ri-resp').value.trim(),respTel:$('#ri-resp-tel').value.trim(),saude:$('#ri-saude').value.trim(),quando:new Date().toISOString()};
     try{await db.doc('inscricoes/'+meuId).set(r);inscricoes[meuId]=r;delete $('#form-ret').dataset.editar;toast('Pré-inscrição enviada. Glória a Deus!');desenharRetiro()}catch(e){toast('Não foi possível enviar agora')}});
   $('#btn-autoriz').onclick=function(){var tc=$('#termo-card');if(tc){tc.scrollIntoView({behavior:'smooth'});tc.querySelector('details').open=true;return}var r=inscricoes[meuId]||{};var a=$('#autorizacao');a.replaceChildren();var t=document.createElement('div');t.className='aut-in';
     var h=document.createElement('h2');h.textContent='Autorização para participação de menor de idade';var p1=document.createElement('p');p1.textContent='Eu, '+(r.resp||'______________________________')+', responsável legal por '+(r.nome||'______________________________')+', nascido(a) em '+(r.nasc?r.nasc.split('-').reverse().join('/'):'___/___/______')+', autorizo sua participação no Retiro de Carnaval dos Jovens da Igreja do Evangelho Quadrangular de Alexânia, de 06 a 09 de fevereiro de 2027, na Casa de Eventos Mundial, em Alexânia-GO.';
@@ -909,14 +988,14 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     AREAS.forEach(function(a){$('#ac-area').appendChild(new Option(a,a));$('#ac-f-area').appendChild(new Option(a,a))})})();
   function lideresNomes(){var n=perfis.filter(function(p){return p.grupo==='lideranca'||p.grupo==='pastora'||p.grupo==='lid2026'}).sort(ordenar).map(function(p){return p.nome});return ['Toda a liderança'].concat(n)}
   function ativarGestao(){document.querySelectorAll('.nav-lider').forEach(function(a){a.hidden=!editor});$('#gestao-bloqueio').hidden=editor;$('#gestao-conteudo').hidden=!editor}
-  document.querySelectorAll('.gestao-tabs .chip').forEach(function(b){b.onclick=function(){document.querySelectorAll('.gestao-tabs .chip').forEach(function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-selected',String(on))});['acoes','dados','acessos'].forEach(function(k){$('#g-'+k).hidden=k!==b.dataset.g});desenharGestao()}});
+  document.querySelectorAll('.gestao-tabs .chip').forEach(function(b){b.onclick=function(){document.querySelectorAll('.gestao-tabs .chip').forEach(function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-selected',String(on))});['acoes','eventos','dados','acessos'].forEach(function(k){$('#g-'+k).hidden=k!==b.dataset.g});desenharGestao()}});
   function hbarras(box,pares,cor){box.replaceChildren();var max=Math.max.apply(null,pares.map(function(p){return p[1]}).concat([1]));if(!pares.length||pares.every(function(p){return !p[1]})){var v=document.createElement('p');v.className='vazio';v.textContent='Sem dados ainda.';box.appendChild(v);return}
     pares.forEach(function(p){var r=document.createElement('div');r.className='hb-l';var n=document.createElement('span');n.textContent=p[0];var t=document.createElement('div');t.className='hb-t';var i=document.createElement('div');i.style.width=(p[1]/max*100)+'%';i.style.background=p[2]||cor||'var(--amar)';t.appendChild(i);var b=document.createElement('b');b.textContent=p[1];r.append(n,t,b);box.appendChild(r)})}
   function kps(box,itens){box.replaceChildren();itens.forEach(function(x){var d=document.createElement('div');d.className='k'+(x[2]?' '+x[2]:'');var b=document.createElement('b');b.textContent=x[0];var s2=document.createElement('span');s2.textContent=x[1];d.append(b,s2);box.appendChild(d)})}
   function chipPessoa(nome,extra){var d=document.createElement('div');d.className='pd-it';var b=document.createElement('b');b.textContent=nome;d.appendChild(b);if(extra){var s2=document.createElement('span');s2.textContent=extra;d.appendChild(s2)}return d}
   function desenharGestao(){if(!editor)return;var aberta=document.querySelector('.gestao-tabs .chip.on').dataset.g;
     var np=Object.keys(pedidos).length;var bd=$('#g-badge');bd.hidden=!np;bd.textContent=np;
-    if(aberta==='acoes')desenharAcoes();else if(aberta==='dados')desenharDados();else desenharAcessos()}
+    if(aberta==='acoes')desenharAcoes();else if(aberta==='eventos')desenharEventos();else if(aberta==='dados')desenharDados();else desenharAcessos()}
   function desenharAcoes(){var hoje=hojeISO();var lista=Object.keys(acoesPlano).map(function(k){return Object.assign({id:k},acoesPlano[k])});
     var fr=$('#ac-f-resp');var atual=fr.value;fr.replaceChildren(new Option('Todos',''));lideresNomes().forEach(function(n){fr.appendChild(new Option(n,n))});fr.value=atual;
     var fa=$('#ac-f-area').value;var fl=lista.filter(function(a){return (!fr.value||a.resp===fr.value)&&(!fa||a.area===fa)});
@@ -942,7 +1021,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   function desenharDados(){var hoje=hojeISO();var ids=Object.keys(cadastros);var por=function(f){var o={};ids.forEach(function(u){var v=cadastros[u][f]||'Não informado';o[v]=(o[v]||0)+1});return o};
     var jov=ids.filter(function(u){return cadastros[u].tipo==='jovem'});var sete=new Date(Date.now()-7*864e5).toISOString().slice(0,10);
     var ativos=jov.filter(function(u){return ((leituras[u]&&leituras[u].dias)||[]).some(function(d){return d>=sete})});
-    kps($('#pd-kp'),[[ids.length,'pessoas cadastradas'],[jov.length,'jovens'],[jov.filter(function(u){return /^Sim/.test(cadastros[u].congregacao||'')}).length,'jovens membros'],[ativos.length,'leram nos últimos 7 dias','ok']]);
+    kps($('#pd-kp'),[[ids.length,'pessoas cadastradas'],[jov.length,'jovens'],[jov.filter(function(u){return cadastros[u].genero==='M'}).length,'rapazes'],[jov.filter(function(u){return cadastros[u].genero==='F'}).length,'moças'],[jov.filter(function(u){return /^Sim/.test(cadastros[u].congregacao||'')}).length,'jovens membros'],[ativos.length,'leram nos últimos 7 dias','ok']]);
     var pt=por('tipo');hbarras($('#pd-tipo'),Object.keys(TIPO_NOME).map(function(k){return [TIPO_NOME[k],pt[k]||0]}));
     var pc={};jov.forEach(function(u){var v=(cadastros[u].congregacao||'Não informado').replace(/^Sim, (na|no) /,'');pc[v]=(pc[v]||0)+1});hbarras($('#pd-congr'),Object.keys(pc).sort(function(a,b){return pc[b]-pc[a]}).map(function(k){return [k,pc[k],/não/i.test(k)?'var(--verm)':'var(--azul)']}));
     var pb={};jov.forEach(function(u){var v=cadastros[u].batismo||'Não informado';pb[v]=(pb[v]||0)+1});hbarras($('#pd-bat'),[['Já batizados',pb['Já sou batizado(a)']||0,'var(--ok)'],['Pretendem se batizar',pb['Pretendo me batizar']||0,'var(--amar)'],['Ainda não decidiram',pb['Ainda não decidi']||0,'rgba(255,253,246,.35)']]);
@@ -1056,7 +1135,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   function pad(n){return String(n).padStart(2,'0')}
   function tickRetiro(){var c=$('#retiro-cd');if(!c)return;var ms=RET_INI-Date.now();if(ms<=0){c.hidden=true;return}
     var d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4),sg=Math.floor(ms%6e4/1e3);$('#cd-d').textContent=d;$('#cd-h').textContent=pad(h);$('#cd-m').textContent=pad(m);$('#cd-s').textContent=pad(sg)}
-  function desenharVagas(){var v=+retStatus.vagas||40,n=Math.min(v,+retStatus.inscritos||0),rest=v-n;var pct=Math.round(n/v*100);$('#vg-i').style.width=Math.max(4,pct)+'%';
+  function desenharVagas(){var v=+(typeof retConf!=='undefined'&&retConf.vagas)||+retStatus.vagas||40,n=Math.min(v,+retStatus.inscritos||0),rest=v-n;var pct=Math.round(n/v*100);$('#vg-i').style.width=Math.max(4,pct)+'%';
     var t=$('#vg-txt'),c=$('#retiro-cd');c.classList.toggle('quase',rest<=10&&rest>0);c.classList.toggle('esgotado',rest<=0);
     t.textContent=rest<=0?'Vagas esgotadas. Entre na lista de espera pelo site.':(n?n+' de '+v+' vagas já garantidas · '+(rest<=10?'🔥 Últimas '+rest+' vagas!':'restam '+rest):'Só '+v+' vagas · garanta a sua antes que acabe')}
   tickRetiro();setInterval(tickRetiro,1000);desenharVagas();
@@ -1151,6 +1230,74 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     this.dataset.confirma='';this.textContent='Remover';try{await db.doc('perfis/'+atual.id).delete();toast('Removido');$('#dlg').close()}catch(e){toast('Não foi possível remover')}};
   function stripLocal(p){var o={};Object.keys(p||{}).forEach(function(k){if(k!=='id'&&k!=='fotoUrl')o[k]=p[k]});return o}
 
+  // ---------- eventos (gestão), avisos, galeria ----------
+  var retConf={valor:0,vagas:40,prazo:'',pix:'',aberto:true},pagamentos={},avisos=[],galeria=[],evFiltro='',pagAtual=null,avAtual=null,cuAtual=null;
+  var MES_SIG=['','JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
+  function dBR(d){return d?d.split('-').reverse().join('/'):''}
+  function stPag(u){var v=+retConf.valor||0,p=pagamentos[u]||{},pg=+p.valor||0;if(p.forma==='Isento')return 'quitado';if(v&&pg>=v)return 'quitado';return pg>0?'parcial':'pendente'}
+  function genDe(u){var r=inscricoes[u]||{};return r.genero||(cadastros[u]&&cadastros[u].genero)||''}
+  function desenharRetConf(){var t=$('#ret-valor');if(!t)return;var v=+retConf.valor||0;t.textContent=v?(BRL(v,0)+(retConf.prazo?' · pagar até '+dBR(retConf.prazo):'')+(retConf.pix?' · '+retConf.pix:'')):'A liderança vai divulgar em breve';desenharVagas()}
+  function desenharEventos(){if(!editor)return;var ids=Object.keys(inscricoes),v=+retConf.valor||0;
+    var meno=function(u){return idadeEm(inscricoes[u].nasc,'2027-02-06')<18};var semTermo=function(u){return meno(u)&&!termoDe(inscricoes[u].nome)};
+    var arrec=ids.reduce(function(a,u){return a+(+((pagamentos[u]||{}).valor)||0)},0),prev=v*ids.filter(function(u){return (pagamentos[u]||{}).forma!=='Isento'}).length;
+    var q=ids.filter(function(u){return stPag(u)==='quitado'}).length;
+    kps($('#ev-kp'),[[ids.length+' / '+((+retConf.vagas)||40),'inscritos / vagas'],[ids.filter(function(u){return genDe(u)==='M'}).length,'rapazes'],[ids.filter(function(u){return genDe(u)==='F'}).length,'moças'],[ids.filter(meno).length,'menores de idade'],[ids.filter(semTermo).length,'menores sem termo',ids.filter(semTermo).length?'alerta':''],[q,'pagamentos quitados','ok'],[BRL(arrec,0),v?'arrecadado de '+BRL(prev,0):'arrecadado (defina o valor)']]);
+    var bar=$('#ev-bar');bar.replaceChildren();var tot=ids.length||1;[['quitado','var(--ok)'],['parcial','var(--amar)'],['pendente','var(--verm)']].forEach(function(x){var i=document.createElement('i');i.style.width=(ids.filter(function(u){return stPag(u)===x[0]}).length/tot*100)+'%';i.style.background=x[1];bar.appendChild(i)});
+    var lg=$('#ev-leg');lg.replaceChildren();[['quitado','Quitado','var(--ok)'],['parcial','Parcial','var(--amar)'],['pendente','Pendente','var(--verm)']].forEach(function(x){var sp=document.createElement('span');sp.style.setProperty('--c',x[2]);sp.textContent=x[1]+' · '+ids.filter(function(u){return stPag(u)===x[0]}).length;lg.appendChild(sp)});
+    var li=$('#ev-lista');li.replaceChildren();var fl=ids.filter(function(u){if(!evFiltro)return true;if(evFiltro==='M'||evFiltro==='F')return genDe(u)===evFiltro;if(evFiltro==='termo')return semTermo(u);if(evFiltro==='pendente')return stPag(u)!=='quitado';return stPag(u)===evFiltro});
+    fl.sort(function(a,b){return (inscricoes[a].nome||'').localeCompare(inscricoes[b].nome||'')}).forEach(function(u){var r=inscricoes[u],p=pagamentos[u]||{},st=stPag(u),id=idadeEm(r.nasc,'2027-02-06');
+      var b=document.createElement('button');b.type='button';b.className='ev-lin';var d=document.createElement('div');d.textContent=(r.nome||'Sem nome');var sm=document.createElement('small');
+      sm.textContent=[{M:'Masculino',F:'Feminino'}[genDe(u)]||'gênero não informado',id!=null?id+' anos':'',r.tel?'WhatsApp '+r.tel:'',meno(u)?(termoDe(r.nome)?'termo ✓':'falta termo'):'',p.valor?'pago '+BRL(+p.valor,0)+(p.forma?' ('+p.forma+')':''):''].filter(Boolean).join(' · ');d.appendChild(sm);
+      var e=document.createElement('span');e.className='ev-st '+st;e.textContent={quitado:'Quitado',parcial:'Parcial',pendente:'Pendente'}[st];b.append(d,e);b.onclick=function(){abrirPag(u)};li.appendChild(b)});
+    if(!fl.length){var v0=document.createElement('p');v0.className='vazio';v0.textContent=ids.length?'Ninguém neste filtro.':'Nenhuma pré-inscrição ainda.';li.appendChild(v0)}
+    if(!$('#ev-valor').dataset.ok){$('#ev-valor').value=retConf.valor||'';$('#ev-vagas').value=retConf.vagas||40;$('#ev-prazo').value=retConf.prazo||'';$('#ev-pix').value=retConf.pix||'';$('#ev-aberto').value=retConf.aberto===false?'0':'1';$('#ev-valor').dataset.ok='1'}
+    if(fin&&!$('#ev-pago').dataset.ok){$('#ev-pago').value=fin.pago||0;$('#ev-caixa').value=fin.caixa||0;$('#ev-meta').value=fin.meta||0;$('#ev-est').value=fin.estimativaTotal||0;var fa=$('#ev-fin-acoes');fa.replaceChildren();(fin.acoes||[]).forEach(linhaFin);$('#ev-pago').dataset.ok='1'}
+    var av=$('#ev-avisos');av.replaceChildren();var hoje=hojeISO();avisos.slice().sort(function(a,b){return (b.criado||'').localeCompare(a.criado||'')}).forEach(function(a){var b=document.createElement('button');b.type='button';b.className='ev-lin';var d=document.createElement('div');d.textContent=(a.destaque?'🔥 ':'')+a.titulo;var sm=document.createElement('small');sm.textContent=a.ate?(a.ate<hoje?'Encerrado em '+dBR(a.ate):'No ar até '+dBR(a.ate)):'No ar sem data para sair';d.appendChild(sm);var st=document.createElement('span');st.className='ev-st '+(a.ate&&a.ate<hoje?'pendente':'quitado');st.textContent=a.ate&&a.ate<hoje?'Fora do ar':'No ar';b.append(d,st);b.onclick=function(){abrirAviso(a)};av.appendChild(b)});
+    if(!avisos.length){var v1=document.createElement('p');v1.className='vazio';v1.textContent='Nenhum aviso publicado.';av.appendChild(v1)}
+    var ms=$('#ev-mes'),cur=ms.value;ms.replaceChildren(new Option('Todos',''));var chs={};((agenda&&agenda.cultos)||[]).forEach(function(c){chs[c.data.slice(0,7)]=1});Object.keys(chs).sort().forEach(function(k){ms.appendChild(new Option(MES_NOME[+k.slice(5,7)]+' '+k.slice(0,4),k))});ms.value=cur&&chs[cur]?cur:(Object.keys(chs).sort().filter(function(k){return k>=hojeISO().slice(0,7)})[0]||'');
+    var cl=$('#ev-cultos');cl.replaceChildren();var cs=((agenda&&agenda.cultos)||[]).map(function(c,i){return {c:c,i:i}}).filter(function(x){return !ms.value||x.c.data.slice(0,7)===ms.value}).sort(function(a,b){return a.c.data<b.c.data?-1:1});
+    cs.forEach(function(x){var c=x.c;var b=document.createElement('button');b.type='button';b.className='ev-lin';var d=document.createElement('div');d.textContent=(c.evento?'⭐ ':'')+c.tema;var sm=document.createElement('small');sm.textContent=dBR(c.data)+(c.fim?' a '+dBR(c.fim):'')+(c.serie?' · '+c.serie:'');d.appendChild(sm);var ed=document.createElement('span');ed.className='ev-st parcial';ed.textContent='Editar';b.append(d,ed);b.onclick=function(){abrirCulto(x.i)};cl.appendChild(b)});
+    if(!cs.length){var v2=document.createElement('p');v2.className='vazio';v2.textContent='Nada neste mês.';cl.appendChild(v2)}
+    var gf=$('#ev-fotos');gf.replaceChildren();galeria.forEach(function(g){var d=document.createElement('div');var im=document.createElement('img');im.src=g.url;im.alt=g.legenda||'';var x=document.createElement('button');x.type='button';x.textContent='Remover';x.onclick=async function(){if(x.dataset.c!=='1'){x.dataset.c='1';x.textContent='Confirmar';return}try{await db.doc('galeria/'+g.id).delete();toast('Foto removida')}catch(e){toast('Não foi possível remover')}};d.append(im,x);gf.appendChild(d)});
+    if(!galeria.length){var v3=document.createElement('p');v3.className='vazio';v3.textContent='Nenhuma foto ainda.';gf.appendChild(v3)}}
+  function linhaFin(a){var d=document.createElement('div');var n=document.createElement('input');n.placeholder='Ação';n.value=(a&&a.nome)||'';n.className='fn';var r=document.createElement('input');r.type='number';r.placeholder='Resultado R$';r.value=a&&a.resultado!=null?a.resultado:'';r.className='fr';var x=document.createElement('button');x.type='button';x.className='btn';x.textContent='✕';x.onclick=function(){d.remove()};d.append(n,r,x);$('#ev-fin-acoes').appendChild(d)}
+  $('#ev-fin-add').onclick=function(){linhaFin(null)};
+  document.querySelectorAll('#ev-filtro .chip').forEach(function(b){b.onclick=function(){document.querySelectorAll('#ev-filtro .chip').forEach(function(x){x.classList.toggle('on',x===b)});evFiltro=b.dataset.f;desenharEventos()}});
+  $('#ev-mes').onchange=desenharEventos;
+  $('#ev-salvar-ret').onclick=async function(){var d={valor:Math.max(0,Math.round(+$('#ev-valor').value||0)),vagas:Math.max(1,parseInt($('#ev-vagas').value,10)||40),prazo:$('#ev-prazo').value,pix:$('#ev-pix').value.trim(),aberto:$('#ev-aberto').value==='1',atualizado:hojeISO()};
+    try{await db.doc('retiro/config').set(d);retConf=d;desenharRetConf();desenharEventos();toast('Retiro atualizado')}catch(e){toast('Não foi possível salvar')}};
+  $('#ev-salvar-fin').onclick=async function(){var ac=[].slice.call(document.querySelectorAll('#ev-fin-acoes > div')).map(function(d){return {nome:d.querySelector('.fn').value.trim(),resultado:Math.round(+d.querySelector('.fr').value||0)}}).filter(function(a){return a.nome});
+    var d=Object.assign({},fin||{},{pago:Math.round(+$('#ev-pago').value||0),caixa:Math.round(+$('#ev-caixa').value||0),meta:Math.max(1,Math.round(+$('#ev-meta').value||0)),estimativaTotal:Math.round(+$('#ev-est').value||0),acoes:ac,atualizado:hojeISO()});
+    try{await db.doc('financas/resumo').set(d);fin=d;desenharFin();toast('Caixa atualizado')}catch(e){toast('Não foi possível salvar')}};
+  function abrirPag(u){pagAtual=u;var r=inscricoes[u],p=pagamentos[u]||{};$('#pag-tit').textContent=r.nome||'Pagamento';$('#pag-info').textContent='Inscrição: '+(+retConf.valor?BRL(+retConf.valor,0):'valor ainda não definido')+' · enviada em '+(r.quando?new Date(r.quando).toLocaleDateString('pt-BR'):'—');
+    $('#pag-valor').value=p.valor||'';$('#pag-forma').value=p.forma||'PIX';$('#pag-obs').value=p.obs||'';var x=$('#pag-excluir');x.dataset.c='';x.textContent='Remover inscrição';$('#dlg-pag').showModal()}
+  $('#pag-cancelar').onclick=function(){$('#dlg-pag').close()};
+  $('#form-pag').addEventListener('submit',async function(ev){ev.preventDefault();var d={valor:Math.max(0,Math.round(+$('#pag-valor').value||0)),forma:$('#pag-forma').value,obs:$('#pag-obs').value.trim(),atualizado:new Date().toISOString(),por:meuEmail||null};
+    try{await db.doc('pagamentos/'+pagAtual).set(d);pagamentos[pagAtual]=d;$('#dlg-pag').close();desenharEventos();toast('Pagamento salvo')}catch(e){toast('Não foi possível salvar')}});
+  $('#pag-excluir').onclick=async function(){var b=this;if(b.dataset.c!=='1'){b.dataset.c='1';b.textContent='Confirmar remoção';return}
+    try{await db.doc('inscricoes/'+pagAtual).delete();if(pagamentos[pagAtual])await db.doc('pagamentos/'+pagAtual).delete();delete inscricoes[pagAtual];delete pagamentos[pagAtual];$('#dlg-pag').close();desenharEventos();desenharRetiro();toast('Inscrição removida')}catch(e){toast('Não foi possível remover')}};
+  function abrirAviso(a){avAtual=a||null;$('#av-tit').textContent=a?'Editar aviso':'Novo aviso';a=a||{};$('#av-titulo').value=a.titulo||'';$('#av-texto').value=a.texto||'';$('#av-ate').value=a.ate||'';$('#av-dest').value=a.destaque?'1':'0';$('#av-link').value=a.link||'';var x=$('#av-excluir');x.hidden=!a.id;x.dataset.c='';x.textContent='Excluir';$('#dlg-aviso').showModal()}
+  $('#ev-aviso-novo').onclick=function(){abrirAviso(null)};$('#av-cancelar').onclick=function(){$('#dlg-aviso').close()};
+  $('#form-aviso').addEventListener('submit',async function(ev){ev.preventDefault();var d={titulo:$('#av-titulo').value.trim(),texto:$('#av-texto').value.trim(),ate:$('#av-ate').value,destaque:$('#av-dest').value==='1',link:$('#av-link').value.trim(),criado:(avAtual&&avAtual.criado)||new Date().toISOString()};
+    try{if(avAtual&&avAtual.id)await db.doc('avisos/'+avAtual.id).set(d);else await db.collection('avisos').add(d);$('#dlg-aviso').close();toast('Aviso salvo')}catch(e){toast('Não foi possível salvar')}});
+  $('#av-excluir').onclick=async function(){var b=this;if(b.dataset.c!=='1'){b.dataset.c='1';b.textContent='Confirmar exclusão';return}try{await db.doc('avisos/'+avAtual.id).delete();$('#dlg-aviso').close();toast('Aviso excluído')}catch(e){toast('Não foi possível excluir')}};
+  function abrirCulto(i){cuAtual=i;var c=(i!=null&&agenda&&agenda.cultos[i])||{};$('#cu-tit').textContent=i!=null?'Editar culto ou evento':'Novo culto ou evento';$('#cu-data').value=c.data||'';$('#cu-fim').value=c.fim||'';$('#cu-tema').value=c.tema||'';$('#cu-serie').value=c.serie||'';$('#cu-evento').checked=!!c.evento;$('#cu-hora').value=c.hora||'';$('#cu-horafim').value=c.horaFim||'';$('#cu-local').value=c.local||'';$('#cu-obs').value=c.obs||'';var x=$('#cu-excluir');x.hidden=i==null;x.dataset.c='';x.textContent='Excluir';$('#dlg-culto').showModal()}
+  $('#ev-culto-novo').onclick=function(){abrirCulto(null)};$('#cu-cancelar').onclick=function(){$('#dlg-culto').close()};
+  async function salvarAgenda(lista,msg){var d=Object.assign({},agenda||{},{cultos:lista,atualizado:hojeISO()});try{await db.doc('agenda/2027').set(d);agenda=d;desenharAgenda();desenharEventos();$('#dlg-culto').close();toast(msg)}catch(e){toast('Não foi possível salvar')}}
+  $('#form-culto').addEventListener('submit',function(ev){ev.preventDefault();var dt=$('#cu-data').value;var c={data:dt,mes:MES_SIG[+dt.slice(5,7)],serie:$('#cu-serie').value.trim(),tema:$('#cu-tema').value.trim()};if($('#cu-fim').value)c.fim=$('#cu-fim').value;if($('#cu-evento').checked)c.evento=true;['hora','horaFim','local','obs'].forEach(function(k){var v=$('#cu-'+k.toLowerCase()).value.trim();if(v)c[k]=v});
+    var lista=((agenda&&agenda.cultos)||[]).slice();if(cuAtual!=null)lista[cuAtual]=c;else lista.push(c);salvarAgenda(lista,'Agenda atualizada')});
+  $('#cu-excluir').onclick=function(){var b=this;if(b.dataset.c!=='1'){b.dataset.c='1';b.textContent='Confirmar exclusão';return}var lista=agenda.cultos.slice();lista.splice(cuAtual,1);salvarAgenda(lista,'Removido da agenda')};
+  $('#ev-foto-arq').addEventListener('change',async function(){var fs=[].slice.call(this.files||[]);if(!fs.length||!db)return;toast('Enviando '+fs.length+' foto(s)…');var n=0;
+    for(var k=0;k<fs.length;k++){try{var du=await comprimir(fs[k],1000,0.75);var url=await guardarFoto(du,'galeria');await db.collection('galeria').add({url:url,legenda:'',criado:new Date().toISOString()});n++}catch(e){}}this.value='';toast(n+' foto(s) adicionada(s)')});
+  function desenharAvisosHome(){var box=$('#avisos-home');if(!box)return;box.replaceChildren();var hoje=hojeISO();avisos.filter(function(a){return !a.ate||a.ate>=hoje}).sort(function(a,b){return (b.destaque?1:0)-(a.destaque?1:0)||(b.criado||'').localeCompare(a.criado||'')}).forEach(function(a){
+      var c=document.createElement(a.link?'a':'div');c.className='card aviso-h'+(a.destaque?' destaque':'');if(a.link){c.href=a.link;if(/^https?:/.test(a.link)){c.target='_blank';c.rel='noopener'}}
+      var e=document.createElement('div');e.className='eb';e.textContent=a.destaque?'🔥 Aviso importante':'📣 Aviso da liderança';var h=document.createElement('h2');h.textContent=a.titulo;c.append(e,h);if(a.texto){var p=document.createElement('p');p.textContent=a.texto;c.appendChild(p)}box.appendChild(c)})}
+  var hfIdx=0,hfTimer=null;
+  function desenharGaleria(){var box=$('#hero-fotos');if(!box)return;box.replaceChildren();clearInterval(hfTimer);$('#hero-wrap').classList.toggle('sem-fotos',!galeria.length);if(!galeria.length)return;
+    var lista=galeria.slice().sort(function(a,b){return (b.criado||'').localeCompare(a.criado||'')});var figs=[],dots=document.createElement('div');dots.className='hf-dots';
+    lista.forEach(function(g,i){var f=document.createElement('figure');var im=document.createElement('img');im.src=g.url;im.alt=g.legenda||'Foto dos jovens';im.loading=i?'lazy':'eager';f.appendChild(im);if(g.legenda){var fc=document.createElement('figcaption');fc.textContent=g.legenda;f.appendChild(fc)}box.appendChild(f);figs.push(f);var d=document.createElement('i');dots.appendChild(d)});
+    if(lista.length>1)box.appendChild(dots);hfIdx=0;function mostrar(){figs.forEach(function(f,i){f.classList.toggle('on',i===hfIdx)});[].forEach.call(dots.children,function(d,i){d.classList.toggle('on',i===hfIdx)})}mostrar();
+    if(lista.length>1&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))hfTimer=setInterval(function(){hfIdx=(hfIdx+1)%figs.length;mostrar()},4500)}
   // ---------- missão cardápio ----------
   var M_ITENS=[{"id":"pernil","nome":"Pernil","un":"kg","total":26,"preco":20,"grupo":"Carnes","sug":0},{"id":"coxa","nome":"Coxa e sobrecoxa","un":"kg","total":38,"preco":12,"grupo":"Carnes","sug":0},{"id":"peito","nome":"Peito de frango","un":"kg","total":16,"preco":18,"grupo":"Carnes","sug":0},{"id":"toscana","nome":"Linguiça toscana","un":"kg","total":8,"preco":22,"grupo":"Carnes","sug":0},{"id":"lfina","nome":"Linguiça fina","un":"kg","total":2,"preco":20,"grupo":"Carnes","sug":0},{"id":"calabresa","nome":"Calabresa","un":"un","total":6,"preco":10,"grupo":"Carnes","sug":0},{"id":"toucinho","nome":"Toucinho","un":"kg","total":2,"preco":15,"grupo":"Carnes","sug":0},{"id":"salsicha","nome":"Salsicha","un":"kg","total":10,"preco":12,"grupo":"Carnes","sug":0},{"id":"bolonha","nome":"Mortadela bolonha","un":"peça","total":4,"preco":40,"grupo":"Carnes","sug":0},{"id":"paof","nome":"Pão francês","un":"un","total":620,"preco":0.8,"grupo":"Pães e lanches","sug":0},{"id":"paoq","nome":"Pão de queijo","un":"kg","total":20,"preco":25,"grupo":"Pães e lanches","sug":0},{"id":"rosca","nome":"Rosca húngara","un":"kg","total":10,"preco":25,"grupo":"Pães e lanches","sug":0},{"id":"enrol","nome":"Enroladinho de salsicha","un":"un","total":100,"preco":1.5,"grupo":"Pães e lanches","sug":0},{"id":"arroz","nome":"Arroz","un":"kg","total":10,"preco":6,"grupo":"Mercearia","sug":0},{"id":"macarrao","nome":"Macarrão","un":"kg","total":6,"preco":8,"grupo":"Mercearia","sug":0},{"id":"ftrigo","nome":"Farinha de trigo","un":"kg","total":2,"preco":6,"grupo":"Mercearia","sug":0},{"id":"fmand","nome":"Farinha de mandioca","un":"kg","total":4,"preco":8,"grupo":"Mercearia","sug":0},{"id":"bpalha","nome":"Batata palha","un":"pacote","total":6,"preco":10,"grupo":"Mercearia","sug":0},{"id":"molho","nome":"Molho de tomate","un":"pacote","total":4,"preco":3,"grupo":"Mercearia","sug":0},{"id":"creme","nome":"Creme de leite","un":"caixinha","total":16,"preco":4,"grupo":"Mercearia","sug":0},{"id":"leite","nome":"Leite integral","un":"litro","total":6,"preco":5,"grupo":"Bebidas","sug":0},{"id":"nescau","nome":"Achocolatado","un":"pacote","total":4,"preco":15,"grupo":"Bebidas","sug":1},{"id":"cafe","nome":"Café","un":"pacote","total":4,"preco":25,"grupo":"Bebidas","sug":1},{"id":"suco","nome":"Suco em pó","un":"pacote","total":40,"preco":1.5,"grupo":"Bebidas","sug":1},{"id":"refri","nome":"Refrigerante 2 L","un":"un","total":20,"preco":8,"grupo":"Bebidas","sug":1},{"id":"batata","nome":"Batata inglesa","un":"kg","total":8,"preco":6,"grupo":"Hortifrúti","sug":0},{"id":"cebola","nome":"Cebola","un":"kg","total":10,"preco":6,"grupo":"Hortifrúti","sug":0},{"id":"cenoura","nome":"Cenoura","un":"kg","total":6,"preco":6,"grupo":"Hortifrúti","sug":0},{"id":"mandioca","nome":"Mandioca","un":"kg","total":6,"preco":5,"grupo":"Hortifrúti","sug":0},{"id":"repolho","nome":"Repolho grande","un":"un","total":6,"preco":6,"grupo":"Hortifrúti","sug":0},{"id":"alface","nome":"Alface","un":"pé","total":10,"preco":3,"grupo":"Hortifrúti","sug":0},{"id":"alho","nome":"Alho","un":"kg","total":2,"preco":30,"grupo":"Hortifrúti","sug":1},{"id":"banana","nome":"Banana","un":"dúzia","total":6,"preco":8,"grupo":"Frutas","sug":0},{"id":"laranja","nome":"Laranja","un":"dúzia","total":6,"preco":6,"grupo":"Frutas","sug":0},{"id":"melancia","nome":"Melancia","un":"un","total":2,"preco":20,"grupo":"Frutas","sug":0}];
   var M_PRAZO=new Date('2027-01-31T23:59:00-03:00').getTime(),M_PTS=300,M_BONUS=50;var mDoc={entregas:[]};
@@ -1511,13 +1658,14 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   function desenharAgenda(){try{desenharHero()}catch(e){}var box=$('#meses');if(!agenda||!agenda.cultos){return}box.replaceChildren();var hoje=hojeISO();
     var lista=agenda.cultos.slice().sort(function(a,b){return a.data<b.data?-1:1});
     var prox=lista.filter(function(c){return (c.fim||c.data)>=hoje})[0];
-    var porMes={};lista.forEach(function(c){var m=+c.data.slice(5,7);(porMes[m]=porMes[m]||[]).push(c)});
-    Object.keys(porMes).sort(function(a,b){return a-b}).forEach(function(m){var cs=porMes[m];var card=document.createElement('div');card.className='mes';
-      var h=document.createElement('h2');h.textContent=MES_NOME[m];var sr=document.createElement('div');sr.className='serie';sr.textContent=cs[0].serie||'';card.append(h,sr);
+    var porMes={};lista.forEach(function(c){var m=c.data.slice(0,7);(porMes[m]=porMes[m]||[]).push(c)});var anoVisto={};
+    Object.keys(porMes).sort().forEach(function(m){var cs=porMes[m];var ano=m.slice(0,4);var card=document.createElement('div');card.className='mes';
+      if(!anoVisto[ano]&&Object.keys(porMes).some(function(k){return k.slice(0,4)!==ano})){anoVisto[ano]=1;var ha=document.createElement('h2');ha.className='titulo-sec ag-ano';ha.textContent=ano==='2026'?'Ainda em 2026':'Programação '+ano;card.dataset.ano=ano;card.ano=ha}
+      var h=document.createElement('h2');h.textContent=MES_NOME[+m.slice(5,7)]+(ano!=='2027'?' de '+ano:'');var sr=document.createElement('div');sr.className='serie';sr.textContent=cs[0].serie||'';card.append(h,sr);
       cs.forEach(function(c){if(filtroAg==='esp'&&!(c.evento||ESPECIAL.test(c.tema)))return;if(filtroAg==='prox'&&(c.fim||c.data)<hoje)return;var r=document.createElement('button');r.type='button';r.setAttribute('aria-expanded','false');r.className='culto'+((c.fim||c.data)<hoje?' passado':'')+(c===prox?' prox':'')+((c.evento||ESPECIAL.test(c.tema))?' esp':'');
         var d=document.createElement('div');d.className='d';d.textContent=c.data.slice(8,10);var sm=document.createElement('small');sm.textContent=c.fim?'a '+c.fim.slice(8,10):'sáb';d.appendChild(sm);
         var t=document.createElement('div');t.className='t';t.textContent=c.tema;r.append(d,t);var det=detalheCulto(c);det.hidden=true;r.onclick=function(){var ab=det.hidden;det.hidden=!ab;r.setAttribute('aria-expanded',String(ab))};card.append(r,det)});if(card.querySelectorAll('.culto').length===0)return;
-      box.appendChild(card)});
+      if(card.ano)box.appendChild(card.ano);box.appendChild(card)});
     if(prox){$('#prox-tema').textContent=prox.tema;$('#prox-info').textContent=prox.data.split('-').reverse().join('/')+(prox.fim?' a '+prox.fim.split('-').reverse().join('/'):'')+' · série '+(prox.serie||'')}}
 
   // ---------- perfil e mural ----------
@@ -1527,7 +1675,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   var fotoNova=null;
   function desenharPerfil(){var meu=meuId?jovens[meuId]:null;var logado=!!(meuId&&podeLancarProprio);var be=$('#btn-entrar');if(be)be.textContent=logado?'Meu perfil':'Entrar';var cv=$('#convite');if(cv)cv.hidden=logado;try{desenharPedido()}catch(e){}
     $('#perfil-sem').hidden=!!meuId&&podeLancarProprio;$('#form-perfil').hidden=!(meuId&&podeLancarProprio);
-    if(meuId&&podeLancarProprio&&!$('#form-perfil').dataset.carregado){$('#pf-nome').value=(meu&&meu.nome)||'';$('#pf-bio').value=(meu&&meu.bio)||'';$('#pf-vers').value=(meu&&meu.versiculo)||'';var cd=cadastros[meuId]||{};$('#pf-congr').value=cd.congregacao||'';$('#pf-batismo').value=cd.batismo||'';$('#pf-termo').checked=!!cd.termo;$('#pf-tipo').value=cd.tipo||tipoConta||'';$('#pf-dejovem').value=cd.deJovem||deJovemConta||'';ajustarTipo();fotoJovem($('#pf-foto'),meu||{nome:$('#pf-nome').value||'?'},'g');if(meu)$('#form-perfil').dataset.carregado='1'}
+    if(meuId&&podeLancarProprio&&!$('#form-perfil').dataset.carregado){$('#pf-nome').value=(meu&&meu.nome)||'';$('#pf-bio').value=(meu&&meu.bio)||'';$('#pf-vers').value=(meu&&meu.versiculo)||'';var cd=cadastros[meuId]||{};$('#pf-congr').value=cd.congregacao||'';$('#pf-batismo').value=cd.batismo||'';$('#pf-genero').value=cd.genero||'';$('#pf-termo').checked=!!cd.termo;$('#pf-tipo').value=cd.tipo||tipoConta||'';$('#pf-dejovem').value=cd.deJovem||deJovemConta||'';ajustarTipo();fotoJovem($('#pf-foto'),meu||{nome:$('#pf-nome').value||'?'},'g');if(meu)$('#form-perfil').dataset.carregado='1'}
     var r=$('#rostos');var ids=Object.keys(jovens);if(ids.length){r.replaceChildren();ids.sort(function(a,b){return (jovens[a].nome||'').localeCompare(jovens[b].nome||'')}).forEach(function(id){var j=jovens[id];var d=document.createElement('div');var f=document.createElement('div');fotoJovem(f,j,'p');var n=document.createElement('span');n.textContent=j.nome||'';d.append(f,n);var cj=cadastros[id];if(editor&&cj){var q=document.createElement('em');q.className='rosto-info';q.textContent=[TIPO_NOME[cj.tipo],cj.deJovem?'de '+cj.deJovem:'',cj.congregacao,cj.batismo].filter(Boolean).join(' · ');d.appendChild(q)}r.appendChild(d)})}
     $('#compor').hidden=!(meuId&&podeLancarProprio);$('#mural-aviso').hidden=!!(meuId&&podeLancarProprio)}
   var TIPO_NOME={jovem:'Jovem',pastor:'Pastor(a)',pais:'Responsável',colaborador:'Colaborador(a)'};var tipoConta='',deJovemConta='';var cadastros={},pedidos={},acoesPlano={},admins={},souDono=false,meuEmail='';
@@ -1535,7 +1683,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   $('#pf-tipo').addEventListener('change',ajustarTipo);
   $('#pf-arq').addEventListener('change',async function(){var f=this.files[0];if(!f)return;try{fotoNova=await comprimir(f,360,0.8);fotoJovem($('#pf-foto'),{foto:fotoNova},'g')}catch(e){toast('Não consegui ler essa imagem')}});
   $('#form-perfil').addEventListener('submit',async function(ev){ev.preventDefault();if(!db||!meuId)return;var b=$('#pf-salvar');b.disabled=true;
-    try{var meu=jovens[meuId]||{};var cad0=cadastros[meuId]||{};var dados={nome:$('#pf-nome').value.trim(),bio:$('#pf-bio').value.trim(),versiculo:$('#pf-vers').value.trim(),foto:(fotoNova?await guardarFoto(fotoNova,'perfil'):null)||meu.foto||null,atualizado:hojeISO()};var cad={nome:dados.nome,tipo:$('#pf-tipo').value,deJovem:$('#pf-tipo').value==='pais'?$('#pf-dejovem').value.trim():'',congregacao:$('#pf-congr').value,batismo:$('#pf-tipo').value==='jovem'?$('#pf-batismo').value:($('#pf-batismo').value||''),termo:$('#pf-termo').checked,termoEm:(cad0.termoEm||hojeISO()),atualizado:hojeISO()};
+    try{var meu=jovens[meuId]||{};var cad0=cadastros[meuId]||{};var dados={nome:$('#pf-nome').value.trim(),bio:$('#pf-bio').value.trim(),versiculo:$('#pf-vers').value.trim(),foto:(fotoNova?await guardarFoto(fotoNova,'perfil'):null)||meu.foto||null,atualizado:hojeISO()};var cad={nome:dados.nome,tipo:$('#pf-tipo').value,deJovem:$('#pf-tipo').value==='pais'?$('#pf-dejovem').value.trim():'',congregacao:$('#pf-congr').value,genero:$('#pf-genero').value,batismo:$('#pf-tipo').value==='jovem'?$('#pf-batismo').value:($('#pf-batismo').value||''),termo:$('#pf-termo').checked,termoEm:(cad0.termoEm||hojeISO()),atualizado:hojeISO()};
       await db.doc('cadastro/'+meuId).set(cad);cadastros[meuId]=cad;await db.doc('jovens/'+meuId).set(dados);fotoNova=null;toast('Perfil salvo')}catch(e){toast('Não foi possível salvar o perfil')}b.disabled=false});
   function assinarPosts(uid){if(postSubs[uid]||!db)return;postSubs[uid]=db.collection('mural/'+uid+'/posts').orderBy('quando','desc').limit(30).onSnapshot(function(s){posts[uid]=s.docs.map(function(d){return Object.assign({id:d.id,autor:uid},d.data())});desenharMural();if(editor&&document.querySelector('#aba-leitura:not([hidden])'))desenharSecreto()},function(){})}
   function desenharMural(){var box=$('#feed-mural');var todos=[];Object.keys(posts).forEach(function(u){todos=todos.concat(posts[u])});todos.sort(function(a,b){return (b.quando||'').localeCompare(a.quando||'')});
@@ -1598,14 +1746,18 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     db.doc('agenda/2027').onSnapshot(function(s){if(s.exists){agenda=s.data();desenharAgenda()}},function(){});
     db.collection('jovens').onSnapshot(function(s){jovens={};s.docs.forEach(function(d){jovens[d.id]=d.data()});Object.keys(jovens).forEach(assinarPosts);try{listaJovensDatalist()}catch(e){}if(meuId)assinarPosts(meuId);desenharPerfil();desenharMural();desenharLeitura()},function(){});
     if(meuId)assinarPosts(meuId);
-    db.collection('inscricoes').onSnapshot(function(s){inscricoes={};s.docs.forEach(function(d){inscricoes[d.id]=d.data()});desenharRetiro()},function(){});
+    db.collection('inscricoes').onSnapshot(function(s){inscricoes={};s.docs.forEach(function(d){inscricoes[d.id]=d.data()});desenharRetiro();desenharGestao()},function(){});
     if(meuId&&!editor)db.doc('inscricoes/'+meuId).onSnapshot(function(s){if(s.exists){inscricoes[meuId]=s.data();desenharRetiro()}},function(){});
     if(editor){db.collection('cadastro').onSnapshot(function(s){cadastros={};s.docs.forEach(function(d){cadastros[d.id]=d.data()});desenharPerfil();listaJovensDatalist();desenharGestao()},function(){});
+      db.collection('pagamentos').onSnapshot(function(s){pagamentos={};s.docs.forEach(function(d){pagamentos[d.id]=d.data()});desenharGestao()},function(){});
       db.collection('acoes').onSnapshot(function(s){acoesPlano={};s.docs.forEach(function(d){acoesPlano[d.id]=d.data()});desenharGestao()},function(){});
       db.collection('pedidos').onSnapshot(function(s){pedidos={};s.docs.forEach(function(d){pedidos[d.id]=d.data()});desenharGestao()},function(){});
       db.collection('admins').onSnapshot(function(s){admins={};s.docs.forEach(function(d){admins[d.id]=d.data()});desenharGestao()},function(){})}
     else if(meuId){db.doc('cadastro/'+meuId).onSnapshot(function(s){if(s.exists){cadastros[meuId]=s.data();delete $('#form-perfil').dataset.carregado;desenharPerfil()}},function(){});
       db.doc('pedidos/'+meuId).onSnapshot(function(s){if(s.exists)pedidos[meuId]=s.data();else delete pedidos[meuId];desenharPedido()},function(){})}
+    db.doc('retiro/config').onSnapshot(function(s){if(s.exists){retConf=Object.assign({valor:0,vagas:40,prazo:'',pix:'',aberto:true},s.data());desenharRetConf();desenharRetiro();desenharGestao()}},function(){});
+    db.collection('avisos').onSnapshot(function(s){avisos=s.docs.map(function(d){return Object.assign({id:d.id},d.data())});desenharAvisosHome();desenharGestao()},function(){});
+    db.collection('galeria').onSnapshot(function(s){galeria=s.docs.map(function(d){return Object.assign({id:d.id},d.data())});desenharGaleria();desenharGestao()},function(){});
     db.doc('retiro/status').onSnapshot(function(s){if(s.exists){retStatus=Object.assign({vagas:40,inscritos:0},s.data());desenharVagas()}},function(){});
     db.collection('termos').onSnapshot(function(s){termos={};s.docs.forEach(function(d){termos[d.id]=d.data()});desenharTermo();desenharRetiro()},function(){});
     if(meuId&&!editor)db.doc('termos/'+meuId).onSnapshot(function(s){if(s.exists){termos[meuId]=s.data();desenharTermo()}},function(){});
