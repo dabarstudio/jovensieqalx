@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#191523">
-<meta name="versao" content="2026-11-03-auto">
 <meta name="description" content="Grupo Missionário de Jovens da IEQ Alexânia: cultos todo sábado às 19h30, plano de leitura bíblica, mural, gincana e o Retiro de Carnaval 2027.">
 <meta property="og:title" content="Jovens IEQ Alexânia-GO">
 <meta property="og:description" content="Culto de jovens todo sábado às 19h30. Plano de leitura, mural, gincana e Retiro de Carnaval 2027.">
@@ -296,6 +295,14 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
 /* compartilhar */
 .dlg-comp{width:min(440px,94vw);max-height:94dvh;overflow:auto}.comp-prev{display:flex;justify-content:center;margin:8px 0}.comp-prev img{width:min(260px,60vw);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.5)}.comp-acoes{justify-content:center}
 .comp-link{background:var(--fundo2);border-radius:12px;padding:10px 12px;margin:6px 0}.comp-link span{display:block;font-size:13px;font-weight:800;margin-bottom:6px}.comp-link div{display:flex;gap:8px}.comp-link input{flex:1;min-width:0;font:14px var(--corpo);color:var(--texto);background:var(--fundo);border:1px solid var(--linha);border-radius:10px;padding:10px}
+.lei-narr{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--linha);background:var(--fundo2)}.lei-narr .btn{min-height:40px;padding:8px 14px;font-size:13px}.nar-vel{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--apagado);margin-left:auto}.nar-vel select{font:13px var(--corpo);color:var(--texto);background:var(--fundo);border:1px solid var(--linha);border-radius:8px;padding:6px}
+.lei-v.lendo,.lei-cap.lendo,.lei-com.lendo{background:rgba(242,183,5,.22);border-radius:8px;outline:2px solid rgba(242,183,5,.5)}
+.lei-com{background:var(--card);border:1px solid var(--linha);border-radius:14px;padding:12px 14px;margin:10px 0 14px;font-size:.95em}.lei-com b{display:block;color:var(--amar);font-size:.8em;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}.lei-com p{margin:0}.lei-com small{display:block;margin-top:8px;font-size:.7em;color:var(--apagado)}.lei-com.fim{border-color:rgba(242,183,5,.45)}
+.retiro-cd{display:block;text-decoration:none;color:var(--texto);background:linear-gradient(135deg,rgba(224,38,63,.22),rgba(142,75,192,.2));border-color:rgba(224,38,63,.5)}.retiro-cd h2{margin:4px 0 10px}
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.cd div{background:rgba(10,8,18,.45);border-radius:12px;padding:8px 4px;text-align:center}.cd b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(34px,9vw,52px);line-height:1;color:#fff;font-variant-numeric:tabular-nums}.cd span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--apagado)}
+.vagas{margin:12px 0 10px}.vg-bar{height:10px;border-radius:5px;background:rgba(255,253,246,.12);overflow:hidden}.vg-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--amar),var(--verm));border-radius:5px;transition:width .6s}.vagas p{margin:6px 0 0;font-size:14px;font-weight:800}
+.retiro-cd.quase .vagas p{color:#FF8A9A;animation:pulsa 1.4s ease-in-out infinite}.retiro-cd.esgotado .vg-bar i{background:var(--apagado)}.cd-btn{width:100%;box-sizing:border-box}
+@keyframes pulsa{50%{opacity:.55}}@media (prefers-reduced-motion:reduce){.retiro-cd.quase .vagas p{animation:none}}
 /* termo */
 .termo-card{border-color:rgba(58,123,213,.5)}.termo-txt{margin:10px 0;background:var(--fundo2);border-radius:12px;padding:10px 14px}.termo-txt summary{cursor:pointer;font-weight:800;min-height:44px;display:flex;align-items:center;color:var(--amar)}.termo-txt p{font-size:14px;line-height:1.55;color:#E7E2F0;margin:8px 0}
 .ok-txt{color:var(--ok);font-size:13px}.pend-txt{color:var(--amar);font-size:13px}
@@ -362,6 +369,13 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       <p class="hero-evento" id="hero-evento" hidden></p>
       <p class="hero-lid" id="hero-lid" hidden>Em 2026, os cultos de jovens são conduzidos pela liderança de <a href="#lideranca" id="hero-lid-nomes">Fábio e Gabriel</a>. A nova liderança assume em 2027.</p>
     </div>
+    <a class="card retiro-cd" id="retiro-cd" href="#financas" aria-label="Retiro de Carnaval: ver detalhes e garantir vaga">
+      <div class="eb">⛺ Retiro de Carnaval · 06 a 09/02</div>
+      <h2>Cheios do Espírito Santo</h2>
+      <div class="cd" id="cd" role="timer" aria-live="off"><div><b id="cd-d">--</b><span>dias</span></div><div><b id="cd-h">--</b><span>horas</span></div><div><b id="cd-m">--</b><span>min</span></div><div><b id="cd-s">--</b><span>seg</span></div></div>
+      <div class="vagas"><div class="vg-bar"><i id="vg-i"></i></div><p id="vg-txt">Vagas limitadas. Garanta a sua!</p></div>
+      <span class="btn forte cd-btn">Quero garantir minha vaga</span>
+    </a>
     <div class="card convite" id="convite">
       <div><div class="eb">Faça parte</div><h2>Crie sua conta e caminhe com a gente</h2><p>Marque o plano de leitura, publique no mural e monte seu perfil. É gratuito.</p></div>
       <a class="btn forte" href="#perfil">Criar minha conta</a>
@@ -676,6 +690,13 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
 </dialog>
 <dialog id="leitor" class="leitor" aria-labelledby="leitor-tit">
   <div class="lei-topo"><button type="button" class="lei-x" id="lei-fechar" aria-label="Fechar">✕</button><h2 id="leitor-tit">Bíblia</h2><div class="lei-fonte"><button type="button" id="lei-menos" aria-label="Diminuir letra">A−</button><button type="button" id="lei-mais" aria-label="Aumentar letra">A+</button></div></div>
+  <div class="lei-narr" id="lei-narr">
+    <button type="button" class="btn" id="nar-pura">🔊 Ouvir o texto</button>
+    <button type="button" class="btn" id="nar-com">🎙️ Ouvir comentado</button>
+    <button type="button" class="btn" id="nar-pausa" hidden>⏸ Pausar</button>
+    <button type="button" class="btn" id="nar-parar" hidden>⏹ Parar</button>
+    <label class="nar-vel">Velocidade<select id="nar-vel"><option value="0.85">Devagar</option><option value="1" selected>Normal</option><option value="1.2">Rápida</option></select></label>
+  </div>
   <div class="lei-corpo" id="lei-corpo"></div>
   <div class="lei-rodape"><button type="button" class="btn" id="lei-ant">‹ Anterior</button><a class="btn" id="lei-yv" target="_blank" rel="noopener">Ler na ARC</a><button type="button" class="btn forte" id="lei-prox">Próximo ›</button></div>
   <p class="lei-cred">Bíblia Livre (BLIVRE) · CC BY 4.0</p>
@@ -822,7 +843,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     var ok=$('#ret-ok');ok.hidden=!minha;if(minha){ok.replaceChildren();var b=document.createElement('b');b.textContent='Pré-inscrição enviada ✓ ';var e=document.createElement('button');e.type='button';e.className='link';e.textContent='Editar';e.onclick=function(){$('#form-ret').dataset.editar='1';preencher(minha);desenharRetiro()};ok.append(b,'A liderança vai confirmar sua vaga e passar o valor. ',e)}
     var menor=minha&&idadeEm(minha.nasc,'2027-02-06')<18;$('#btn-autoriz').hidden=!menor;
     if(logado&&!minha&&!$('#ri-nome').value){var j=jovens[meuId];if(j&&j.nome)$('#ri-nome').value=j.nome}
-    var box=$('#ret-lista');box.hidden=!editor;if(!editor)return;var ids=Object.keys(inscricoes);var nm=ids.filter(function(u){return idadeEm(inscricoes[u].nasc,'2027-02-06')<18}).length;
+    var box=$('#ret-lista');box.hidden=!editor;if(!editor)return;var ids=Object.keys(inscricoes);if(!window.jovensConta&&db&&ids.length!==(+retStatus.inscritos||0)){retStatus.inscritos=ids.length;db.doc('retiro/status').set({vagas:+retStatus.vagas||40,inscritos:ids.length,atualizado:hojeISO()}).catch(function(){})}var nm=ids.filter(function(u){return idadeEm(inscricoes[u].nasc,'2027-02-06')<18}).length;
     var kp=$('#ret-kp');kp.replaceChildren();[[ids.length,'pré-inscritos'],[nm,'menores de idade'],[ids.filter(function(u){return idadeEm(inscricoes[u].nasc,'2027-02-06')<18&&termoDe(inscricoes[u].nome)}).length,'termos assinados'],[Object.keys(termos).length,'termos recebidos']].forEach(function(x){var d=document.createElement('div');d.className='k';var b=document.createElement('b');b.textContent=x[0];var s2=document.createElement('span');s2.textContent=x[1];d.append(b,s2);kp.appendChild(d)});
     var tab=$('#ret-tab');tab.replaceChildren();ids.sort(function(a,b){return (inscricoes[a].nome||'').localeCompare(inscricoes[b].nome||'')}).forEach(function(u){var r=inscricoes[u];var id=idadeEm(r.nasc,'2027-02-06');var d=document.createElement('div');d.className='ret-linha';var n=document.createElement('b');n.textContent=r.nome+(id!=null?' · '+id+' anos':'');var t=document.createElement('span');t.textContent='WhatsApp '+r.tel+(id<18?' · responsável: '+(r.resp||'?')+' '+(r.respTel||''):'');d.append(n,t);if(r.saude){var sd=document.createElement('em');sd.textContent='Saúde: '+r.saude;d.appendChild(sd)}if(id<18){var tm=termoDe(r.nome);var st=document.createElement('b');st.className=tm?'ok-txt':'pend-txt';st.textContent=tm?'✓ Termo assinado por '+tm.nome+' ('+tm.par+')':'⏳ Falta o termo do responsável';d.appendChild(st)}tab.appendChild(d)});
     var tt=$('#termo-tab');tt.replaceChildren();var ks=Object.keys(termos);if(!ks.length){var v=document.createElement('p');v.className='vazio';v.textContent='Nenhum termo assinado ainda.';tt.appendChild(v)}
@@ -909,7 +930,36 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       vs.forEach(function(t,k){if(!t)return;var p=document.createElement('p');p.className='lei-v';var n=document.createElement('sup');n.textContent=k+1;p.append(n,' '+t);p.onclick=function(){var txt=l[1]+' '+c+':'+(k+1)+' · '+t;if(navigator.clipboard)navigator.clipboard.writeText(txt).then(function(){toast('Versículo copiado')},function(){});p.classList.toggle('marcado')};corpo.appendChild(p)})}
       corpo.scrollTop=0}).catch(function(){corpo.replaceChildren();var e=document.createElement('p');e.className='vazio';e.textContent='Não foi possível carregar o texto agora. Verifique a internet.';corpo.appendChild(e)})}
   function passo(dir){var l=LIVROS[leit.i];var c=(dir>0?leit.fim:leit.c)+dir;var i=leit.i;if(c<1){i--;if(i<0)return;c=LIVROS[i][2]}else if(c>l[2]){i++;if(i>=LIVROS.length)return;c=1}leit={i:i,c:c,fim:c};mostrarLeitor()}
-  $('#lei-ant').onclick=function(){passo(-1)};$('#lei-prox').onclick=function(){passo(1)};$('#lei-fechar').onclick=function(){$('#leitor').close()};
+  $('#lei-ant').onclick=function(){pararNarr();passo(-1)};$('#lei-prox').onclick=function(){pararNarr();passo(1)};$('#lei-fechar').onclick=function(){pararNarr();$('#leitor').close()};
+  $('#leitor').addEventListener('close',function(){pararNarr()});
+  // ---------- narração ----------
+  var comentCache=null;function comentarios(){if(comentCache)return Promise.resolve(comentCache);return fetch('biblia/comentarios.json').then(function(r){return r.json()}).then(function(j){comentCache=j;return j}).catch(function(){comentCache={livros:{},caps:{}};return comentCache})}
+  var nar={fila:[],i:0,ativo:false,pausado:false};var temVoz=('speechSynthesis' in window);
+  if(!temVoz){['#nar-pura','#nar-com'].forEach(function(q){$(q).disabled=true;$(q).title='Este navegador não tem leitura em voz'})}
+  function vozPt(){var vs=speechSynthesis.getVoices();return vs.filter(function(v){return /pt[-_]BR/i.test(v.lang)})[0]||vs.filter(function(v){return /^pt/i.test(v.lang)})[0]||null}
+  function frases(t){return (t||'').match(/[^.!?;]+(?:[.!?;]+(?=\s|$)|$)\s*/g)||[t]}
+  function addFila(txt,el){frases(txt).forEach(function(f){if(f.trim())nar.fila.push({t:f.trim(),el:el})})}
+  function cartaoCom(tit,txt,cls){var d=document.createElement('div');d.className='lei-com '+cls;var b=document.createElement('b');b.textContent=tit;var p=document.createElement('p');p.textContent=txt;d.append(b,p);return d}
+  async function narrar(comentada){pararNarr();if(!temVoz)return;var l=LIVROS[leit.i];var corpo=$('#lei-corpo');nar.fila=[];nar.i=0;
+    corpo.querySelectorAll('.lei-com').forEach(function(x){x.remove()});
+    if(comentada){var cm=await comentarios();var k=l[0]+'.'+leit.c;var cap=cm.caps[k];var ctx=(cap&&cap.contexto)?cap.contexto:(cm.livros[l[0]]||'');
+      var cIni=cartaoCom('Contexto',(cm.livros[l[0]]&&cap?cm.livros[l[0]]+' ':'')+ctx,'ini');corpo.insertBefore(cIni,corpo.firstChild);addFila('Contexto. '+cIni.querySelector('p').textContent,cIni)}
+    var caps=[].slice.call(corpo.querySelectorAll('.lei-cap'));
+    corpo.querySelectorAll('.lei-cap, .lei-v').forEach(function(el){if(el.classList.contains('lei-cap'))addFila(el.textContent.replace(/ (\d+)$/,', capítulo $1')+'.',el);else addFila(el.textContent.replace(/^\d+\s*/,''),el)});
+    if(comentada){var cm2=comentCache;var tx=[];for(var c=leit.c;c<=leit.fim;c++){var cc=cm2.caps[l[0]+'.'+c];if(cc&&cc.comentario)tx.push(cc.comentario)}
+      var fim=tx.length?tx.join(' '):'Para refletir: o que Deus falou com você nesta leitura? Escolha um versículo para guardar no coração hoje e compartilhe no mural.';
+      var cFim=cartaoCom('Comentário',fim,'fim');corpo.appendChild(cFim);var cr=document.createElement('small');cr.textContent=cm2.autor||'';if(cr.textContent)cFim.appendChild(cr);addFila('Comentário. '+fim,cFim)}
+    nar.ativo=true;nar.pausado=false;estadoNarr();falar()}
+  function falar(){if(!nar.ativo||nar.pausado)return;if(nar.i>=nar.fila.length){pararNarr();return}var it=nar.fila[nar.i];
+    document.querySelectorAll('#lei-corpo .lendo').forEach(function(x){if(x!==it.el)x.classList.remove('lendo')});if(it.el){it.el.classList.add('lendo');try{it.el.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){}}
+    var u=new SpeechSynthesisUtterance(it.t);u.lang='pt-BR';var v=vozPt();if(v)u.voice=v;u.rate=+$('#nar-vel').value||1;
+    u.onend=function(){if(!nar.ativo||nar.pausado)return;nar.i++;falar()};u.onerror=function(e){if(e.error==='interrupted'||e.error==='canceled')return;nar.i++;falar()};speechSynthesis.speak(u)}
+  function pararNarr(){nar.ativo=false;nar.pausado=false;try{speechSynthesis.cancel()}catch(e){}document.querySelectorAll('#lei-corpo .lendo').forEach(function(x){x.classList.remove('lendo')});estadoNarr()}
+  function estadoNarr(){$('#nar-pausa').hidden=!nar.ativo;$('#nar-parar').hidden=!nar.ativo;$('#nar-pausa').textContent=nar.pausado?'▶ Continuar':'⏸ Pausar';$('#nar-pura').hidden=nar.ativo;$('#nar-com').hidden=nar.ativo}
+  $('#nar-pura').onclick=function(){narrar(false)};$('#nar-com').onclick=function(){narrar(true)};$('#nar-parar').onclick=pararNarr;
+  $('#nar-pausa').onclick=function(){if(!nar.ativo)return;if(nar.pausado){nar.pausado=false;estadoNarr();falar()}else{nar.pausado=true;try{speechSynthesis.cancel()}catch(e){}estadoNarr()}};
+  $('#nar-vel').onchange=function(){if(nar.ativo&&!nar.pausado){try{speechSynthesis.cancel()}catch(e){}setTimeout(falar,60)}};
+  if(temVoz){try{speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=function(){}}catch(e){}}
   function tam(d){leiTam=Math.max(14,Math.min(28,leiTam+d));$('#lei-corpo').style.fontSize=leiTam+'px';try{localStorage.setItem('jovens-leitor-tam',leiTam)}catch(e){}}
   $('#lei-menos').onclick=function(){tam(-2)};$('#lei-mais').onclick=function(){tam(2)};
   var bibTest='at';
@@ -955,6 +1005,16 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     try{if(navigator.share){await navigator.share({text:t});return}}catch(e){if(e&&e.name==='AbortError')return}
     try{await navigator.clipboard.writeText(t);toast('Texto copiado. Cole onde quiser!')}catch(e){toast('Não foi possível compartilhar')}};
   $('#comp-fechar').onclick=function(){$('#dlg-comp').close()};
+
+  // ---------- contagem regressiva e vagas do retiro ----------
+  var RET_INI=new Date('2027-02-06T17:30:00-03:00').getTime();var retStatus={vagas:40,inscritos:0};
+  function pad(n){return String(n).padStart(2,'0')}
+  function tickRetiro(){var c=$('#retiro-cd');if(!c)return;var ms=RET_INI-Date.now();if(ms<=0){c.hidden=true;return}
+    var d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4),sg=Math.floor(ms%6e4/1e3);$('#cd-d').textContent=d;$('#cd-h').textContent=pad(h);$('#cd-m').textContent=pad(m);$('#cd-s').textContent=pad(sg)}
+  function desenharVagas(){var v=+retStatus.vagas||40,n=Math.min(v,+retStatus.inscritos||0),rest=v-n;var pct=Math.round(n/v*100);$('#vg-i').style.width=Math.max(4,pct)+'%';
+    var t=$('#vg-txt'),c=$('#retiro-cd');c.classList.toggle('quase',rest<=10&&rest>0);c.classList.toggle('esgotado',rest<=0);
+    t.textContent=rest<=0?'Vagas esgotadas. Entre na lista de espera pelo site.':(n?n+' de '+v+' vagas já garantidas · '+(rest<=10?'🔥 Últimas '+rest+' vagas!':'restam '+rest):'Só '+v+' vagas · garanta a sua antes que acabe')}
+  tickRetiro();setInterval(tickRetiro,1000);desenharVagas();
 
   // destaque do próximo culto
   function desenharHero(){var hj=new Date();var dw=hj.getDay();var ad=(6-dw+7)%7;if(ad===0&&hj.getHours()>=21)ad=7;var d=new Date(hj.getFullYear(),hj.getMonth(),hj.getDate()+ad);
@@ -1462,6 +1522,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       db.collection('admins').onSnapshot(function(s){admins={};s.docs.forEach(function(d){admins[d.id]=d.data()});desenharGestao()},function(){})}
     else if(meuId){db.doc('cadastro/'+meuId).onSnapshot(function(s){if(s.exists){cadastros[meuId]=s.data();delete $('#form-perfil').dataset.carregado;desenharPerfil()}},function(){});
       db.doc('pedidos/'+meuId).onSnapshot(function(s){if(s.exists)pedidos[meuId]=s.data();else delete pedidos[meuId];desenharPedido()},function(){})}
+    db.doc('retiro/status').onSnapshot(function(s){if(s.exists){retStatus=Object.assign({vagas:40,inscritos:0},s.data());desenharVagas()}},function(){});
     db.collection('termos').onSnapshot(function(s){termos={};s.docs.forEach(function(d){termos[d.id]=d.data()});desenharTermo();desenharRetiro()},function(){});
     if(meuId&&!editor)db.doc('termos/'+meuId).onSnapshot(function(s){if(s.exists){termos[meuId]=s.data();desenharTermo()}},function(){});
     db.collection('denuncias').onSnapshot(function(s){denuncias={};s.docs.forEach(function(d){denuncias[d.id]=d.data()});desenharMural()},function(){});
