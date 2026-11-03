@@ -101,6 +101,26 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 .campo input,.campo textarea,.campo select{font:15px var(--corpo);color:var(--texto);background:var(--fundo);border:1px solid var(--linha);border-radius:10px;padding:9px 10px}
 .campo textarea{min-height:110px;resize:vertical}
 .acoes{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+/* missão cardápio */
+.missao .mt{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media (max-width:520px){.missao .mt{grid-template-columns:1fr}}
+.mteq{border-radius:14px;padding:14px;background:var(--fundo2);border:1px solid var(--linha);display:flex;flex-direction:column;gap:8px}
+.mteq .n{font-weight:800;font-size:14px}.mteq .pc{font-family:var(--display);font-size:44px;line-height:.9}.mteq .pc small{font:13px var(--corpo);color:var(--apagado);margin-left:6px}
+.mbar{height:12px;border-radius:6px;background:rgba(255,253,246,.1);overflow:hidden}.mbar i{display:block;height:100%;border-radius:6px;transition:width .6s}
+.mteq .sub{font-size:12px;color:var(--apagado)}
+.mprazo{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 12px;border-radius:12px;background:rgba(242,183,5,.12);border:1px solid rgba(242,183,5,.35);font-size:13px}
+.mprazo b{font-family:var(--display);font-size:26px;font-weight:400;color:var(--amar);line-height:1}
+.mgr{margin-top:12px;border:1px solid var(--linha);border-radius:14px;background:var(--fundo2);overflow:hidden}
+.mgr summary{cursor:pointer;list-style:none;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:12px 14px;font-weight:800}
+.mgr summary::-webkit-details-marker{display:none}.mgr summary small{font-weight:400;color:var(--apagado);font-size:12px}
+.mgr summary .duo{display:flex;gap:6px}.mgr summary .duo span{font-size:12px;font-weight:800;padding:3px 8px;border-radius:99px}
+.mit{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:4px 12px;align-items:center;padding:10px 14px;border-top:1px solid var(--linha);font-size:14px}
+.mit .nm small{display:block;color:var(--apagado);font-size:12px}
+.mit .bb{display:flex;flex-direction:column;gap:5px}
+.mit .bl{display:grid;grid-template-columns:1fr 48px;gap:6px;align-items:center;font-size:11px;color:var(--apagado)}.mit .bl .mbar{height:8px}
+.mit.ok .nm::after{content:" ✓";color:var(--ok)}
+.mregras{margin:12px 0 0;padding-left:18px;font-size:13px;color:var(--apagado);display:flex;flex-direction:column;gap:4px}
+.mlog{display:flex;flex-direction:column;gap:6px;margin-top:10px;max-height:260px;overflow:auto}
 /* gincana */
 .placar{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:stretch}
 @media (max-width:640px){.placar{grid-template-columns:1fr}.vs{display:none}}
@@ -442,6 +462,22 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       <div class="time card" data-time="b"><span class="lider" hidden>Na frente</span><div class="tn">Equipe B</div><div class="pts">0<small>pontos</small></div></div>
     </div>
     <div class="card"><h2>A corrida até a premiação</h2><p class="aviso">Cada equipe avança na trilha conforme soma pontos. A linha de chegada é a meta do ano.</p><div class="trilha" id="trilha"></div></div>
+    <div class="card missao" id="missao">
+      <div class="eb">Missão Cardápio · Retiro 2027</div>
+      <h2 style="margin-top:6px">Cada equipe abastece metade da cozinha</h2>
+      <p class="aviso">Como em Atos 2:44-45, quando os irmãos repartiam o que tinham conforme a necessidade de cada um. A lista abaixo saiu do cardápio do retiro e foi dividida igualmente entre as duas equipes.</p>
+      <div class="mt" id="m-times"></div>
+      <div class="mprazo" id="m-prazo"></div>
+      <div id="m-grupos"></div>
+      <ul class="mregras">
+        <li>A entrega é feita ao Comitê da Gincana, que registra aqui no site.</li>
+        <li>Perecíveis (carnes, pães, verduras e frutas) podem ser entregues em valor, pelo preço de referência, ou combinados com a cozinha para a semana do retiro.</li>
+        <li>Cada item vale pontos conforme o seu peso na lista. Lista completa: 300 pontos, mais 50 de bônus.</li>
+        <li>O que passar da meta não soma pontos, mas reforça a cozinha.</li>
+      </ul>
+      <div class="so-editor" style="margin-top:14px"><button class="btn forte" type="button" id="m-registrar">Registrar entrega</button></div>
+      <div class="mlog so-editor" id="m-log"></div>
+    </div>
     <div class="grid2">
       <div class="card"><h2>Duelo por categoria</h2><p class="aviso" style="margin-bottom:10px">Onde cada equipe está pontuando mais.</p><div class="cats" id="cats"></div></div>
       <div class="card"><h2>Últimos lançamentos</h2><p class="aviso" style="margin-bottom:10px">Tudo o que o comitê já lançou, do mais recente ao mais antigo.</p><div class="feed" id="feed"></div></div>
@@ -733,6 +769,15 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   </div>
 </dialog>
 
+<dialog id="dlg-m">
+  <h3 style="font-family:var(--display);font-weight:400;font-size:30px;margin:0">Registrar entrega</h3>
+  <p class="aviso">Missão Cardápio do retiro.</p>
+  <label class="campo">Equipe<select id="m-eq"></select></label>
+  <label class="campo">Item<select id="m-item"></select></label>
+  <label class="campo"><span id="m-qtd-l">Quantidade</span><input id="m-qtd" type="number" min="0" step="0.5" value="1"></label>
+  <label class="campo"><span><input type="checkbox" id="m-valor"> Entregue em valor (R$)</span></label>
+  <div class="acoes"><button class="btn" type="button" id="m-cancelar">Cancelar</button><button class="btn forte" type="button" id="m-salvar">Registrar</button></div>
+</dialog>
 <dialog id="dlg-g">
   <h3 style="font-family:var(--display);font-weight:400;font-size:30px;margin:0">Equipes e prêmio</h3>
   <label class="campo">Nome da competição<input id="g-nome" type="text" maxlength="40"></label>
@@ -1106,9 +1151,47 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     this.dataset.confirma='';this.textContent='Remover';try{await db.doc('perfis/'+atual.id).delete();toast('Removido');$('#dlg').close()}catch(e){toast('Não foi possível remover')}};
   function stripLocal(p){var o={};Object.keys(p||{}).forEach(function(k){if(k!=='id'&&k!=='fotoUrl')o[k]=p[k]});return o}
 
+  // ---------- missão cardápio ----------
+  var M_ITENS=[{"id":"pernil","nome":"Pernil","un":"kg","total":26,"preco":20,"grupo":"Carnes","sug":0},{"id":"coxa","nome":"Coxa e sobrecoxa","un":"kg","total":38,"preco":12,"grupo":"Carnes","sug":0},{"id":"peito","nome":"Peito de frango","un":"kg","total":16,"preco":18,"grupo":"Carnes","sug":0},{"id":"toscana","nome":"Linguiça toscana","un":"kg","total":8,"preco":22,"grupo":"Carnes","sug":0},{"id":"lfina","nome":"Linguiça fina","un":"kg","total":2,"preco":20,"grupo":"Carnes","sug":0},{"id":"calabresa","nome":"Calabresa","un":"un","total":6,"preco":10,"grupo":"Carnes","sug":0},{"id":"toucinho","nome":"Toucinho","un":"kg","total":2,"preco":15,"grupo":"Carnes","sug":0},{"id":"salsicha","nome":"Salsicha","un":"kg","total":10,"preco":12,"grupo":"Carnes","sug":0},{"id":"bolonha","nome":"Mortadela bolonha","un":"peça","total":4,"preco":40,"grupo":"Carnes","sug":0},{"id":"paof","nome":"Pão francês","un":"un","total":620,"preco":0.8,"grupo":"Pães e lanches","sug":0},{"id":"paoq","nome":"Pão de queijo","un":"kg","total":20,"preco":25,"grupo":"Pães e lanches","sug":0},{"id":"rosca","nome":"Rosca húngara","un":"kg","total":10,"preco":25,"grupo":"Pães e lanches","sug":0},{"id":"enrol","nome":"Enroladinho de salsicha","un":"un","total":100,"preco":1.5,"grupo":"Pães e lanches","sug":0},{"id":"arroz","nome":"Arroz","un":"kg","total":10,"preco":6,"grupo":"Mercearia","sug":0},{"id":"macarrao","nome":"Macarrão","un":"kg","total":6,"preco":8,"grupo":"Mercearia","sug":0},{"id":"ftrigo","nome":"Farinha de trigo","un":"kg","total":2,"preco":6,"grupo":"Mercearia","sug":0},{"id":"fmand","nome":"Farinha de mandioca","un":"kg","total":4,"preco":8,"grupo":"Mercearia","sug":0},{"id":"bpalha","nome":"Batata palha","un":"pacote","total":6,"preco":10,"grupo":"Mercearia","sug":0},{"id":"molho","nome":"Molho de tomate","un":"pacote","total":4,"preco":3,"grupo":"Mercearia","sug":0},{"id":"creme","nome":"Creme de leite","un":"caixinha","total":16,"preco":4,"grupo":"Mercearia","sug":0},{"id":"leite","nome":"Leite integral","un":"litro","total":6,"preco":5,"grupo":"Bebidas","sug":0},{"id":"nescau","nome":"Achocolatado","un":"pacote","total":4,"preco":15,"grupo":"Bebidas","sug":1},{"id":"cafe","nome":"Café","un":"pacote","total":4,"preco":25,"grupo":"Bebidas","sug":1},{"id":"suco","nome":"Suco em pó","un":"pacote","total":40,"preco":1.5,"grupo":"Bebidas","sug":1},{"id":"refri","nome":"Refrigerante 2 L","un":"un","total":20,"preco":8,"grupo":"Bebidas","sug":1},{"id":"batata","nome":"Batata inglesa","un":"kg","total":8,"preco":6,"grupo":"Hortifrúti","sug":0},{"id":"cebola","nome":"Cebola","un":"kg","total":10,"preco":6,"grupo":"Hortifrúti","sug":0},{"id":"cenoura","nome":"Cenoura","un":"kg","total":6,"preco":6,"grupo":"Hortifrúti","sug":0},{"id":"mandioca","nome":"Mandioca","un":"kg","total":6,"preco":5,"grupo":"Hortifrúti","sug":0},{"id":"repolho","nome":"Repolho grande","un":"un","total":6,"preco":6,"grupo":"Hortifrúti","sug":0},{"id":"alface","nome":"Alface","un":"pé","total":10,"preco":3,"grupo":"Hortifrúti","sug":0},{"id":"alho","nome":"Alho","un":"kg","total":2,"preco":30,"grupo":"Hortifrúti","sug":1},{"id":"banana","nome":"Banana","un":"dúzia","total":6,"preco":8,"grupo":"Frutas","sug":0},{"id":"laranja","nome":"Laranja","un":"dúzia","total":6,"preco":6,"grupo":"Frutas","sug":0},{"id":"melancia","nome":"Melancia","un":"un","total":2,"preco":20,"grupo":"Frutas","sug":0}];
+  var M_PRAZO=new Date('2027-01-31T23:59:00-03:00').getTime(),M_PTS=300,M_BONUS=50;var mDoc={entregas:[]};
+  function mItens(){return (mDoc.itens&&mDoc.itens.length)?mDoc.itens:M_ITENS}
+  function mCalc(){var it=mItens(),vt=0;it.forEach(function(i){vt+=i.total/2*i.preco});var r={a:{},b:{}};
+    (mDoc.entregas||[]).forEach(function(e){var i=it.filter(function(x){return x.id===e.item})[0];if(!i||!r[e.eq])return;var q=e.valor?(+e.valor/i.preco):(+e.qtd||0);r[e.eq][e.item]=(r[e.eq][e.item]||0)+q});
+    var o={};['a','b'].forEach(function(k){var v=0,pts=0,comp=0;it.forEach(function(i){var meta=i.total/2,q=Math.min(meta,r[k][i.id]||0);v+=q*i.preco;pts+=M_PTS*(q*i.preco)/vt;if(q>=meta)comp++});
+      var pc=vt?v/vt:0;pts=Math.round(pts)+(pc>=0.999?M_BONUS:0);o[k]={q:r[k],valor:v,pc:pc,pts:pts,comp:comp}});o.vt=vt;o.it=it;return o}
+  function fmtQ(n){return (Math.round(n*10)/10).toLocaleString('pt-BR')}
+  function desenharMissao(){var c=mCalc(),box=$('#m-times');if(!box)return;box.replaceChildren();
+    ['a','b'].forEach(function(k){var d=document.createElement('div');d.className='mteq';d.style.borderColor=COR_EQ[k];
+      var n=document.createElement('div');n.className='n';n.style.color=COR_EQ[k];n.textContent=gconf[k];
+      var pc=document.createElement('div');pc.className='pc';pc.textContent=Math.round(c[k].pc*100)+'%';var sm=document.createElement('small');sm.textContent='da lista';pc.appendChild(sm);
+      var b=document.createElement('div');b.className='mbar';var bi=document.createElement('i');bi.style.width=Math.max(2,c[k].pc*100)+'%';bi.style.background=COR_EQ[k];b.appendChild(bi);
+      var sub=document.createElement('div');sub.className='sub';sub.textContent=c[k].pts+' de '+(M_PTS+M_BONUS)+' pontos · '+c[k].comp+' de '+c.it.length+' itens completos · meta ≈ R$ '+(Math.round(c.vt/100)*100).toLocaleString('pt-BR');
+      d.append(n,pc,b,sub);box.appendChild(d)});
+    var pz=$('#m-prazo'),dias=Math.ceil((M_PRAZO-Date.now())/864e5);pz.replaceChildren();
+    if(dias>0){var bb=document.createElement('b');bb.textContent=dias;var t=document.createElement('span');t.textContent=(dias===1?'dia':'dias')+' para fechar as entregas (31/01). '+(dias<=15?'Reta final: cada quilo conta!':'Quem começa cedo chega na frente.');pz.append(bb,t)}
+    else{var t2=document.createElement('span');t2.textContent='Entregas encerradas. Obrigado, equipes!';pz.appendChild(t2)}
+    var gs=$('#m-grupos');gs.replaceChildren();var grupos=[];c.it.forEach(function(i){if(grupos.indexOf(i.grupo)<0)grupos.push(i.grupo)});
+    grupos.forEach(function(g){var its=c.it.filter(function(i){return i.grupo===g});var det=document.createElement('details');det.className='mgr';
+      var su=document.createElement('summary');var tl=document.createElement('div');tl.textContent=g+' ';var sm=document.createElement('small');sm.textContent=its.length+' itens';tl.appendChild(sm);
+      var duo=document.createElement('div');duo.className='duo';['a','b'].forEach(function(k){var vm=0,ve=0;its.forEach(function(i){var m=i.total/2;vm+=m*i.preco;ve+=Math.min(m,c[k].q[i.id]||0)*i.preco});var sp=document.createElement('span');sp.style.background=COR_EQ[k]+'33';sp.style.color=COR_EQ[k];sp.textContent=Math.round(vm?ve/vm*100:0)+'%';duo.appendChild(sp)});
+      su.append(tl,duo);det.appendChild(su);
+      its.forEach(function(i){var m=i.total/2,row=document.createElement('div');row.className='mit';if((c.a.q[i.id]||0)>=m&&(c.b.q[i.id]||0)>=m)row.classList.add('ok');
+        var nm=document.createElement('div');nm.className='nm';nm.textContent=i.nome;var s2=document.createElement('small');s2.textContent='Meta por equipe: '+fmtQ(m)+' '+i.un+' · ref. R$ '+i.preco.toLocaleString('pt-BR',{minimumFractionDigits:i.preco%1?2:0})+'/'+i.un+(i.sug?' · quantidade sugerida':'');nm.appendChild(s2);
+        var bb2=document.createElement('div');bb2.className='bb';['a','b'].forEach(function(k){var q=c[k].q[i.id]||0;var l=document.createElement('div');l.className='bl';var br=document.createElement('div');br.className='mbar';var x=document.createElement('i');x.style.width=Math.min(100,q/m*100)+'%';x.style.background=COR_EQ[k];br.appendChild(x);var tx=document.createElement('span');tx.textContent=fmtQ(Math.min(q,999))+'/'+fmtQ(m);l.append(br,tx);bb2.appendChild(l)});
+        row.append(nm,bb2);det.appendChild(row)});gs.appendChild(det)});
+    var lg=$('#m-log');lg.replaceChildren();if(podeLancar){(mDoc.entregas||[]).slice().reverse().forEach(function(e,ri){var idx=mDoc.entregas.length-1-ri;var i=c.it.filter(function(x){return x.id===e.item})[0];var row=document.createElement('div');row.className='lanc';
+      var dot=document.createElement('i');dot.style.background=COR_EQ[e.eq]||'#888';var mm=document.createElement('div');mm.className='m';mm.textContent=(gconf[e.eq]||'')+' · '+(i?i.nome:e.item);var s3=document.createElement('small');s3.textContent=(e.valor?'R$ '+e.valor:fmtQ(e.qtd)+' '+(i?i.un:''))+' · '+(e.data||'').split('-').reverse().join('/');mm.appendChild(s3);
+      var x=document.createElement('button');x.className='del';x.type='button';x.textContent='Desfazer';x.onclick=async function(){if(x.dataset.c!=='1'){x.dataset.c='1';x.textContent='Confirmar';return}var arr=mDoc.entregas.slice();arr.splice(idx,1);try{await db.doc('gincana/cardapio').set(Object.assign({},mDoc,{entregas:arr}));toast('Entrega desfeita')}catch(er){toast('Não foi possível desfazer')}};
+      row.append(dot,mm,x);lg.appendChild(row)})}}
+  $('#m-registrar').onclick=function(){var se=$('#m-eq');se.replaceChildren(new Option(gconf.a,'a'),new Option(gconf.b,'b'));var si=$('#m-item');si.replaceChildren();mItens().forEach(function(i){si.appendChild(new Option(i.nome+' ('+i.un+')',i.id))});$('#m-qtd').value=1;$('#m-valor').checked=false;$('#m-qtd-l').textContent='Quantidade';$('#dlg-m').showModal()};
+  $('#m-valor').onchange=function(){$('#m-qtd-l').textContent=this.checked?'Valor entregue (R$)':'Quantidade'};
+  $('#m-cancelar').onclick=function(){$('#dlg-m').close()};
+  $('#m-salvar').onclick=async function(){if(!db)return;var q=parseFloat($('#m-qtd').value);if(!(q>0)){toast('Informe a quantidade');return}
+    var e={eq:$('#m-eq').value,item:$('#m-item').value,data:hojeISO()};if($('#m-valor').checked)e.valor=Math.round(q);else e.qtd=q;
+    try{await db.doc('gincana/cardapio').set(Object.assign({},mDoc,{entregas:(mDoc.entregas||[]).concat([e])}));toast('Entrega registrada');$('#dlg-m').close()}catch(er){toast('Não foi possível registrar')}};
   // ---------- gincana ----------
   function totais(){var t={a:0,b:0},c={};CATS.forEach(function(k){c[k]={a:0,b:0}});
-    pontos.forEach(function(p){var v=Number(p.pontos)||0;if(t[p.equipe]==null)return;t[p.equipe]+=v;if(!c[p.categoria])c[p.categoria]={a:0,b:0};c[p.categoria][p.equipe]+=v});return {t:t,c:c}}
+    pontos.forEach(function(p){var v=Number(p.pontos)||0;if(t[p.equipe]==null)return;t[p.equipe]+=v;if(!c[p.categoria])c[p.categoria]={a:0,b:0};c[p.categoria][p.equipe]+=v});var mc=mCalc();c['Missão Cardápio']={a:mc.a.pts,b:mc.b.pts};t.a+=mc.a.pts;t.b+=mc.b.pts;return {t:t,c:c}}
   function desenharGincana(){var r=totais();$('#g-titulo').textContent=gconf.nome||'Corrida da Fé';$('#g-premio').textContent=gconf.premio||'A definir pela liderança.';
     ['a','b'].forEach(function(k){var el=document.querySelector('[data-time="'+k+'"]');el.style.background='linear-gradient(160deg,'+COR_EQ[k]+'33,var(--card) 60%)';el.style.borderColor=COR_EQ[k];
       el.querySelector('.tn').textContent=gconf[k];var pts=el.querySelector('.pts');pts.firstChild.nodeValue=r.t[k].toLocaleString('pt-BR');
@@ -1146,7 +1229,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     // form
     var se=$('#f-equipe'),cur=se.value;se.replaceChildren(new Option(gconf.a,'a'),new Option(gconf.b,'b'));if(cur)se.value=cur;
     var sc=$('#f-cat');if(!sc.options.length)CATS.forEach(function(c){sc.appendChild(new Option(c,c))});
-    $('#form-card').hidden=!podeLancar;
+    $('#form-card').hidden=!podeLancar;desenharMissao();
   }
   $('#form-pts').addEventListener('submit',async function(ev){ev.preventDefault();if(!db)return;var v=parseInt($('#f-pts').value,10);var mot=$('#f-motivo').value.trim();
     if(!v){toast('Informe os pontos');return}if(!mot){toast('Escreva o motivo do lançamento');return}
@@ -1509,6 +1592,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     if(!db){clearTimeout(timer);return}
     db.collection('perfis').onSnapshot(function(s){clearTimeout(timer);aplicarPerfis(resolverFotos(s.docs.map(function(d){return Object.assign({id:d.id},d.data())}))) },function(){});
     db.collection('pontos').onSnapshot(function(s){pontos=s.docs.map(function(d){return Object.assign({id:d.id},d.data())});desenharGincana()},function(){});
+    db.doc('gincana/cardapio').onSnapshot(function(s){mDoc=s.exists?Object.assign({entregas:[]},s.data()):{entregas:[]};desenharGincana()},function(){});
     db.doc('gincana/config').onSnapshot(function(s){if(s.exists)gconf=Object.assign(gconf,s.data());desenharGincana()},function(){});
     db.collection('leitura').onSnapshot(function(s){leituras={};s.docs.forEach(function(d){leituras[d.id]=d.data()});minhas=(meuId&&leituras[meuId]&&leituras[meuId].dias)||[];minhasNotas=(meuId&&leituras[meuId]&&leituras[meuId].notas)||{};minhasPv=(meuId&&leituras[meuId]&&leituras[meuId].pv)||{};desenharLeitura()},function(){});
     db.doc('agenda/2027').onSnapshot(function(s){if(s.exists){agenda=s.data();desenharAgenda()}},function(){});
