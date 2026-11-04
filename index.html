@@ -82,7 +82,7 @@ body.editor .so-editor{display:inline-flex!important}
 .nomes p{margin:2px 0 0;color:var(--apagado);font-size:13px}
 /* organograma */
 .org{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding-bottom:6px}
-.nivel{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;padding-top:22px}
+.org-ano{display:flex;align-items:center;gap:12px;margin:26px 0 -6px;color:var(--apagado);font-size:13px}.org-ano::before,.org-ano::after{content:"";flex:1;height:1px;background:var(--linha)}.org-ano b{font-family:var(--display);font-size:26px;font-weight:400;color:var(--amar);line-height:1}.nivel{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;padding-top:22px}
 .nivel::before{content:"";position:absolute;top:0;left:50%;width:2px;height:22px;background:var(--linha)}
 .nivel:first-child{padding-top:0}.nivel:first-child::before{display:none}
 .no{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;color:var(--texto);cursor:pointer;padding:6px;border-radius:14px;font:inherit;width:118px}
@@ -415,7 +415,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
         <a class="btn zap" id="hero-zap" href="#" target="_blank" rel="noopener" hidden>Falar com a liderança</a>
       </div>
       <p class="hero-evento" id="hero-evento" hidden></p>
-      <p class="hero-lid" id="hero-lid" hidden>Em 2026, os cultos de jovens são conduzidos pela liderança de <a href="#lideranca" id="hero-lid-nomes">Fábio e Gabriel</a>. A nova liderança assume em 2027.</p>
+      <p class="hero-lid" id="hero-lid" hidden>Os cultos de 2026, conduzidos por <a href="#lideranca" id="hero-lid-nomes">Fábio e Gabriel</a>, se encerram com o Congresso Incendiados. A nova liderança assume em 2027.</p>
     </div><div class="hero-fotos" id="hero-fotos" aria-label="Fotos dos últimos cultos e ações"></div></div></div>
     <div class="avisos-home" id="avisos-home"></div>
     <a class="card retiro-cd" id="retiro-cd" href="#financas" aria-label="Retiro de Carnaval: ver detalhes e garantir vaga">
@@ -880,7 +880,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   var $=function(s){return document.querySelector(s)};
   var GRUPOS=[
     {id:'pastora',nome:'Pastores',cor:'#F2B705'},
-    {id:'lideranca',nome:'Liderança',cor:'#FF6B80'},
+    {id:'lideranca',nome:'Liderança 2027',cor:'#FF6B80'},
     {id:'louvor',nome:'Ministério de Louvor',cor:'#F2B705'},
     {id:'intercessao',nome:'Intercessão',cor:'#C39BEA'},
     {id:'comite',nome:'Comitê da Gincana',cor:'#7AAEF0'},
@@ -890,7 +890,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     {id:'secretaria',nome:'Secretaria',cor:'#B48CE0'},
     {id:'apoio',nome:'Apoio',cor:'#7FBF6A'},
     {id:'cozinha',nome:'Cozinha',cor:'#E07A1F'},
-    {id:'lid2026',nome:'Liderança 2026 (gratidão)',cor:'#C9CED6'}
+    {id:'lid2026',nome:'Liderança 2026',cor:'#C9CED6'}
   ];
   var CATS=['Presença no culto','Versículo decorado','Quiz bíblico','Visitante trazido','Desafio da semana','Serviço na igreja','Gincana do retiro'];
   var COR_EQ={a:'#E0263F',b:'#3A7BD5'};
@@ -1226,7 +1226,8 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
         if(ps.length)ps.forEach(function(p){m.appendChild(noPessoa(p))});else{var v=document.createElement('span');v.className='vazio';v.style.fontSize='12px';v.style.padding='10px';v.textContent='A definir';m.appendChild(v)}
         box.appendChild(m);nv.appendChild(box)});
       org.appendChild(nv)}
-    nivel(['pastora']);nivel(['lideranca']);if(editor){var av=document.createElement('p');av.className='aviso';av.textContent='🔒 As equipes abaixo aparecem só para a liderança enquanto estão em definição.';org.appendChild(av);nivel(['louvor','intercessao','midia','recepcao']);nivel(['tesouraria','secretaria','comite']);nivel(['apoio','cozinha'])}}
+    function faixa(ano,txt){var f=document.createElement('div');f.className='org-ano';var b=document.createElement('b');b.textContent=ano;var s2=document.createElement('span');s2.textContent=txt;f.append(b,s2);org.appendChild(f)}
+    nivel(['pastora']);faixa('2026','Conduziu os cultos até o Congresso Incendiados, em 21/11');nivel(['lid2026']);faixa('2027','Nova liderança, a partir de 2027');nivel(['lideranca']);if(editor){var av=document.createElement('p');av.className='aviso';av.textContent='🔒 As equipes abaixo aparecem só para a liderança enquanto estão em definição.';org.appendChild(av);nivel(['louvor','intercessao','midia','recepcao']);nivel(['tesouraria','secretaria','comite']);nivel(['apoio','cozinha'])}}
 
   // ---------- diálogo de perfil ----------
   var atual=null,novo=false;
