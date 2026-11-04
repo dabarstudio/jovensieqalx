@@ -342,7 +342,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
 /* compartilhar */
 .dlg-comp{width:min(440px,94vw);max-height:94dvh;overflow:auto}.comp-prev{display:flex;justify-content:center;margin:8px 0}.comp-prev img{width:min(260px,60vw);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.5)}.comp-acoes{justify-content:center}
 .comp-link{background:var(--fundo2);border-radius:12px;padding:10px 12px;margin:6px 0}.comp-link span{display:block;font-size:13px;font-weight:800;margin-bottom:6px}.comp-link div{display:flex;gap:8px}.comp-link input{flex:1;min-width:0;font:14px var(--corpo);color:var(--texto);background:var(--fundo);border:1px solid var(--linha);border-radius:10px;padding:10px}
-.nar-voz-l select{max-width:180px}.lei-narr{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--linha);background:var(--fundo2)}.lei-narr .btn{min-height:40px;padding:8px 14px;font-size:13px}.nar-vel{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--apagado);margin-left:auto}.nar-vel select{font:13px var(--corpo);color:var(--texto);background:var(--fundo);border:1px solid var(--linha);border-radius:8px;padding:6px}
+.nar-voz-l select{max-width:180px}.nar-dica{width:100%;font-size:12px;color:var(--apagado)}.nar-dica summary{cursor:pointer;color:var(--amar);font-weight:800}.nar-dica p{margin:6px 0 2px;line-height:1.5}.lei-narr{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--linha);background:var(--fundo2)}.lei-narr .btn{min-height:40px;padding:8px 14px;font-size:13px}.nar-vel{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--apagado);margin-left:auto}.nar-vel select{font:13px var(--corpo);color:var(--texto);background:var(--fundo);border:1px solid var(--linha);border-radius:8px;padding:6px}
 .lei-v.lendo,.lei-cap.lendo,.lei-com.lendo{background:rgba(242,183,5,.22);border-radius:8px;outline:2px solid rgba(242,183,5,.5)}
 .lei-com{background:var(--card);border:1px solid var(--linha);border-radius:14px;padding:12px 14px;margin:10px 0 14px;font-size:.95em}.lei-com b{display:block;color:var(--amar);font-size:.8em;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}.lei-com p{margin:0}.lei-com small{display:block;margin-top:8px;font-size:.7em;color:var(--apagado)}.lei-com.fim{border-color:rgba(242,183,5,.45)}
 .retiro-cd{display:block;text-decoration:none;color:var(--texto);background:linear-gradient(135deg,rgba(224,38,63,.22),rgba(142,75,192,.2));border-color:rgba(224,38,63,.5)}.retiro-cd h2{margin:4px 0 10px}
@@ -785,6 +785,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     <button type="button" class="btn" id="nar-pausa" hidden>⏸ Pausar</button>
     <button type="button" class="btn" id="nar-parar" hidden>⏹ Parar</button>
     <label class="nar-vel nar-voz-l">Voz<select id="nar-voz" aria-label="Escolher a voz da narração"></select></label>
+    <details class="nar-dica"><summary>Vozes mais naturais</summary><p>iPhone: Ajustes → Acessibilidade → Conteúdo Falado → Vozes → Português (Brasil) e baixe <b>Luciana</b> ou <b>Felipe</b> na versão <b>Melhorada/Premium</b>. Android: Configurações → Saída de conversão de texto em voz → Google → instale as vozes em português de alta qualidade. No computador, o navegador Edge tem as vozes neurais <b>Thalita</b>, <b>Francisca</b> e <b>Antonio</b> (✨).</p></details>
     <a class="btn" id="nar-humana" target="_blank" rel="noopener" title="Abre a narração gravada (Almeida) no Wordproject">🎧 Narrador humano</a>
     <label class="nar-vel" style="margin-left:0">Velocidade<select id="nar-vel"><option value="0.85">Devagar</option><option value="1" selected>Normal</option><option value="1.2">Rápida</option></select></label>
   </div>
@@ -1063,14 +1064,21 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   var comentCache=null;function comentarios(){if(comentCache)return Promise.resolve(comentCache);return fetch('biblia/comentarios.json').then(function(r){return r.json()}).then(function(j){comentCache=j;return j}).catch(function(){comentCache={livros:{},caps:{}};return comentCache})}
   var nar={fila:[],i:0,ativo:false,pausado:false};var temVoz=('speechSynthesis' in window);
   if(!temVoz){['#nar-pura','#nar-com'].forEach(function(q){$(q).disabled=true;$(q).title='Este navegador não tem leitura em voz'})}
-  function vozesPt(){try{return speechSynthesis.getVoices().filter(function(v){return /^pt/i.test(v.lang)}).sort(function(a,b){var ab=/BR/i.test(a.lang)?0:1,bb=/BR/i.test(b.lang)?0:1;return ab-bb||(/natural|online|neural|premium|enhanced/i.test(b.name)?1:0)-(/natural|online|neural|premium|enhanced/i.test(a.name)?1:0)||a.name.localeCompare(b.name)})}catch(e){return []}}
+  var VOZ_FORA=/\b(Eddy|Flo|Grandma|Grandpa|Vovó|Vovô|Reed|Rocko|Sandy|Shelley|Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Good News|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Fred|Junior|Kathy|Ralph|eSpeak|espeak)\b/i;
+  function vozesPt(){try{return speechSynthesis.getVoices().filter(function(v){return /^pt/i.test(v.lang)&&!VOZ_FORA.test(v.name)}).sort(function(a,b){var ab=/BR/i.test(a.lang)?0:1,bb=/BR/i.test(b.lang)?0:1;return ab-bb||(/natural|online|neural|premium|enhanced/i.test(b.name)?1:0)-(/natural|online|neural|premium|enhanced/i.test(a.name)?1:0)||a.name.localeCompare(b.name)})}catch(e){return []}}
   function nomeVoz(v){var n=v.name.replace(/Microsoft |Google |Apple |Online |\(Natural\)|- Portuguese \(Brazil\)|Portuguese \(Brazil\)|português do Brasil|Português \(Brasil\)/gi,'').replace(/[()]/g,'').replace(/\s+/g,' ').trim();if(!n||/^pt/i.test(n))n='Voz';var q=/natural|online|neural|premium|enhanced/i.test(v.name)?' ✨':'';return n+(/BR/i.test(v.lang)?' · Brasil':' · Portugal')+q}
   function montarVozes(){var sel=$('#nar-voz');if(!sel)return;var vs=vozesPt();var salvo='';try{salvo=localStorage.getItem('narVoz')||''}catch(e){}sel.replaceChildren(new Option('Padrão do aparelho',''));vs.forEach(function(v){sel.appendChild(new Option(nomeVoz(v),v.voiceURI||v.name))});sel.value=salvo;if(sel.value!==salvo)sel.value='';$('.nar-voz-l').hidden=!vs.length}
   if(temVoz){montarVozes();try{speechSynthesis.addEventListener('voiceschanged',montarVozes)}catch(e){speechSynthesis.onvoiceschanged=montarVozes}}
   $('#nar-voz').onchange=function(){try{localStorage.setItem('narVoz',this.value)}catch(e){}if(nar.ativo&&!nar.pausado){try{speechSynthesis.cancel()}catch(e){}setTimeout(falar,60)}else{try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance('Graça e paz! É com esta voz que vou ler a Palavra.');u.lang='pt-BR';var v=vozPt();if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}};
   function vozPt(){var vs=speechSynthesis.getVoices();var esc=$('#nar-voz')&&$('#nar-voz').value;if(esc){var m=vs.filter(function(v){return (v.voiceURI||v.name)===esc})[0];if(m)return m}return vs.filter(function(v){return /pt[-_]BR/i.test(v.lang)})[0]||vs.filter(function(v){return /^pt/i.test(v.lang)})[0]||null}
   function frases(t){return (t||'').match(/[^.!?;]+(?:[.!?;]+(?=\s|$)|$)\s*/g)||[t]}
-  function addFila(txt,el){frases(txt).forEach(function(f){if(f.trim())nar.fila.push({t:f.trim(),el:el})})}
+  function addFila(txt,el){var buf='';frases(txt).forEach(function(f){f=f.trim();if(!f)return;if(buf&&(buf+' '+f).length>230){nar.fila.push({t:buf,el:el});buf=f}else buf=buf?buf+' '+f:f});if(buf)nar.fila.push({t:buf,el:el})}
+  var ORD_M={1:'Primeiro',2:'Segundo',3:'Terceiro'},ORD_F={1:'Primeira',2:'Segunda',3:'Terceira'};
+  function falaPt(t){return String(t||'')
+    .replace(/\b([123])\s*(Samuel|Reis|Crônicas|Cronicas)\b/g,function(m,n,b){return ORD_M[n]+' '+b})
+    .replace(/\b([123])\s*(Coríntios|Corintios|Tessalonicenses|Timóteo|Timoteo|Pedro|João|Joao)\b/g,function(m,n,b){return ORD_F[n]+' '+b})
+    .replace(/(\d+):(\d+)\s*[-–]\s*(\d+)/g,'capítulo $1, versículos $2 a $3').replace(/(\d+):(\d+)/g,'capítulo $1, versículo $2')
+    .replace(/(\d+)\s*[–-]\s*(\d+)/g,'$1 a $2').replace(/\s*·\s*/g,', ').replace(/[“”"]/g,'')}
   function cartaoCom(tit,txt,cls){var d=document.createElement('div');d.className='lei-com '+cls;var b=document.createElement('b');b.textContent=tit;var p=document.createElement('p');p.textContent=txt;d.append(b,p);return d}
   async function narrar(comentada){pararNarr();if(!temVoz)return;var l=LIVROS[leit.i];var corpo=$('#lei-corpo');nar.fila=[];nar.i=0;
     corpo.querySelectorAll('.lei-com').forEach(function(x){x.remove()});
@@ -1084,7 +1092,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     nar.ativo=true;nar.pausado=false;estadoNarr();falar()}
   function falar(){if(!nar.ativo||nar.pausado)return;if(nar.i>=nar.fila.length){pararNarr();return}var it=nar.fila[nar.i];
     document.querySelectorAll('#lei-corpo .lendo').forEach(function(x){if(x!==it.el)x.classList.remove('lendo')});if(it.el){it.el.classList.add('lendo');try{it.el.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){}}
-    var u=new SpeechSynthesisUtterance(it.t);u.lang='pt-BR';var v=vozPt();if(v)u.voice=v;u.rate=+$('#nar-vel').value||1;
+    var u=new SpeechSynthesisUtterance(falaPt(it.t));u.lang='pt-BR';var v=vozPt();if(v)u.voice=v;u.rate=+$('#nar-vel').value||1;
     u.onend=function(){if(!nar.ativo||nar.pausado)return;nar.i++;falar()};u.onerror=function(e){if(e.error==='interrupted'||e.error==='canceled')return;nar.i++;falar()};speechSynthesis.speak(u)}
   function pararNarr(){nar.ativo=false;nar.pausado=false;try{speechSynthesis.cancel()}catch(e){}document.querySelectorAll('#lei-corpo .lendo').forEach(function(x){x.classList.remove('lendo')});estadoNarr()}
   function estadoNarr(){$('#nar-pausa').hidden=!nar.ativo;$('#nar-parar').hidden=!nar.ativo;$('#nar-pausa').textContent=nar.pausado?'▶ Continuar':'⏸ Pausar';$('#nar-pura').hidden=nar.ativo;$('#nar-com').hidden=nar.ativo}
