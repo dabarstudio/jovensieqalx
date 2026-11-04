@@ -271,7 +271,7 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 .hero-acoes{justify-content:flex-start;margin-top:6px}.hero-evento{margin:6px 0 0;padding-top:10px;border-top:1px solid var(--linha);font-size:15px}.hero-evento b{color:var(--amar)}
 .btn.zap{background:#25D366;border-color:#25D366;color:#0b2416}
 .convite{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}.convite h2{margin-top:6px}.convite p{margin:6px 0 0;color:var(--apagado)}
-.rodape{border-top:1px solid var(--linha);background:var(--fundo2);margin-top:24px}
+.rodape{border-top:1px solid var(--linha);background:var(--fundo2);margin-top:24px}.rod-by{max-width:1100px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left,0px)) 18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--apagado);opacity:.8}.rod-by b{background:linear-gradient(90deg,var(--amar),var(--verm),var(--roxo));-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
 .rod-in{max-width:1100px;margin:0 auto;padding:22px max(16px,env(safe-area-inset-left,0px)) 28px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;font-size:14px;color:var(--apagado)}
 .rod-in b{display:block;color:var(--texto);font-family:var(--display);font-weight:400;font-size:24px}.rod-in span{display:block;margin-top:4px}
 .rod-links{display:flex;flex-direction:column;gap:2px}.rod-links a{color:var(--texto);font-weight:800;text-decoration:none;padding:10px 0;min-height:44px}
@@ -342,7 +342,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
 /* compartilhar */
 .dlg-comp{width:min(440px,94vw);max-height:94dvh;overflow:auto}.comp-prev{display:flex;justify-content:center;margin:8px 0}.comp-prev img{width:min(260px,60vw);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.5)}.comp-acoes{justify-content:center}
 .comp-link{background:var(--fundo2);border-radius:12px;padding:10px 12px;margin:6px 0}.comp-link span{display:block;font-size:13px;font-weight:800;margin-bottom:6px}.comp-link div{display:flex;gap:8px}.comp-link input{flex:1;min-width:0;font:14px var(--corpo);color:var(--texto);background:var(--fundo);border:1px solid var(--linha);border-radius:10px;padding:10px}
-.lei-narr{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--linha);background:var(--fundo2)}.lei-narr .btn{min-height:40px;padding:8px 14px;font-size:13px}.nar-vel{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--apagado);margin-left:auto}.nar-vel select{font:13px var(--corpo);color:var(--texto);background:var(--fundo);border:1px solid var(--linha);border-radius:8px;padding:6px}
+.nar-voz-l select{max-width:180px}.lei-narr{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--linha);background:var(--fundo2)}.lei-narr .btn{min-height:40px;padding:8px 14px;font-size:13px}.nar-vel{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--apagado);margin-left:auto}.nar-vel select{font:13px var(--corpo);color:var(--texto);background:var(--fundo);border:1px solid var(--linha);border-radius:8px;padding:6px}
 .lei-v.lendo,.lei-cap.lendo,.lei-com.lendo{background:rgba(242,183,5,.22);border-radius:8px;outline:2px solid rgba(242,183,5,.5)}
 .lei-com{background:var(--card);border:1px solid var(--linha);border-radius:14px;padding:12px 14px;margin:10px 0 14px;font-size:.95em}.lei-com b{display:block;color:var(--amar);font-size:.8em;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}.lei-com p{margin:0}.lei-com small{display:block;margin-top:8px;font-size:.7em;color:var(--apagado)}.lei-com.fim{border-color:rgba(242,183,5,.45)}
 .retiro-cd{display:block;text-decoration:none;color:var(--texto);background:linear-gradient(135deg,rgba(224,38,63,.22),rgba(142,75,192,.2));border-color:rgba(224,38,63,.5)}.retiro-cd h2{margin:4px 0 10px}
@@ -784,7 +784,9 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     <button type="button" class="btn" id="nar-com">🎙️ Ouvir comentado</button>
     <button type="button" class="btn" id="nar-pausa" hidden>⏸ Pausar</button>
     <button type="button" class="btn" id="nar-parar" hidden>⏹ Parar</button>
-    <label class="nar-vel">Velocidade<select id="nar-vel"><option value="0.85">Devagar</option><option value="1" selected>Normal</option><option value="1.2">Rápida</option></select></label>
+    <label class="nar-vel nar-voz-l">Voz<select id="nar-voz" aria-label="Escolher a voz da narração"></select></label>
+    <a class="btn" id="nar-humana" target="_blank" rel="noopener" title="Abre a narração gravada (Almeida) no Wordproject">🎧 Narrador humano</a>
+    <label class="nar-vel" style="margin-left:0">Velocidade<select id="nar-vel"><option value="0.85">Devagar</option><option value="1" selected>Normal</option><option value="1.2">Rápida</option></select></label>
   </div>
   <div class="lei-corpo" id="lei-corpo"></div>
   <div class="lei-rodape"><button type="button" class="btn" id="lei-ant">‹ Anterior</button><a class="btn" id="lei-yv" target="_blank" rel="noopener">Ler na ARC</a><button type="button" class="btn forte" id="lei-prox">Próximo ›</button></div>
@@ -802,6 +804,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       <a id="rod-zap" href="#" target="_blank" rel="noopener" hidden>WhatsApp da liderança</a>
     </div>
   </div>
+  <div class="rod-by"><span>⚡ by <b>Vital Labs</b></span></div>
 </footer>
 
 <dialog id="dlg">
@@ -1048,7 +1051,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   function parseRef(ref){var m=/^(.+?) (\d+)(?:[–-](\d+))?$/.exec((ref||'').trim());if(!m)return null;var i=LIV_POR_NOME[m[1]];if(i==null)return null;return {i:i,c:+m[2],fim:m[3]?+m[3]:+m[2]}}
   function abrirRef(ref){var r=parseRef(ref);if(!r){toast('Não encontrei essa passagem');return}leit=r;mostrarLeitor()}
   function mostrarLeitor(){var l=LIVROS[leit.i];var corpo=$('#lei-corpo');corpo.style.fontSize=leiTam+'px';corpo.replaceChildren();var car=document.createElement('p');car.className='vazio';car.textContent='Carregando…';corpo.appendChild(car);
-    $('#leitor-tit').textContent=l[1]+' '+leit.c+(leit.fim>leit.c?'–'+leit.fim:'');$('#lei-yv').href='https://www.bible.com/pt/bible/212/'+l[0]+'.'+leit.c+'.ARC';
+    $('#leitor-tit').textContent=l[1]+' '+leit.c+(leit.fim>leit.c?'–'+leit.fim:'');$('#lei-yv').href='https://www.bible.com/pt/bible/212/'+l[0]+'.'+leit.c+'.ARC';var ixl=LIVROS.indexOf(l)+1;$('#nar-humana').href='https://wordproject.org/bibles/audio/02_portuguese-BR/b'+String(ixl).padStart(2,'0')+'.htm';
     var d=$('#leitor');if(!d.open)d.showModal();
     bibLivro(l[0]).then(function(j){corpo.replaceChildren();for(var c=leit.c;c<=leit.fim;c++){var vs=j[c-1]||[];var h=document.createElement('h3');h.className='lei-cap';h.textContent=l[1]+' '+c;corpo.appendChild(h);
       vs.forEach(function(t,k){if(!t)return;var p=document.createElement('p');p.className='lei-v';var n=document.createElement('sup');n.textContent=k+1;p.append(n,' '+t);p.onclick=function(){var txt=l[1]+' '+c+':'+(k+1)+' · '+t;if(navigator.clipboard)navigator.clipboard.writeText(txt).then(function(){toast('Versículo copiado')},function(){});p.classList.toggle('marcado')};corpo.appendChild(p)})}
@@ -1060,7 +1063,12 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   var comentCache=null;function comentarios(){if(comentCache)return Promise.resolve(comentCache);return fetch('biblia/comentarios.json').then(function(r){return r.json()}).then(function(j){comentCache=j;return j}).catch(function(){comentCache={livros:{},caps:{}};return comentCache})}
   var nar={fila:[],i:0,ativo:false,pausado:false};var temVoz=('speechSynthesis' in window);
   if(!temVoz){['#nar-pura','#nar-com'].forEach(function(q){$(q).disabled=true;$(q).title='Este navegador não tem leitura em voz'})}
-  function vozPt(){var vs=speechSynthesis.getVoices();return vs.filter(function(v){return /pt[-_]BR/i.test(v.lang)})[0]||vs.filter(function(v){return /^pt/i.test(v.lang)})[0]||null}
+  function vozesPt(){try{return speechSynthesis.getVoices().filter(function(v){return /^pt/i.test(v.lang)}).sort(function(a,b){var ab=/BR/i.test(a.lang)?0:1,bb=/BR/i.test(b.lang)?0:1;return ab-bb||(/natural|online|neural|premium|enhanced/i.test(b.name)?1:0)-(/natural|online|neural|premium|enhanced/i.test(a.name)?1:0)||a.name.localeCompare(b.name)})}catch(e){return []}}
+  function nomeVoz(v){var n=v.name.replace(/Microsoft |Google |Apple |Online |\(Natural\)|- Portuguese \(Brazil\)|Portuguese \(Brazil\)|português do Brasil|Português \(Brasil\)/gi,'').replace(/[()]/g,'').replace(/\s+/g,' ').trim();if(!n||/^pt/i.test(n))n='Voz';var q=/natural|online|neural|premium|enhanced/i.test(v.name)?' ✨':'';return n+(/BR/i.test(v.lang)?' · Brasil':' · Portugal')+q}
+  function montarVozes(){var sel=$('#nar-voz');if(!sel)return;var vs=vozesPt();var salvo='';try{salvo=localStorage.getItem('narVoz')||''}catch(e){}sel.replaceChildren(new Option('Padrão do aparelho',''));vs.forEach(function(v){sel.appendChild(new Option(nomeVoz(v),v.voiceURI||v.name))});sel.value=salvo;if(sel.value!==salvo)sel.value='';$('.nar-voz-l').hidden=!vs.length}
+  if(temVoz){montarVozes();try{speechSynthesis.addEventListener('voiceschanged',montarVozes)}catch(e){speechSynthesis.onvoiceschanged=montarVozes}}
+  $('#nar-voz').onchange=function(){try{localStorage.setItem('narVoz',this.value)}catch(e){}if(nar.ativo&&!nar.pausado){try{speechSynthesis.cancel()}catch(e){}setTimeout(falar,60)}else{try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance('Graça e paz! É com esta voz que vou ler a Palavra.');u.lang='pt-BR';var v=vozPt();if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}};
+  function vozPt(){var vs=speechSynthesis.getVoices();var esc=$('#nar-voz')&&$('#nar-voz').value;if(esc){var m=vs.filter(function(v){return (v.voiceURI||v.name)===esc})[0];if(m)return m}return vs.filter(function(v){return /pt[-_]BR/i.test(v.lang)})[0]||vs.filter(function(v){return /^pt/i.test(v.lang)})[0]||null}
   function frases(t){return (t||'').match(/[^.!?;]+(?:[.!?;]+(?=\s|$)|$)\s*/g)||[t]}
   function addFila(txt,el){frases(txt).forEach(function(f){if(f.trim())nar.fila.push({t:f.trim(),el:el})})}
   function cartaoCom(tit,txt,cls){var d=document.createElement('div');d.className='lei-com '+cls;var b=document.createElement('b');b.textContent=tit;var p=document.createElement('p');p.textContent=txt;d.append(b,p);return d}
