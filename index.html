@@ -404,13 +404,13 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
 <main>
   <section class="aba" id="aba-inicio">
     <div class="hero card" aria-labelledby="hero-titulo"><div class="hero-wrap sem-fotos" id="hero-wrap"><div class="hero-txt">
-      <div class="eb">Culto de jovens · todo sábado</div>
+      <div class="eb" id="hero-eb">Culto de jovens · todo sábado</div>
       <h1 id="hero-titulo" class="hero-hora">19h30 <span>às 21h00</span></h1>
       <p class="hero-data" id="hero-data">Próximo: sábado</p>
       <p class="hero-tema" id="hero-tema" hidden></p>
-      <p class="hero-local"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span><b>IEQ Alexânia · Sede</b><br>Rua 15 de Novembro, Qd. 05, Lt. 07, Setor 13 de Maio, Centro</span></p>
+      <p class="hero-local"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span><b id="hero-loc-n">IEQ Alexânia · Sede</b><br><span id="hero-loc-e">Rua 15 de Novembro, Qd. 05, Lt. 07, Setor 13 de Maio, Centro</span></span></p>
       <div class="acoes hero-acoes">
-        <a class="btn forte" href="https://www.google.com/maps/search/?api=1&amp;query=Igreja%20do%20Evangelho%20Quadrangular%20Alex%C3%A2nia&amp;query_place_id=ChIJhUFIkk3iW5MRUSaQnMCwf_g" target="_blank" rel="noopener">Como chegar</a>
+        <a class="btn forte" id="hero-mapa" href="https://www.google.com/maps/search/?api=1&amp;query=Igreja%20do%20Evangelho%20Quadrangular%20Alex%C3%A2nia&amp;query_place_id=ChIJhUFIkk3iW5MRUSaQnMCwf_g" target="_blank" rel="noopener">Como chegar</a>
         <a class="btn" href="#agenda">Ver agenda</a>
         <a class="btn zap" id="hero-zap" href="#" target="_blank" rel="noopener" hidden>Falar com a liderança</a>
       </div>
@@ -1158,14 +1158,22 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   tickRetiro();setInterval(tickRetiro,1000);desenharVagas();
 
   // destaque do próximo culto
-  function desenharHero(){var hj=new Date();var dw=hj.getDay();var ad=(6-dw+7)%7;if(ad===0&&hj.getHours()>=21)ad=7;var d=new Date(hj.getFullYear(),hj.getMonth(),hj.getDate()+ad);
-    var iso=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-    $('#hero-data').textContent=(ad===0?'Hoje, ':ad===1?'Amanhã, ':'Próximo: ')+'sábado, '+iso.slice(8)+'/'+iso.slice(5,7);
+  function desenharHero(){var hj=new Date();var hoje=hj.getFullYear()+'-'+String(hj.getMonth()+1).padStart(2,'0')+'-'+String(hj.getDate()).padStart(2,'0');
     var lista=(agenda&&agenda.cultos)?agenda.cultos.slice().sort(function(a,b){return a.data<b.data?-1:1}):[];
-    var c=lista.filter(function(x){return x.data===iso||(x.fim&&x.data<=iso&&x.fim>=iso)})[0];var t=$('#hero-tema');
-    if(c){t.replaceChildren();var b=document.createElement('b');b.textContent=c.tema;if(c.evento||c.fim){t.append('Neste sábado: ',b,'. Programação especial, confira na agenda.')}else t.append('Tema: ',b,c.serie?' · série '+c.serie:'');t.hidden=false}else t.hidden=true;
-    var ev=lista.filter(function(x){return (x.evento||ESPECIAL.test(x.tema))&&(x.fim||x.data)>=iso})[0];var e=$('#hero-evento');
-    if(ev&&ev!==c){e.replaceChildren();var bb=document.createElement('b');bb.textContent='Próximo evento: ';e.append(bb,ev.tema+' · '+ev.data.split('-').reverse().slice(0,2).join('/')+(ev.fim?' a '+ev.fim.split('-').reverse().slice(0,2).join('/'):''));e.hidden=false}else e.hidden=true}
+    var passou=function(x){var fimDia=(x.fim||x.data);if(fimDia>hoje)return false;if(fimDia<hoje)return true;var hf=x.horaFim||(x.hora?String(Math.min(23,+x.hora.slice(0,2)+3)).padStart(2,'0')+':'+x.hora.slice(3,5):'21:00');return hj.getHours()*60+hj.getMinutes()>=(+hf.slice(0,2))*60+(+hf.slice(3,5))};
+    var nx=lista.filter(function(x){return !passou(x)})[0];var t=$('#hero-tema'),e=$('#hero-evento'),tit=$('#hero-titulo'),eb=$('#hero-eb');
+    var dm=function(d){return d.split('-').reverse().slice(0,2).join('/')};var hh=function(h){return h.replace(':','h')};
+    var quando=function(x){var dd=Math.round((new Date(x.data+'T12:00:00')-new Date(hoje+'T12:00:00'))/864e5);var ds=['domingo','segunda','terça','quarta','quinta','sexta','sábado'][new Date(x.data+'T12:00:00').getDay()];return (dd===0?'Hoje, ':dd===1?'Amanhã, ':'')+ds+', '+dm(x.data)};
+    tit.replaceChildren();var sp=document.createElement('span');
+    if(!nx){eb.textContent='Culto de jovens · todo sábado';tit.append('19h30 ');sp.textContent='às 21h00';tit.appendChild(sp);$('#hero-data').textContent='Agenda em atualização';t.hidden=true;e.hidden=true;return}
+    if(nx.fim){eb.textContent='Próximo evento';tit.append(dm(nx.data)+' ');sp.textContent='a '+dm(nx.fim);tit.appendChild(sp);$('#hero-data').textContent=nx.tema}
+    else if(nx.evento){eb.textContent='Próximo evento · '+quando(nx);tit.append(hh(nx.hora||'19:30')+' ');sp.textContent=nx.horaFim?'às '+hh(nx.horaFim):'';tit.appendChild(sp);$('#hero-data').textContent=nx.tema}
+    else{eb.textContent='Culto de jovens · sábados';tit.append(hh(nx.hora||'19:30')+' ');sp.textContent='às '+hh(nx.horaFim||'21:00');tit.appendChild(sp);$('#hero-data').textContent=quando(nx).replace(/^(\w)/,function(m){return m.toUpperCase()})}
+    var MAPA_SEDE='https://www.google.com/maps/search/?api=1&query=Igreja%20do%20Evangelho%20Quadrangular%20Alex%C3%A2nia&query_place_id=ChIJhUFIkk3iW5MRUSaQnMCwf_g';var fora=nx.fim||(nx.local&&!/sede/i.test(nx.local));
+    $('#hero-loc-n').textContent=fora?(nx.local||'Casa de Eventos Mundial'):'IEQ Alexânia · Sede';$('#hero-loc-e').textContent=fora?'Alexânia-GO':'Rua 15 de Novembro, Qd. 05, Lt. 07, Setor 13 de Maio, Centro';$('#hero-mapa').href=fora?'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((nx.local||'Casa de Eventos Mundial')+' Alexânia GO'):MAPA_SEDE;
+    t.replaceChildren();if(nx.evento||nx.fim){if(nx.obs){t.textContent=nx.obs;t.hidden=false}else t.hidden=true}else{var b=document.createElement('b');b.textContent=nx.tema;t.append('Tema: ',b,nx.serie?' · série '+nx.serie:'');t.hidden=false}
+    var depois=lista.filter(function(x){return x!==nx&&!passou(x)});var ev=depois.filter(function(x){return x.evento||x.fim||ESPECIAL.test(x.tema)})[0];var volta=(nx.evento||nx.fim)?depois.filter(function(x){return !x.evento&&!x.fim})[0]:null;
+    e.replaceChildren();if(ev||volta){var bb=document.createElement('b');if(ev){bb.textContent='Depois: ';e.append(bb,ev.tema+' · '+dm(ev.data)+(ev.fim?' a '+dm(ev.fim):''))}if(volta){var b2=document.createElement('b');b2.textContent=(ev?' · ':'')+'Cultos de sábado voltam em ';e.append(b2,dm(volta.data)+'.')}e.hidden=false}else e.hidden=true}
   window.addEventListener('hashchange',mostrarAba);setTimeout(mostrarAba,0);
   window.addEventListener('resize',function(){desenharGincana();desenharFin()});
 
