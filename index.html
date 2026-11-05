@@ -258,6 +258,8 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 .pv-comp{display:flex;flex-direction:column;gap:8px}.pv-comp .ant{padding:10px 12px;border-radius:12px;background:var(--fundo2);border-left:4px solid var(--amar)}.pv-comp .ant small{display:block;font-weight:800;font-size:11px;color:var(--amar);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
 .chk{display:flex;gap:8px;align-items:center;font-size:13px;margin:10px 0 6px}
 .aq-faixa{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 16px}.aq-faixa div{background:linear-gradient(135deg,rgba(242,183,5,.16),rgba(200,16,46,.12));border:1px solid rgba(242,183,5,.35);border-radius:14px;padding:12px;text-align:center}.aq-faixa b{display:block;font-family:var(--display);font-size:40px;line-height:1;color:var(--amar)}.aq-faixa span{font-size:12px;color:var(--apagado)}
+.pub-sheet{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));top:auto;transform:translateX(-50%);margin:0;width:min(520px,calc(100% - 24px));border:1px solid rgba(242,183,5,.5);border-radius:18px;background:var(--card);color:var(--texto);box-shadow:0 18px 50px rgba(0,0,0,.55);padding:14px 16px;z-index:40}.pub-sheet[open]{display:flex;gap:12px;animation:pubIn .35s ease}@keyframes pubIn{from{transform:translate(-50%,30px);opacity:0}to{transform:translate(-50%,0);opacity:1}}.pub-ic{font-size:26px}.pub-c{display:flex;flex-direction:column;gap:4px;min-width:0}.pub-c span{color:var(--apagado);font-size:14px}.pub-c small{color:var(--amar);font-weight:800;font-size:12px}.pub-c p{margin:4px 0;font-size:14px;max-height:84px;overflow:auto;white-space:pre-line;background:var(--fundo2);border-radius:10px;padding:8px 10px}.pub-c .acoes{margin-top:6px}
+.lt-vis{border:1px solid var(--linha);border-radius:14px;padding:10px 14px;margin:6px 0 10px;display:flex;flex-direction:column;gap:6px}.lt-vis legend{font-weight:800;font-size:14px;padding:0 6px}.lt-vis label{display:flex;gap:8px;align-items:center;cursor:pointer}.lt-vis small{color:var(--apagado)}
 .turma{display:flex;flex-wrap:wrap;gap:8px}.turma-bt{background:none;border:0;padding:4px;cursor:pointer;border-radius:50%}.turma-bt:focus-visible{outline:2px solid var(--amar)}
 #dlg-cam{max-width:560px;width:calc(100% - 32px)}.cam-top{display:flex;gap:14px;align-items:center}.cam-top h3{font-family:var(--display);font-weight:400;font-size:34px;margin:0}
 .cam-dias{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;margin:6px 0 2px}.cam-dias i{aspect-ratio:1;border-radius:5px;background:rgba(255,253,246,.1)}.cam-dias i.on{background:var(--ok)}.cam-dias i.nota{box-shadow:inset 0 0 0 2px var(--amar)}
@@ -888,6 +890,14 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   <div id="cam-notas"></div>
   <div class="acoes"><button type="button" class="btn" onclick="this.closest('dialog').close()">Fechar</button></div>
 </dialog>
+<dialog id="dlg-pub" class="pub-sheet" aria-labelledby="pub-tit">
+  <div class="pub-ic">✅</div>
+  <div class="pub-c"><b id="pub-tit">Sua reflexão foi registrada!</b>
+    <span>Deseja publicá-la para a turma ou mantê-la privada?</span>
+    <small id="pub-tipo"></small><p id="pub-txt"></p><small id="pub-mais"></small>
+    <div class="acoes"><button type="button" class="btn" id="pub-priv">🔒 Manter privada</button><button type="button" class="btn forte" id="pub-pub">🌍 Publicar</button></div>
+  </div>
+</dialog>
 <dialog id="dlg-m">
   <h3 style="font-family:var(--display);font-weight:400;font-size:30px;margin:0">Registrar entrega</h3>
   <p class="aviso">Missão Cardápio do retiro.</p>
@@ -1368,7 +1378,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     if(lista.length>1&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))hfTimer=setInterval(function(){hfIdx=(hfIdx+1)%figs.length;mostrar()},4500)}
   // ---------- campanha: sorteio de 1 inscrição ----------
   var CAMP={ini:'2026-11-05',fim:'2027-02-05',dias:10,vagas:20};
-  function campDe(l){l=l||{};var notas=l.notas||{},pvx=l.pv||{},set={};(l.dias||[]).forEach(function(d){if(d>=CAMP.ini&&(notas[d]||pvx[d]))set[d]=1});var ds=Object.keys(set).sort();var run=0,prev=null,fim=null;
+  function campDe(l){l=l||{};var set={};(l.dias||[]).forEach(function(d){if(d>=CAMP.ini&&temRef(l,d))set[d]=1});var ds=Object.keys(set).sort();var run=0,prev=null,fim=null;
     ds.forEach(function(d){var cons=prev&&(new Date(d+'T12:00:00Z')-new Date(prev+'T12:00:00Z'))===864e5;run=cons?run+1:1;prev=d;if(!fim&&run>=CAMP.dias)fim=d});
     var hoje=hojeISO(),ont=new Date(new Date(hoje+'T12:00:00Z').getTime()-864e5).toISOString().slice(0,10);var atual=(prev===hoje||prev===ont)?run:0;return {atual:Math.min(atual,CAMP.dias),fim:fim}}
   function desenharCampanha(){var c=$('#camp-card');if(!c)return;var hoje=hojeISO();c.hidden=hoje>CAMP.fim;if(c.hidden)return;
@@ -1656,7 +1666,10 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   window.JOVENS_PLANOS=function(){return {aquec:AQUEC,plano:PLANO}};
   function emAquec(h){return h<=AQ_FIM}
   function planoAtivo(){return emAquec(hojeISO())?AQUEC:PLANO}
-  var leituras={},minhas=[],minhasNotas={},minhasPv={};
+  var leituras={},minhas=[],minhasNotas={},minhasPv={},meuDiario={notas:{},pv:{},dec:{}};
+  function mergeMinhas(){var L=(meuId&&leituras[meuId])||{};minhasNotas=Object.assign({},L.notas||{},meuDiario.notas||{});minhasPv=Object.assign({},L.pv||{},meuDiario.pv||{})}
+  function temRef(L,d){L=L||{};return !!((L.notas&&L.notas[d])||(L.pv&&L.pv[d])||(L.priv&&L.priv[d]))}
+  function nRefs(L,de,ate){L=L||{};var n=0;var ok=function(d){return (!de||d>=de)&&(!ate||d<=ate)};Object.keys(L.notas||{}).forEach(function(d){if(ok(d)&&L.notas[d])n++});Object.keys(L.pv||{}).forEach(function(d){if(ok(d)&&L.pv[d])n++});Object.keys(L.priv||{}).forEach(function(d){if(ok(d)){var x=L.priv[d]||{};n+=(x.n?1:0)+(x.p?1:0)}});return n}
   function seqDe(dias){var set={};dias.forEach(function(x){set[x]=1});var hoje=hojeISO(),n=0,d=new Date(hoje+'T12:00:00Z');if(!set[hoje])d=new Date(d.getTime()-864e5);
     while(set[d.toISOString().slice(0,10)]){n++;d=new Date(d.getTime()-864e5)}return n}
   function livrosConcluidos(dias,plano){var set={};dias.forEach(function(x){set[x]=1});var por={};plano.forEach(function(p){var ls={};p.partes.forEach(function(pt){(pt.caps||[]).forEach(function(c){ls[c.livro]=1})});Object.keys(ls).forEach(function(l){por[l]=por[l]||{t:0,f:0};por[l].t++;if(set[p.data])por[l].f++})});return Object.keys(por).filter(function(k){return por[k].f===por[k].t})}
@@ -1723,29 +1736,50 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   function refDia(d){var x=AQUEC.filter(function(y){return y.data===d})[0]||PLANO.filter(function(y){return y.data===d})[0];if(!x)return '';return x.ref||(x.partes||[]).map(function(p){return p.ref}).join(' · ')}
   function abrirCaminhada(u){var l=leituras[u]||{},j=jovens[u]||{},dias=(l.dias||[]).slice().sort(),notas=l.notas||{},pvs=l.pv||{};var hoje=hojeISO();
     var f=$('#cam-foto');f.replaceChildren();var fx=document.createElement('div');fotoJovem(fx,j,'m');f.appendChild(fx);$('#cam-nome').textContent=j.nome||'Jovem';
-    var nN=Object.keys(notas).filter(function(d){return notas[d]}).length+Object.keys(pvs).filter(function(d){return pvs[d]}).length;var cp=campDe(l);
+    var nN=nRefs(l);var proprio=u===meuId;if(proprio){notas=Object.assign({},notas,meuDiario.notas||{});pvs=Object.assign({},pvs,meuDiario.pv||{})}var cp=campDe(l);
     kps($('#cam-kp'),[['🔥 '+seqDe(dias),'dias seguidos'],[dias.length,'leituras feitas'],[nN,'reflexões escritas']]);
-    var g=$('#cam-dias');g.replaceChildren();for(var i=13;i>=0;i--){var d=new Date(new Date(hoje+'T12:00:00Z').getTime()-i*864e5).toISOString().slice(0,10);var c=document.createElement('i');var leu=dias.indexOf(d)>=0;var ref=notas[d]||pvs[d];c.className=(leu?'on':'')+(ref?' nota':'');c.title=d.split('-').reverse().slice(0,2).join('/')+(leu?' · leu':'')+(ref?' · refletiu':'');g.appendChild(c)}
+    var g=$('#cam-dias');g.replaceChildren();for(var i=13;i>=0;i--){var d=new Date(new Date(hoje+'T12:00:00Z').getTime()-i*864e5).toISOString().slice(0,10);var c=document.createElement('i');var leu=dias.indexOf(d)>=0;var ref=notas[d]||pvs[d]||(l.priv&&l.priv[d]);c.className=(leu?'on':'')+(ref?' nota':'');c.title=d.split('-').reverse().slice(0,2).join('/')+(leu?' · leu':'')+(ref?' · refletiu':'');g.appendChild(c)}
     $('#cam-camp').textContent=cp.fim?'✓ Completou os 10 dias do sorteio em '+cp.fim.split('-').reverse().slice(0,2).join('/'):'Sorteio: '+cp.atual+'/'+CAMP.dias+' dias seguidos com reflexão';
-    var box=$('#cam-notas');box.replaceChildren();var pode=editor||u===meuId;
-    if(!pode){var p=document.createElement('p');p.className='aviso';p.textContent='As reflexões são pessoais: só a própria pessoa e a liderança veem o que foi escrito.';box.appendChild(p)}
-    else{var itens=[];Object.keys(notas).forEach(function(d){if(notas[d])itens.push({d:d,t:notas[d],tipo:'Reflexão da leitura',ref:refDia(d)})});Object.keys(pvs).forEach(function(d){var v=pvs[d];var t=typeof v==='string'?v:(v&&(v.texto||v.t||v.nota))||'';if(t)itens.push({d:d,t:t,tipo:'Aprendizado no Provérbio',ref:(refDia(d).match(/Provérbios \d+/)||[''])[0]})});
-      itens.sort(function(a,b){return a.d<b.d?1:-1});if(!itens.length){var v=document.createElement('p');v.className='vazio';v.textContent='Nenhuma reflexão escrita ainda.';box.appendChild(v)}
-      itens.forEach(function(x){var it=document.createElement('div');it.className='cam-nota';var h=document.createElement('small');h.textContent=x.d.split('-').reverse().join('/')+' · '+x.tipo+(x.ref?' · '+x.ref:'');var q=document.createElement('p');q.textContent=x.t;it.append(h,q);box.appendChild(it)})}
+    var box=$('#cam-notas');box.replaceChildren();var nPriv=proprio?0:nRefs({priv:l.priv});
+    if(nPriv){var pp=document.createElement('p');pp.className='aviso';pp.textContent='🔒 '+nPriv+(nPriv===1?' reflexão pessoal':' reflexões pessoais')+': só '+(j.nome?j.nome.split(' ')[0]:'a pessoa')+' vê.';box.appendChild(pp)}
+    {var itens=[];Object.keys(notas).forEach(function(d){if(notas[d])itens.push({d:d,t:notas[d],tipo:'Reflexão da leitura',ref:refDia(d)})});Object.keys(pvs).forEach(function(d){var v=pvs[d];var t=typeof v==='string'?v:(v&&(v.texto||v.t||v.nota))||'';if(t)itens.push({d:d,t:t,tipo:'Aprendizado no Provérbio',ref:(refDia(d).match(/Provérbios \d+/)||[''])[0]})});
+      itens.sort(function(a,b){return a.d<b.d?1:-1});if(!itens.length&&!nPriv){var v=document.createElement('p');v.className='vazio';v.textContent='Nenhuma reflexão publicada ainda.';box.appendChild(v)}
+      itens.forEach(function(x){var it=document.createElement('div');it.className='cam-nota';var h=document.createElement('small');var pri=proprio&&((meuDiario.notas||{})[x.d]===x.t||(meuDiario.pv||{})[x.d]===x.t);h.textContent=(pri?'🔒 ':'')+x.d.split('-').reverse().join('/')+' · '+x.tipo+(x.ref?' · '+x.ref:'');var q=document.createElement('p');q.textContent=x.t;it.append(h,q);box.appendChild(it)})}
     $('#dlg-cam').showModal()}
 
   function desenharSecreto(){var box=$('#rank-secreto');box.replaceChildren();
     var us={};Object.keys(leituras).forEach(function(u){us[u]=1});Object.keys(posts).forEach(function(u){us[u]=1});
     var lista=Object.keys(us).filter(function(u){var t=cadastros[u]&&cadastros[u].tipo;return !t||t==='jovem'}).map(function(u){var L=leituras[u]||{};var lid=dentro(L.dias||[],AQUEC).length;var notas=L.notas||{};
-      var pvn=L.pv||{};var nn=Object.keys(notas).filter(function(d){return d>=AQ_INI&&d<=AQ_FIM&&notas[d]}).length+Object.keys(pvn).filter(function(d){return d>=AQ_INI&&d<=AQ_FIM&&pvn[d]}).length;
+      var nn=nRefs(L,AQ_INI,AQ_FIM);
       var np=(posts[u]||[]).filter(function(p){var d=(p.quando||'').slice(0,10);return d>=AQ_INI&&d<=AQ_FIM&&!p.daLeitura}).length;
       return {u:u,lid:lid,com:nn+np,pts:lid+nn+np,seq:seqDe(L.dias||[])}}).filter(function(r){return r.pts>0}).sort(function(a,b){return b.pts-a.pts||b.lid-a.lid||b.seq-a.seq});
     if(!lista.length){var v=document.createElement('p');v.className='vazio';v.textContent='Ainda sem leituras ou reflexões no aquecimento.';box.appendChild(v);return}
     var max=lista[0].pts;lista.forEach(function(r,i){var row=linhaRank(r,i,max,r.pts,i<3?['  🥇','  🥈','  🥉'][i]:'',r.lid+' leituras · '+r.com+' reflexões');row.style.cursor='pointer';row.setAttribute('role','button');row.tabIndex=0;row.title='Ver reflexões';row.onclick=function(){abrirCaminhada(r.u)};row.onkeydown=function(e){if(e.key==='Enter')abrirCaminhada(r.u)};box.appendChild(row)})}
   async function gravarLeitura(diasNovos,notaHoje,pvHoje){if(!db||!meuId)return;var atual=leituras[meuId]||{};var set={};(atual.dias||[]).concat(diasNovos).forEach(function(x){set[x]=1});var h=hojeISO();
-    var notas=Object.assign({},atual.notas||{});if(notaHoje!=null){if(notaHoje)notas[h]=notaHoje;else delete notas[h]}
-    var pv=Object.assign({},atual.pv||{});if(pvHoje!=null){if(pvHoje)pv[h]=pvHoje;else delete pv[h]}
-    await db.doc('leitura/'+meuId).set({dias:Object.keys(set).sort(),notas:notas,pv:pv,atualizado:h})}
+    var notas=Object.assign({},atual.notas||{}),pv=Object.assign({},atual.pv||{}),priv=JSON.parse(JSON.stringify(atual.priv||{}));var dn=Object.assign({},meuDiario.notas||{}),dp=Object.assign({},meuDiario.pv||{}),dec=Object.assign({},meuDiario.dec||{});var mexeu=false,novos=[];
+    function aplica(val,pub,dpriv,chave){if(val==null)return;var m=priv[h]||{};
+      if(pub[h]&&val){pub[h]=val;return}
+      if(!val){delete pub[h];if(dpriv[h]!==undefined){delete dpriv[h];mexeu=true}delete m[chave]}
+      else{if(dpriv[h]!==val){dpriv[h]=val;mexeu=true;delete dec[chave+':'+h];novos.push(chave+':'+h)}m[chave]=1}
+      if(Object.keys(m).length)priv[h]=m;else delete priv[h]}
+    aplica(notaHoje,notas,dn,'n');aplica(pvHoje,pv,dp,'p');
+    if(mexeu){await db.doc('diario/'+meuId).set({notas:dn,pv:dp,dec:dec,atualizado:h});meuDiario={notas:dn,pv:dp,dec:dec}}
+    await db.doc('leitura/'+meuId).set({dias:Object.keys(set).sort(),notas:notas,pv:pv,priv:priv,atualizado:h});
+    if(novos.length)setTimeout(perguntarPublicar,700)}
+  // ---------- publicar ou manter privada ----------
+  function pendentesDiario(){var out=[],dec=meuDiario.dec||{};Object.keys(meuDiario.notas||{}).forEach(function(d){if(meuDiario.notas[d]&&!dec['n:'+d])out.push({k:'n',d:d,t:meuDiario.notas[d]})});Object.keys(meuDiario.pv||{}).forEach(function(d){if(meuDiario.pv[d]&&!dec['p:'+d])out.push({k:'p',d:d,t:meuDiario.pv[d]})});return out.sort(function(a,b){return a.d<b.d?1:-1})}
+  var pubAtual=null;
+  $('#pub-pub').onclick=function(){decidirPublicar(true)};$('#pub-priv').onclick=function(){decidirPublicar(false)};
+  function perguntarPublicar(){var pend=pendentesDiario();var dl=$('#dlg-pub');if(!pend.length||!dl||dl.open)return;pubAtual=pend[0];
+    $('#pub-tipo').textContent=(pubAtual.k==='n'?'Reflexão da leitura':'Aprendizado no Provérbio')+' · '+pubAtual.d.split('-').reverse().slice(0,2).join('/')+(refDia(pubAtual.d)?' · '+refDia(pubAtual.d):'');
+    $('#pub-txt').textContent=pubAtual.t;$('#pub-mais').textContent=pend.length>1?'Você tem mais '+(pend.length-1)+(pend.length===2?' reflexão aguardando':' reflexões aguardando')+' a sua escolha.':'';dl.show()}
+  async function decidirPublicar(publicar){var x=pubAtual;if(!x||!db||!meuId)return;$('#dlg-pub').close();var h=hojeISO();
+    var L=leituras[meuId]||{};var notas=Object.assign({},L.notas||{}),pv=Object.assign({},L.pv||{}),priv=JSON.parse(JSON.stringify(L.priv||{}));var dn=Object.assign({},meuDiario.notas||{}),dp=Object.assign({},meuDiario.pv||{}),dec=Object.assign({},meuDiario.dec||{});
+    try{if(publicar){if(x.k==='n'){notas[x.d]=x.t;delete dn[x.d]}else{pv[x.d]=x.t;delete dp[x.d]}var m=priv[x.d]||{};delete m[x.k];if(Object.keys(m).length)priv[x.d]=m;else delete priv[x.d];delete dec[x.k+':'+x.d]}
+      else dec[x.k+':'+x.d]=1;
+      await db.doc('diario/'+meuId).set({notas:dn,pv:dp,dec:dec,atualizado:h});meuDiario={notas:dn,pv:dp,dec:dec};
+      if(publicar)await db.doc('leitura/'+meuId).set(Object.assign({},L,{notas:notas,pv:pv,priv:priv,atualizado:h}));
+      toast(publicar?'Reflexão publicada na sua caminhada 🌍':'Reflexão mantida só para você 🔒');mergeMinhas();setTimeout(perguntarPublicar,500)}catch(e){toast('Não foi possível salvar agora')}}
   async function compartilharNota(texto){if(!texto||!$('#lt-mural').checked||!db||!meuId)return;if(!jovens[meuId]||!jovens[meuId].nome){toast('Complete seu perfil para publicar no mural');return}
     var p=planoAtivo().filter(function(x){return x.data===hojeISO()})[0];await db.collection('mural/'+meuId+'/posts').add({tipo:'Devocional',ref:p?p.ref:'',texto:texto,foto:null,quando:new Date().toISOString(),daLeitura:true});$('#lt-mural').checked=false}
   async function salvarLeituras(novas){try{await gravarLeitura(novas,null);toast(novas.length>1?novas.length+' leituras marcadas':'Leitura marcada. Glória a Deus!')}catch(e){toast('Não foi possível marcar a leitura')}}
@@ -1845,11 +1879,12 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     db.collection('pontos').onSnapshot(function(s){pontos=s.docs.map(function(d){return Object.assign({id:d.id},d.data())});desenharGincana()},function(){});
     db.doc('gincana/cardapio').onSnapshot(function(s){mDoc=s.exists?Object.assign({entregas:[]},s.data()):{entregas:[]};desenharGincana()},function(){});
     db.doc('gincana/config').onSnapshot(function(s){if(s.exists)gconf=Object.assign(gconf,s.data());desenharGincana()},function(){});
-    db.collection('leitura').onSnapshot(function(s){leituras={};s.docs.forEach(function(d){leituras[d.id]=d.data()});minhas=(meuId&&leituras[meuId]&&leituras[meuId].dias)||[];minhasNotas=(meuId&&leituras[meuId]&&leituras[meuId].notas)||{};minhasPv=(meuId&&leituras[meuId]&&leituras[meuId].pv)||{};desenharLeitura();desenharCampanha();desenharGestao()},function(){});
+    db.collection('leitura').onSnapshot(function(s){leituras={};s.docs.forEach(function(d){leituras[d.id]=d.data()});minhas=(meuId&&leituras[meuId]&&leituras[meuId].dias)||[];mergeMinhas();desenharLeitura();desenharCampanha();desenharGestao()},function(){});
     db.doc('agenda/2027').onSnapshot(function(s){if(s.exists){agenda=s.data();desenharAgenda()}},function(){});
     db.collection('jovens').onSnapshot(function(s){jovens={};s.docs.forEach(function(d){jovens[d.id]=d.data()});try{desenharCampanha()}catch(e){}Object.keys(jovens).forEach(assinarPosts);try{listaJovensDatalist()}catch(e){}if(meuId)assinarPosts(meuId);desenharPerfil();desenharMural();desenharLeitura()},function(){});
     if(meuId)assinarPosts(meuId);
     db.collection('inscricoes').onSnapshot(function(s){inscricoes={};s.docs.forEach(function(d){inscricoes[d.id]=d.data()});desenharRetiro();desenharGestao();desenharCampanha()},function(){});
+    if(meuId)db.doc('diario/'+meuId).onSnapshot(function(s){meuDiario=s.exists?Object.assign({notas:{},pv:{},dec:{}},s.data()):{notas:{},pv:{},dec:{}};setTimeout(perguntarPublicar,1500);mergeMinhas();var nt=$('#lt-nota');if(nt)delete nt.dataset.dia;var pt=$('#lt-pv');if(pt)delete pt.dataset.dia;desenharLeitura()},function(){});
     if(meuId&&!editor)db.doc('inscricoes/'+meuId).onSnapshot(function(s){if(s.exists){inscricoes[meuId]=s.data();desenharRetiro();desenharCampanha()}},function(){});
     if(editor){db.collection('cadastro').onSnapshot(function(s){cadastros={};s.docs.forEach(function(d){cadastros[d.id]=d.data()});cadChecado=true;desenharPerfil();listaJovensDatalist();desenharGestao();desenharAlertaPerfil()},function(){});
       db.collection('pagamentos').onSnapshot(function(s){pagamentos={};s.docs.forEach(function(d){pagamentos[d.id]=d.data()});desenharGestao()},function(){});
