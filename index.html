@@ -1368,7 +1368,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     if(lista.length>1&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))hfTimer=setInterval(function(){hfIdx=(hfIdx+1)%figs.length;mostrar()},4500)}
   // ---------- campanha: sorteio de 1 inscrição ----------
   var CAMP={ini:'2026-11-05',fim:'2027-02-05',dias:10,vagas:20};
-  function campDe(l){l=l||{};var notas=l.notas||{},set={};(l.dias||[]).forEach(function(d){if(d>=CAMP.ini&&notas[d])set[d]=1});var ds=Object.keys(set).sort();var run=0,prev=null,fim=null;
+  function campDe(l){l=l||{};var notas=l.notas||{},pvx=l.pv||{},set={};(l.dias||[]).forEach(function(d){if(d>=CAMP.ini&&(notas[d]||pvx[d]))set[d]=1});var ds=Object.keys(set).sort();var run=0,prev=null,fim=null;
     ds.forEach(function(d){var cons=prev&&(new Date(d+'T12:00:00Z')-new Date(prev+'T12:00:00Z'))===864e5;run=cons?run+1:1;prev=d;if(!fim&&run>=CAMP.dias)fim=d});
     var hoje=hojeISO(),ont=new Date(new Date(hoje+'T12:00:00Z').getTime()-864e5).toISOString().slice(0,10);var atual=(prev===hoje||prev===ont)?run:0;return {atual:Math.min(atual,CAMP.dias),fim:fim}}
   function desenharCampanha(){var c=$('#camp-card');if(!c)return;var hoje=hojeISO();c.hidden=hoje>CAMP.fim;if(c.hidden)return;
@@ -1721,16 +1721,17 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     var t=$('#turma');t.replaceChildren();if(!leram.length){var v=document.createElement('p');v.className='vazio';v.textContent='Ninguém marcou a leitura de hoje ainda. Que tal ser o primeiro?';t.appendChild(v);return}
     leram.forEach(function(u){var bt=document.createElement('button');bt.type='button';bt.className='turma-bt';bt.setAttribute('aria-label','Ver a caminhada de '+((jovens[u]&&jovens[u].nome)||'jovem'));var f=document.createElement('div');fotoJovem(f,jovens[u]||{},'p');f.title=(jovens[u]&&jovens[u].nome)||'Jovem';bt.appendChild(f);bt.onclick=function(){abrirCaminhada(u)};t.appendChild(bt)})}
   function refDia(d){var x=AQUEC.filter(function(y){return y.data===d})[0]||PLANO.filter(function(y){return y.data===d})[0];if(!x)return '';return x.ref||(x.partes||[]).map(function(p){return p.ref}).join(' · ')}
-  function abrirCaminhada(u){var l=leituras[u]||{},j=jovens[u]||{},dias=(l.dias||[]).slice().sort(),notas=l.notas||{};var hoje=hojeISO();
+  function abrirCaminhada(u){var l=leituras[u]||{},j=jovens[u]||{},dias=(l.dias||[]).slice().sort(),notas=l.notas||{},pvs=l.pv||{};var hoje=hojeISO();
     var f=$('#cam-foto');f.replaceChildren();var fx=document.createElement('div');fotoJovem(fx,j,'m');f.appendChild(fx);$('#cam-nome').textContent=j.nome||'Jovem';
-    var nN=Object.keys(notas).filter(function(d){return notas[d]}).length;var cp=campDe(l);
+    var nN=Object.keys(notas).filter(function(d){return notas[d]}).length+Object.keys(pvs).filter(function(d){return pvs[d]}).length;var cp=campDe(l);
     kps($('#cam-kp'),[['🔥 '+seqDe(dias),'dias seguidos'],[dias.length,'leituras feitas'],[nN,'reflexões escritas']]);
-    var g=$('#cam-dias');g.replaceChildren();for(var i=13;i>=0;i--){var d=new Date(new Date(hoje+'T12:00:00Z').getTime()-i*864e5).toISOString().slice(0,10);var c=document.createElement('i');var leu=dias.indexOf(d)>=0;c.className=(leu?'on':'')+(notas[d]?' nota':'');c.title=d.split('-').reverse().slice(0,2).join('/')+(leu?' · leu':'')+(notas[d]?' · refletiu':'');g.appendChild(c)}
+    var g=$('#cam-dias');g.replaceChildren();for(var i=13;i>=0;i--){var d=new Date(new Date(hoje+'T12:00:00Z').getTime()-i*864e5).toISOString().slice(0,10);var c=document.createElement('i');var leu=dias.indexOf(d)>=0;var ref=notas[d]||pvs[d];c.className=(leu?'on':'')+(ref?' nota':'');c.title=d.split('-').reverse().slice(0,2).join('/')+(leu?' · leu':'')+(ref?' · refletiu':'');g.appendChild(c)}
     $('#cam-camp').textContent=cp.fim?'✓ Completou os 10 dias do sorteio em '+cp.fim.split('-').reverse().slice(0,2).join('/'):'Sorteio: '+cp.atual+'/'+CAMP.dias+' dias seguidos com reflexão';
     var box=$('#cam-notas');box.replaceChildren();var pode=editor||u===meuId;
     if(!pode){var p=document.createElement('p');p.className='aviso';p.textContent='As reflexões são pessoais: só a própria pessoa e a liderança veem o que foi escrito.';box.appendChild(p)}
-    else{var ds=Object.keys(notas).filter(function(d){return notas[d]}).sort().reverse();if(!ds.length){var v=document.createElement('p');v.className='vazio';v.textContent='Nenhuma reflexão escrita ainda.';box.appendChild(v)}
-      ds.forEach(function(d){var it=document.createElement('div');it.className='cam-nota';var h=document.createElement('small');h.textContent=d.split('-').reverse().join('/')+(refDia(d)?' · '+refDia(d):'');var q=document.createElement('p');q.textContent=notas[d];it.append(h,q);box.appendChild(it)})}
+    else{var itens=[];Object.keys(notas).forEach(function(d){if(notas[d])itens.push({d:d,t:notas[d],tipo:'Reflexão da leitura',ref:refDia(d)})});Object.keys(pvs).forEach(function(d){var v=pvs[d];var t=typeof v==='string'?v:(v&&(v.texto||v.t||v.nota))||'';if(t)itens.push({d:d,t:t,tipo:'Aprendizado no Provérbio',ref:(refDia(d).match(/Provérbios \d+/)||[''])[0]})});
+      itens.sort(function(a,b){return a.d<b.d?1:-1});if(!itens.length){var v=document.createElement('p');v.className='vazio';v.textContent='Nenhuma reflexão escrita ainda.';box.appendChild(v)}
+      itens.forEach(function(x){var it=document.createElement('div');it.className='cam-nota';var h=document.createElement('small');h.textContent=x.d.split('-').reverse().join('/')+' · '+x.tipo+(x.ref?' · '+x.ref:'');var q=document.createElement('p');q.textContent=x.t;it.append(h,q);box.appendChild(it)})}
     $('#dlg-cam').showModal()}
 
   function desenharSecreto(){var box=$('#rank-secreto');box.replaceChildren();
@@ -1740,7 +1741,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       var np=(posts[u]||[]).filter(function(p){var d=(p.quando||'').slice(0,10);return d>=AQ_INI&&d<=AQ_FIM&&!p.daLeitura}).length;
       return {u:u,lid:lid,com:nn+np,pts:lid+nn+np,seq:seqDe(L.dias||[])}}).filter(function(r){return r.pts>0}).sort(function(a,b){return b.pts-a.pts||b.lid-a.lid||b.seq-a.seq});
     if(!lista.length){var v=document.createElement('p');v.className='vazio';v.textContent='Ainda sem leituras ou reflexões no aquecimento.';box.appendChild(v);return}
-    var max=lista[0].pts;lista.forEach(function(r,i){var row=linhaRank(r,i,max,r.pts,i<3?['  🥇','  🥈','  🥉'][i]:'',r.lid+' leituras · '+r.com+' reflexões');box.appendChild(row)})}
+    var max=lista[0].pts;lista.forEach(function(r,i){var row=linhaRank(r,i,max,r.pts,i<3?['  🥇','  🥈','  🥉'][i]:'',r.lid+' leituras · '+r.com+' reflexões');row.style.cursor='pointer';row.setAttribute('role','button');row.tabIndex=0;row.title='Ver reflexões';row.onclick=function(){abrirCaminhada(r.u)};row.onkeydown=function(e){if(e.key==='Enter')abrirCaminhada(r.u)};box.appendChild(row)})}
   async function gravarLeitura(diasNovos,notaHoje,pvHoje){if(!db||!meuId)return;var atual=leituras[meuId]||{};var set={};(atual.dias||[]).concat(diasNovos).forEach(function(x){set[x]=1});var h=hojeISO();
     var notas=Object.assign({},atual.notas||{});if(notaHoje!=null){if(notaHoje)notas[h]=notaHoje;else delete notas[h]}
     var pv=Object.assign({},atual.pv||{});if(pvHoje!=null){if(pvHoje)pv[h]=pvHoje;else delete pv[h]}
