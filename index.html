@@ -985,7 +985,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   $('#tm-imprimir').onclick=function(){imprimirTermo(null)};
   function norm(x){return (x||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim()}
   function termoDe(nome){var n=norm(nome);if(!n)return null;var pri=n.split(' ')[0];var achou=null;Object.keys(termos).forEach(function(u){var tj=norm(termos[u].jovem);if(tj===n||(tj.split(' ')[0]===pri&&(tj.indexOf(n)>=0||n.indexOf(tj)>=0)))achou=termos[u]});return achou}
-  var inscricoes={},denuncias={};
+  var inscricoes={},denuncias={},contasRes=null;
   function idadeEm(nasc,ref){if(!nasc)return null;var n=new Date(nasc+'T12:00:00'),r=new Date(ref+'T12:00:00');var a=r.getFullYear()-n.getFullYear();if(r.getMonth()<n.getMonth()||(r.getMonth()===n.getMonth()&&r.getDate()<n.getDate()))a--;return a}
   function desenharRetiro(){montarRetiro();var logado=!!(meuId&&podeLancarProprio);var minha=meuId&&inscricoes[meuId];
     $('#ret-entrar').hidden=logado;$('#form-ret').hidden=!logado||!!(minha&&!$('#form-ret').dataset.editar);
@@ -1047,7 +1047,9 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   function desenharDados(){var hoje=hojeISO();var ids=Object.keys(cadastros);var por=function(f){var o={};ids.forEach(function(u){var v=cadastros[u][f]||'Não informado';o[v]=(o[v]||0)+1});return o};
     var jov=ids.filter(function(u){return cadastros[u].tipo==='jovem'});var sete=new Date(Date.now()-7*864e5).toISOString().slice(0,10);
     var ativos=jov.filter(function(u){return ((leituras[u]&&leituras[u].dias)||[]).some(function(d){return d>=sete})});
-    kps($('#pd-kp'),[[ids.length,'pessoas cadastradas'],[jov.length,'jovens'],[jov.filter(function(u){return cadastros[u].genero==='M'}).length,'rapazes'],[jov.filter(function(u){return cadastros[u].genero==='F'}).length,'moças'],[jov.filter(function(u){return /^Sim/.test(cadastros[u].congregacao||'')}).length,'jovens membros'],[ativos.length,'leram nos últimos 7 dias','ok']]);
+    if(contasRes===null&&window.sbJovens){contasRes={};window.sbJovens.rpc('contas_resumo').then(function(r){contasRes=r.data||{};desenharDados()},function(){})}
+    var kc=(contasRes&&contasRes.contas)?[[contasRes.contas,'contas criadas'],[Math.max(0,contasRes.contas-ids.length),'ainda sem perfil completo',contasRes.contas-ids.length>0?'alerta':'']]:[];
+    kps($('#pd-kp'),kc.concat([[ids.length,'perfis completos'],[jov.length,'jovens'],[jov.filter(function(u){return cadastros[u].genero==='M'}).length,'rapazes'],[jov.filter(function(u){return cadastros[u].genero==='F'}).length,'moças'],[jov.filter(function(u){return /^Sim/.test(cadastros[u].congregacao||'')}).length,'jovens membros'],[ativos.length,'leram nos últimos 7 dias','ok']]));
     var pt=por('tipo');hbarras($('#pd-tipo'),Object.keys(TIPO_NOME).map(function(k){return [TIPO_NOME[k],pt[k]||0]}));
     var pc={};jov.forEach(function(u){var v=(cadastros[u].congregacao||'Não informado').replace(/^Sim, (na|no) /,'');pc[v]=(pc[v]||0)+1});hbarras($('#pd-congr'),Object.keys(pc).sort(function(a,b){return pc[b]-pc[a]}).map(function(k){return [k,pc[k],/não/i.test(k)?'var(--verm)':'var(--azul)']}));
     var pb={};jov.forEach(function(u){var v=cadastros[u].batismo||'Não informado';pb[v]=(pb[v]||0)+1});hbarras($('#pd-bat'),[['Já batizados',pb['Já sou batizado(a)']||0,'var(--ok)'],['Pretendem se batizar',pb['Pretendo me batizar']||0,'var(--amar)'],['Ainda não decidiram',pb['Ainda não decidi']||0,'rgba(255,253,246,.35)']]);
