@@ -128,6 +128,18 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 .ev-fotos button{position:absolute;top:4px;right:4px;border:0;border-radius:99px;background:rgba(15,13,22,.8);color:#fff;font-size:12px;padding:4px 8px;cursor:pointer}
 .ev-acoes-fin{display:flex;flex-direction:column;gap:6px;margin-top:8px}.ev-acoes-fin div{display:grid;grid-template-columns:1fr 110px auto;gap:6px}
 .ev-acoes-fin input{font:14px var(--corpo);color:var(--texto);background:var(--fundo);border:1px solid var(--linha);border-radius:10px;padding:8px}
+/* campanha sorteio */
+.camp{position:relative;overflow:hidden;border:1px solid rgba(242,183,5,.4);background:radial-gradient(circle at 100% 0,rgba(242,183,5,.18),transparent 55%),radial-gradient(circle at 0 100%,rgba(142,75,192,.2),transparent 55%),var(--card)}
+.camp .selo{position:absolute;top:18px;right:18px;background:var(--verm);color:#fff;font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:99px}
+.camp h2{font-family:var(--display);font-weight:400;font-size:clamp(40px,8vw,64px);line-height:.9;margin:6px 0 10px}.camp h2 span{color:var(--amar)}
+.camp .uma{display:inline-block;font-family:var(--display);font-size:1.5em;line-height:1;background:var(--amar);color:#14111C;padding:2px 10px 0;border-radius:8px;transform:rotate(-3deg);margin:0 2px;vertical-align:-4px}
+.camp-passos{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.camp-p{display:grid;grid-template-columns:38px 1fr auto;gap:12px;align-items:center;background:rgba(255,253,246,.05);border:1px solid var(--linha);border-radius:14px;padding:10px 12px}
+.camp-p .n{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:24px;color:#14111C}
+.camp-p b{display:block}.camp-p small{color:var(--apagado)}
+.camp-p .st{font-size:12px;font-weight:800;padding:4px 10px;border-radius:99px;background:rgba(255,253,246,.08);color:var(--apagado);white-space:nowrap}.camp-p .st.ok{background:rgba(60,179,113,.18);color:var(--ok)}
+.camp-dias{display:flex;gap:4px;margin-top:6px}.camp-dias i{flex:1;height:8px;border-radius:4px;background:rgba(255,253,246,.12)}.camp-dias i.on{background:var(--amar)}
+.camp-rod{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
 /* missão cardápio */
 .missao .mt{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
 @media (max-width:520px){.missao .mt{grid-template-columns:1fr}}
@@ -418,6 +430,14 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       <p class="hero-lid" id="hero-lid" hidden>Os cultos de 2026, conduzidos por <a href="#lideranca" id="hero-lid-nomes">Fábio e Gabriel</a>, se encerram com o Congresso Incendiados. A nova liderança assume em 2027.</p>
     </div><div class="hero-fotos" id="hero-fotos" aria-label="Fotos dos últimos cultos e ações"></div></div></div>
     <div class="avisos-home" id="avisos-home"></div>
+    <div class="card camp" id="camp-card" hidden>
+      <span class="selo">Sorteio</span>
+      <div class="eb">Retiro de Carnaval 2027</div>
+      <h2>Seu retiro <span>de graça?</span></h2>
+      <p style="margin:0">Cumpra os 3 passos e concorra a <span class="uma">UMA</span> <b style="color:var(--amar)">inscrição gratuita</b> no retiro. Participam os 20 primeiros.</p>
+      <div class="camp-passos" id="camp-passos"></div>
+      <div class="camp-rod"><span class="aviso" id="camp-cont"></span><a class="btn forte" id="camp-cta" href="#perfil">Participar</a></div>
+    </div>
     <a class="card retiro-cd" id="retiro-cd" href="#financas" aria-label="Retiro de Carnaval: ver detalhes e garantir vaga">
       <div class="eb">⛺ Retiro de Carnaval · 06 a 09/02</div>
       <h2>Cheios do Espírito Santo</h2>
@@ -684,6 +704,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
           <div class="ev-bar" id="ev-bar"></div><div class="ev-leg" id="ev-leg"></div>
           <div class="chips" id="ev-filtro" style="margin-top:12px"><button type="button" class="chip on" data-f="">Todos</button><button type="button" class="chip" data-f="pendente">Pendentes</button><button type="button" class="chip" data-f="quitado">Quitados</button><button type="button" class="chip" data-f="M">Rapazes</button><button type="button" class="chip" data-f="F">Moças</button><button type="button" class="chip" data-f="termo">Menor sem termo</button></div>
           <div class="ev-lista" id="ev-lista"></div></div>
+        <div class="card ev-sec"><h2>Sorteio: 1 inscrição grátis</h2><p class="aviso">Pré-inscritos que leram e escreveram a reflexão 10 dias seguidos (desde 05/11). Os 20 primeiros a completar entram no sorteio.</p><div class="ev-lista" id="ev-sorteio"></div></div>
         <div class="grid2">
           <div class="card ev-sec"><h2>Retiro: valores e vagas</h2><p class="aviso">Aparece para todos na aba Rumo ao Retiro e na contagem do início.</p>
             <div class="ev-2"><label class="campo">Valor da inscrição (R$)<input id="ev-valor" type="number" min="0" step="10"></label><label class="campo">Vagas<input id="ev-vagas" type="number" min="1" step="1"></label></div>
@@ -1263,7 +1284,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   function stPag(u){var v=+retConf.valor||0,p=pagamentos[u]||{},pg=+p.valor||0;if(p.forma==='Isento')return 'quitado';if(v&&pg>=v)return 'quitado';return pg>0?'parcial':'pendente'}
   function genDe(u){var r=inscricoes[u]||{};return r.genero||(cadastros[u]&&cadastros[u].genero)||''}
   function desenharRetConf(){var t=$('#ret-valor');if(!t)return;var v=+retConf.valor||0;t.textContent=v?(BRL(v,0)+(retConf.prazo?' · pagar até '+dBR(retConf.prazo):'')+(retConf.pix?' · '+retConf.pix:'')):'A liderança vai divulgar em breve';desenharVagas()}
-  function desenharEventos(){if(!editor)return;var ids=Object.keys(inscricoes),v=+retConf.valor||0;
+  function desenharEventos(){if(!editor)return;try{desenharSorteioLid()}catch(e){}var ids=Object.keys(inscricoes),v=+retConf.valor||0;
     var meno=function(u){return idadeEm(inscricoes[u].nasc,'2027-02-06')<18};var semTermo=function(u){return meno(u)&&!termoDe(inscricoes[u].nome)};
     var arrec=ids.reduce(function(a,u){return a+(+((pagamentos[u]||{}).valor)||0)},0),prev=v*ids.filter(function(u){return (pagamentos[u]||{}).forma!=='Isento'}).length;
     var q=ids.filter(function(u){return stPag(u)==='quitado'}).length;
@@ -1324,6 +1345,27 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     lista.forEach(function(g,i){var f=document.createElement('figure');var im=document.createElement('img');im.src=g.url;im.alt=g.legenda||'Foto dos jovens';im.loading=i?'lazy':'eager';f.appendChild(im);if(g.legenda){var fc=document.createElement('figcaption');fc.textContent=g.legenda;f.appendChild(fc)}box.appendChild(f);figs.push(f);var d=document.createElement('i');dots.appendChild(d)});
     if(lista.length>1)box.appendChild(dots);hfIdx=0;function mostrar(){figs.forEach(function(f,i){f.classList.toggle('on',i===hfIdx)});[].forEach.call(dots.children,function(d,i){d.classList.toggle('on',i===hfIdx)})}mostrar();
     if(lista.length>1&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))hfTimer=setInterval(function(){hfIdx=(hfIdx+1)%figs.length;mostrar()},4500)}
+  // ---------- campanha: sorteio de 1 inscrição ----------
+  var CAMP={ini:'2026-11-05',fim:'2027-02-05',dias:10,vagas:20};
+  function campDe(l){l=l||{};var notas=l.notas||{},set={};(l.dias||[]).forEach(function(d){if(d>=CAMP.ini&&notas[d])set[d]=1});var ds=Object.keys(set).sort();var run=0,prev=null,fim=null;
+    ds.forEach(function(d){var cons=prev&&(new Date(d+'T12:00:00Z')-new Date(prev+'T12:00:00Z'))===864e5;run=cons?run+1:1;prev=d;if(!fim&&run>=CAMP.dias)fim=d});
+    var hoje=hojeISO(),ont=new Date(new Date(hoje+'T12:00:00Z').getTime()-864e5).toISOString().slice(0,10);var atual=(prev===hoje||prev===ont)?run:0;return {atual:Math.min(atual,CAMP.dias),fim:fim}}
+  function desenharCampanha(){var c=$('#camp-card');if(!c)return;var hoje=hojeISO();c.hidden=hoje>CAMP.fim;if(c.hidden)return;
+    var logado=!!meuId,perfil=logado&&jovens[meuId]&&jovens[meuId].nome,insc=logado&&inscricoes[meuId],cp=campDe(logado&&leituras[meuId]);var ok3=!!cp.fim;
+    var box=$('#camp-passos');box.replaceChildren();
+    [[1,'#F2B705','Cadastre-se no app','Crie sua conta e complete o perfil',!!perfil,'#perfil'],[2,'#E0263F','Faça sua pré-inscrição','Na aba Rumo ao Retiro',!!insc,'#financas'],[3,'#8E4BC0','10 dias seguidos na Palavra','Leia e escreva sua reflexão todos os dias',ok3,'#leitura']].forEach(function(x){
+      var r=document.createElement('a');r.className='camp-p';r.href=x[5];r.style.textDecoration='none';r.style.color='inherit';var n=document.createElement('span');n.className='n';n.style.background=x[1];if(x[0]>1)n.style.color='#fff';n.textContent=x[0];
+      var t=document.createElement('div');var b=document.createElement('b');b.textContent=x[2];var sm=document.createElement('small');sm.textContent=x[3];t.append(b,sm);
+      if(x[0]===3&&logado&&!ok3){var dd=document.createElement('div');dd.className='camp-dias';for(var i=0;i<CAMP.dias;i++){var it=document.createElement('i');if(i<cp.atual)it.className='on';dd.appendChild(it)}t.appendChild(dd)}
+      var st=document.createElement('span');st.className='st'+(x[4]?' ok':'');st.textContent=logado?(x[4]?'✓ Feito':(x[0]===3?cp.atual+'/'+CAMP.dias+' dias':'Pendente')):'—';r.append(n,t,st);box.appendChild(r)});
+    var concl=Object.keys(leituras).filter(function(u){return campDe(leituras[u]).fim}).length;
+    $('#camp-cont').textContent=concl?concl+(concl===1?' jovem já completou':' jovens já completaram')+' os 10 dias.':'Comece hoje: a contagem vale a partir de 05/11.';
+    var cta=$('#camp-cta');if(!logado){cta.textContent='Criar minha conta';cta.href='#perfil'}else if(!perfil){cta.textContent='Completar perfil';cta.href='#perfil'}else if(!insc){cta.textContent='Fazer pré-inscrição';cta.href='#financas'}else if(!ok3){cta.textContent='Ler a Palavra de hoje';cta.href='#leitura'}else{cta.textContent='Você está concorrendo! 🙌';cta.href='#financas'}}
+  function desenharSorteioLid(){var box=$('#ev-sorteio');if(!box)return;box.replaceChildren();var ids=Object.keys(inscricoes);var lista=ids.map(function(u){var cp=campDe(leituras[u]);return {u:u,nome:(inscricoes[u].nome||nomeDe(u)),cp:cp,quando:inscricoes[u].quando||''}});
+    lista.sort(function(a,b){if(a.cp.fim&&b.cp.fim)return a.cp.fim<b.cp.fim?-1:a.cp.fim>b.cp.fim?1:(a.quando<b.quando?-1:1);if(a.cp.fim)return -1;if(b.cp.fim)return 1;return b.cp.atual-a.cp.atual});
+    var pos=0;lista.forEach(function(x){var r=document.createElement('div');r.className='ev-lin';r.style.cursor='default';var d=document.createElement('div');if(x.cp.fim)pos++;d.textContent=(x.cp.fim?pos+'º · ':'')+x.nome;var sm=document.createElement('small');sm.textContent=x.cp.fim?'Completou os 10 dias em '+dBR(x.cp.fim):'Sequência atual: '+x.cp.atual+'/'+CAMP.dias+' dias com reflexão';d.appendChild(sm);
+      var st=document.createElement('span');st.className='ev-st '+(x.cp.fim&&pos<=CAMP.vagas?'quitado':x.cp.fim?'parcial':'pendente');st.textContent=x.cp.fim?(pos<=CAMP.vagas?'No sorteio':'Fora (após 20º)'):'Em andamento';r.append(d,st);box.appendChild(r)});
+    if(!lista.length){var v=document.createElement('p');v.className='vazio';v.textContent='Ninguém pré-inscrito ainda.';box.appendChild(v)}}
   // ---------- missão cardápio ----------
   var M_ITENS=[{"id":"pernil","nome":"Pernil","un":"kg","total":26,"preco":20,"grupo":"Carnes","sug":0},{"id":"coxa","nome":"Coxa e sobrecoxa","un":"kg","total":38,"preco":12,"grupo":"Carnes","sug":0},{"id":"peito","nome":"Peito de frango","un":"kg","total":16,"preco":18,"grupo":"Carnes","sug":0},{"id":"toscana","nome":"Linguiça toscana","un":"kg","total":8,"preco":22,"grupo":"Carnes","sug":0},{"id":"lfina","nome":"Linguiça fina","un":"kg","total":2,"preco":20,"grupo":"Carnes","sug":0},{"id":"calabresa","nome":"Calabresa","un":"un","total":6,"preco":10,"grupo":"Carnes","sug":0},{"id":"toucinho","nome":"Toucinho","un":"kg","total":2,"preco":15,"grupo":"Carnes","sug":0},{"id":"salsicha","nome":"Salsicha","un":"kg","total":10,"preco":12,"grupo":"Carnes","sug":0},{"id":"bolonha","nome":"Mortadela bolonha","un":"peça","total":4,"preco":40,"grupo":"Carnes","sug":0},{"id":"paof","nome":"Pão francês","un":"un","total":620,"preco":0.8,"grupo":"Pães e lanches","sug":0},{"id":"paoq","nome":"Pão de queijo","un":"kg","total":20,"preco":25,"grupo":"Pães e lanches","sug":0},{"id":"rosca","nome":"Rosca húngara","un":"kg","total":10,"preco":25,"grupo":"Pães e lanches","sug":0},{"id":"enrol","nome":"Enroladinho de salsicha","un":"un","total":100,"preco":1.5,"grupo":"Pães e lanches","sug":0},{"id":"arroz","nome":"Arroz","un":"kg","total":10,"preco":6,"grupo":"Mercearia","sug":0},{"id":"macarrao","nome":"Macarrão","un":"kg","total":6,"preco":8,"grupo":"Mercearia","sug":0},{"id":"ftrigo","nome":"Farinha de trigo","un":"kg","total":2,"preco":6,"grupo":"Mercearia","sug":0},{"id":"fmand","nome":"Farinha de mandioca","un":"kg","total":4,"preco":8,"grupo":"Mercearia","sug":0},{"id":"bpalha","nome":"Batata palha","un":"pacote","total":6,"preco":10,"grupo":"Mercearia","sug":0},{"id":"molho","nome":"Molho de tomate","un":"pacote","total":4,"preco":3,"grupo":"Mercearia","sug":0},{"id":"creme","nome":"Creme de leite","un":"caixinha","total":16,"preco":4,"grupo":"Mercearia","sug":0},{"id":"leite","nome":"Leite integral","un":"litro","total":6,"preco":5,"grupo":"Bebidas","sug":0},{"id":"nescau","nome":"Achocolatado","un":"pacote","total":4,"preco":15,"grupo":"Bebidas","sug":1},{"id":"cafe","nome":"Café","un":"pacote","total":4,"preco":25,"grupo":"Bebidas","sug":1},{"id":"suco","nome":"Suco em pó","un":"pacote","total":40,"preco":1.5,"grupo":"Bebidas","sug":1},{"id":"refri","nome":"Refrigerante 2 L","un":"un","total":20,"preco":8,"grupo":"Bebidas","sug":1},{"id":"batata","nome":"Batata inglesa","un":"kg","total":8,"preco":6,"grupo":"Hortifrúti","sug":0},{"id":"cebola","nome":"Cebola","un":"kg","total":10,"preco":6,"grupo":"Hortifrúti","sug":0},{"id":"cenoura","nome":"Cenoura","un":"kg","total":6,"preco":6,"grupo":"Hortifrúti","sug":0},{"id":"mandioca","nome":"Mandioca","un":"kg","total":6,"preco":5,"grupo":"Hortifrúti","sug":0},{"id":"repolho","nome":"Repolho grande","un":"un","total":6,"preco":6,"grupo":"Hortifrúti","sug":0},{"id":"alface","nome":"Alface","un":"pé","total":10,"preco":3,"grupo":"Hortifrúti","sug":0},{"id":"alho","nome":"Alho","un":"kg","total":2,"preco":30,"grupo":"Hortifrúti","sug":1},{"id":"banana","nome":"Banana","un":"dúzia","total":6,"preco":8,"grupo":"Frutas","sug":0},{"id":"laranja","nome":"Laranja","un":"dúzia","total":6,"preco":6,"grupo":"Frutas","sug":0},{"id":"melancia","nome":"Melancia","un":"un","total":2,"preco":20,"grupo":"Frutas","sug":0}];
   var M_PRAZO=new Date('2027-01-31T23:59:00-03:00').getTime(),M_PTS=300,M_BONUS=50;var mDoc={entregas:[]};
@@ -1768,12 +1810,12 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     db.collection('pontos').onSnapshot(function(s){pontos=s.docs.map(function(d){return Object.assign({id:d.id},d.data())});desenharGincana()},function(){});
     db.doc('gincana/cardapio').onSnapshot(function(s){mDoc=s.exists?Object.assign({entregas:[]},s.data()):{entregas:[]};desenharGincana()},function(){});
     db.doc('gincana/config').onSnapshot(function(s){if(s.exists)gconf=Object.assign(gconf,s.data());desenharGincana()},function(){});
-    db.collection('leitura').onSnapshot(function(s){leituras={};s.docs.forEach(function(d){leituras[d.id]=d.data()});minhas=(meuId&&leituras[meuId]&&leituras[meuId].dias)||[];minhasNotas=(meuId&&leituras[meuId]&&leituras[meuId].notas)||{};minhasPv=(meuId&&leituras[meuId]&&leituras[meuId].pv)||{};desenharLeitura()},function(){});
+    db.collection('leitura').onSnapshot(function(s){leituras={};s.docs.forEach(function(d){leituras[d.id]=d.data()});minhas=(meuId&&leituras[meuId]&&leituras[meuId].dias)||[];minhasNotas=(meuId&&leituras[meuId]&&leituras[meuId].notas)||{};minhasPv=(meuId&&leituras[meuId]&&leituras[meuId].pv)||{};desenharLeitura();desenharCampanha();desenharGestao()},function(){});
     db.doc('agenda/2027').onSnapshot(function(s){if(s.exists){agenda=s.data();desenharAgenda()}},function(){});
-    db.collection('jovens').onSnapshot(function(s){jovens={};s.docs.forEach(function(d){jovens[d.id]=d.data()});Object.keys(jovens).forEach(assinarPosts);try{listaJovensDatalist()}catch(e){}if(meuId)assinarPosts(meuId);desenharPerfil();desenharMural();desenharLeitura()},function(){});
+    db.collection('jovens').onSnapshot(function(s){jovens={};s.docs.forEach(function(d){jovens[d.id]=d.data()});try{desenharCampanha()}catch(e){}Object.keys(jovens).forEach(assinarPosts);try{listaJovensDatalist()}catch(e){}if(meuId)assinarPosts(meuId);desenharPerfil();desenharMural();desenharLeitura()},function(){});
     if(meuId)assinarPosts(meuId);
-    db.collection('inscricoes').onSnapshot(function(s){inscricoes={};s.docs.forEach(function(d){inscricoes[d.id]=d.data()});desenharRetiro();desenharGestao()},function(){});
-    if(meuId&&!editor)db.doc('inscricoes/'+meuId).onSnapshot(function(s){if(s.exists){inscricoes[meuId]=s.data();desenharRetiro()}},function(){});
+    db.collection('inscricoes').onSnapshot(function(s){inscricoes={};s.docs.forEach(function(d){inscricoes[d.id]=d.data()});desenharRetiro();desenharGestao();desenharCampanha()},function(){});
+    if(meuId&&!editor)db.doc('inscricoes/'+meuId).onSnapshot(function(s){if(s.exists){inscricoes[meuId]=s.data();desenharRetiro();desenharCampanha()}},function(){});
     if(editor){db.collection('cadastro').onSnapshot(function(s){cadastros={};s.docs.forEach(function(d){cadastros[d.id]=d.data()});desenharPerfil();listaJovensDatalist();desenharGestao()},function(){});
       db.collection('pagamentos').onSnapshot(function(s){pagamentos={};s.docs.forEach(function(d){pagamentos[d.id]=d.data()});desenharGestao()},function(){});
       db.collection('acoes').onSnapshot(function(s){acoesPlano={};s.docs.forEach(function(d){acoesPlano[d.id]=d.data()});desenharGestao()},function(){});
@@ -1782,7 +1824,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     else if(meuId){db.doc('cadastro/'+meuId).onSnapshot(function(s){if(s.exists){cadastros[meuId]=s.data();delete $('#form-perfil').dataset.carregado;desenharPerfil()}},function(){});
       db.doc('pedidos/'+meuId).onSnapshot(function(s){if(s.exists)pedidos[meuId]=s.data();else delete pedidos[meuId];desenharPedido()},function(){})}
     db.doc('retiro/config').onSnapshot(function(s){if(s.exists){retConf=Object.assign({valor:0,vagas:40,prazo:'',pix:'',aberto:true},s.data());desenharRetConf();desenharRetiro();desenharGestao()}},function(){});
-    db.collection('avisos').onSnapshot(function(s){avisos=s.docs.map(function(d){return Object.assign({id:d.id},d.data())});desenharAvisosHome();desenharGestao()},function(){});
+    db.collection('avisos').onSnapshot(function(s){avisos=s.docs.map(function(d){return Object.assign({id:d.id},d.data())});desenharAvisosHome();try{desenharCampanha()}catch(e){}desenharGestao()},function(){});
     db.collection('galeria').onSnapshot(function(s){galeria=s.docs.map(function(d){return Object.assign({id:d.id},d.data())});desenharGaleria();desenharGestao()},function(){});
     db.doc('retiro/status').onSnapshot(function(s){if(s.exists){retStatus=Object.assign({vagas:40,inscritos:0},s.data());desenharVagas()}},function(){});
     db.collection('termos').onSnapshot(function(s){termos={};s.docs.forEach(function(d){termos[d.id]=d.data()});desenharTermo();desenharRetiro()},function(){});
