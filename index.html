@@ -258,7 +258,10 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 .pv-comp{display:flex;flex-direction:column;gap:8px}.pv-comp .ant{padding:10px 12px;border-radius:12px;background:var(--fundo2);border-left:4px solid var(--amar)}.pv-comp .ant small{display:block;font-weight:800;font-size:11px;color:var(--amar);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
 .chk{display:flex;gap:8px;align-items:center;font-size:13px;margin:10px 0 6px}
 .aq-faixa{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 16px}.aq-faixa div{background:linear-gradient(135deg,rgba(242,183,5,.16),rgba(200,16,46,.12));border:1px solid rgba(242,183,5,.35);border-radius:14px;padding:12px;text-align:center}.aq-faixa b{display:block;font-family:var(--display);font-size:40px;line-height:1;color:var(--amar)}.aq-faixa span{font-size:12px;color:var(--apagado)}
-.turma{display:flex;flex-wrap:wrap;gap:8px}.turma .foto{outline:2px solid var(--ok);outline-offset:2px}.turma .vazio{margin:0}
+.turma{display:flex;flex-wrap:wrap;gap:8px}.turma-bt{background:none;border:0;padding:4px;cursor:pointer;border-radius:50%}.turma-bt:focus-visible{outline:2px solid var(--amar)}
+#dlg-cam{max-width:560px;width:calc(100% - 32px)}.cam-top{display:flex;gap:14px;align-items:center}.cam-top h3{font-family:var(--display);font-weight:400;font-size:34px;margin:0}
+.cam-dias{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;margin:6px 0 2px}.cam-dias i{aspect-ratio:1;border-radius:5px;background:rgba(255,253,246,.1)}.cam-dias i.on{background:var(--ok)}.cam-dias i.nota{box-shadow:inset 0 0 0 2px var(--amar)}
+.cam-nota{background:var(--fundo2);border-radius:12px;padding:10px 12px;margin-top:8px}.cam-nota small{color:var(--amar);font-weight:800}.cam-nota p{margin:4px 0 0;white-space:pre-line}#cam-notas{max-height:46vh;overflow:auto}.turma .foto{outline:2px solid var(--ok);outline-offset:2px}.turma .vazio{margin:0}
 .secreto{border:1px dashed var(--amar)}.rk .det{font-size:11px;color:var(--apagado)}
 .lt-ref{font-family:var(--display);font-size:clamp(40px,8vw,64px);line-height:1;margin:8px 0}
 .minha{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.minha div{background:var(--fundo2);border-radius:12px;padding:10px;text-align:center}.minha b{display:block;font-family:var(--display);font-size:36px;line-height:1;color:var(--amar)}.minha span{font-size:11px;color:var(--apagado)}
@@ -876,6 +879,15 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   <label class="chk"><input type="checkbox" id="cu-evento"> É um evento especial (retiro, encontro, louvorzão…)</label>
   <div class="acoes"><button type="button" class="btn" id="cu-excluir" hidden>Excluir</button><button type="button" class="btn" id="cu-cancelar">Cancelar</button><button type="submit" class="btn forte">Salvar</button></div>
 </form></dialog>
+<dialog id="dlg-cam">
+  <div class="cam-top"><div id="cam-foto"></div><div><h3 id="cam-nome"></h3><span class="aviso" id="cam-camp"></span></div></div>
+  <div class="kp" id="cam-kp" style="margin-top:12px"></div>
+  <p class="aviso" style="margin:12px 0 0">Últimos 14 dias: verde é leitura feita; contorno amarelo é dia com reflexão.</p>
+  <div class="cam-dias" id="cam-dias"></div>
+  <h4 style="margin:14px 0 0">Reflexões</h4>
+  <div id="cam-notas"></div>
+  <div class="acoes"><button type="button" class="btn" onclick="this.closest('dialog').close()">Fechar</button></div>
+</dialog>
 <dialog id="dlg-m">
   <h3 style="font-family:var(--display);font-weight:400;font-size:30px;margin:0">Registrar entrega</h3>
   <p class="aviso">Missão Cardápio do retiro.</p>
@@ -1707,7 +1719,20 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     var total=0;Object.keys(leituras).forEach(function(u){total+=dentro(leituras[u].dias||[],AQUEC).length});
     $('#aq-dias').textContent=diasAte('2027-02-06');$('#aq-hoje').textContent=leram.length;$('#aq-total').textContent=total;
     var t=$('#turma');t.replaceChildren();if(!leram.length){var v=document.createElement('p');v.className='vazio';v.textContent='Ninguém marcou a leitura de hoje ainda. Que tal ser o primeiro?';t.appendChild(v);return}
-    leram.forEach(function(u){var f=document.createElement('div');fotoJovem(f,jovens[u]||{},'p');f.title=(jovens[u]&&jovens[u].nome)||'Jovem';t.appendChild(f)})}
+    leram.forEach(function(u){var bt=document.createElement('button');bt.type='button';bt.className='turma-bt';bt.setAttribute('aria-label','Ver a caminhada de '+((jovens[u]&&jovens[u].nome)||'jovem'));var f=document.createElement('div');fotoJovem(f,jovens[u]||{},'p');f.title=(jovens[u]&&jovens[u].nome)||'Jovem';bt.appendChild(f);bt.onclick=function(){abrirCaminhada(u)};t.appendChild(bt)})}
+  function refDia(d){var x=AQUEC.filter(function(y){return y.data===d})[0]||PLANO.filter(function(y){return y.data===d})[0];if(!x)return '';return x.ref||(x.partes||[]).map(function(p){return p.ref}).join(' · ')}
+  function abrirCaminhada(u){var l=leituras[u]||{},j=jovens[u]||{},dias=(l.dias||[]).slice().sort(),notas=l.notas||{};var hoje=hojeISO();
+    var f=$('#cam-foto');f.replaceChildren();var fx=document.createElement('div');fotoJovem(fx,j,'m');f.appendChild(fx);$('#cam-nome').textContent=j.nome||'Jovem';
+    var nN=Object.keys(notas).filter(function(d){return notas[d]}).length;var cp=campDe(l);
+    kps($('#cam-kp'),[['🔥 '+seqDe(dias),'dias seguidos'],[dias.length,'leituras feitas'],[nN,'reflexões escritas']]);
+    var g=$('#cam-dias');g.replaceChildren();for(var i=13;i>=0;i--){var d=new Date(new Date(hoje+'T12:00:00Z').getTime()-i*864e5).toISOString().slice(0,10);var c=document.createElement('i');var leu=dias.indexOf(d)>=0;c.className=(leu?'on':'')+(notas[d]?' nota':'');c.title=d.split('-').reverse().slice(0,2).join('/')+(leu?' · leu':'')+(notas[d]?' · refletiu':'');g.appendChild(c)}
+    $('#cam-camp').textContent=cp.fim?'✓ Completou os 10 dias do sorteio em '+cp.fim.split('-').reverse().slice(0,2).join('/'):'Sorteio: '+cp.atual+'/'+CAMP.dias+' dias seguidos com reflexão';
+    var box=$('#cam-notas');box.replaceChildren();var pode=editor||u===meuId;
+    if(!pode){var p=document.createElement('p');p.className='aviso';p.textContent='As reflexões são pessoais: só a própria pessoa e a liderança veem o que foi escrito.';box.appendChild(p)}
+    else{var ds=Object.keys(notas).filter(function(d){return notas[d]}).sort().reverse();if(!ds.length){var v=document.createElement('p');v.className='vazio';v.textContent='Nenhuma reflexão escrita ainda.';box.appendChild(v)}
+      ds.forEach(function(d){var it=document.createElement('div');it.className='cam-nota';var h=document.createElement('small');h.textContent=d.split('-').reverse().join('/')+(refDia(d)?' · '+refDia(d):'');var q=document.createElement('p');q.textContent=notas[d];it.append(h,q);box.appendChild(it)})}
+    $('#dlg-cam').showModal()}
+
   function desenharSecreto(){var box=$('#rank-secreto');box.replaceChildren();
     var us={};Object.keys(leituras).forEach(function(u){us[u]=1});Object.keys(posts).forEach(function(u){us[u]=1});
     var lista=Object.keys(us).filter(function(u){var t=cadastros[u]&&cadastros[u].tipo;return !t||t==='jovem'}).map(function(u){var L=leituras[u]||{};var lid=dentro(L.dias||[],AQUEC).length;var notas=L.notas||{};
