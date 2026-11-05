@@ -32,6 +32,7 @@ html,body{background:var(--fundo);color:var(--texto)}
 [hidden]{display:none!important}
 body{font-family:var(--corpo);font-size:15px;line-height:1.5}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--fundo2)}
+.alerta-perfil{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;justify-content:space-between;max-width:1100px;margin:12px auto 0;padding:12px 16px;border-radius:14px;background:rgba(224,38,63,.14);border:1px solid rgba(224,38,63,.5);font-size:14px;box-sizing:border-box;width:calc(100% - 32px)}.alerta-perfil[hidden]{display:none}.alerta-perfil .btn{padding:8px 16px;min-height:0}
 .topo{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--fundo2);border-bottom:1px solid var(--linha)}
 .faixa{display:flex;height:4px}.faixa i{flex:1}
 .topo-in{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px 0;display:flex;flex-direction:column;gap:8px}
@@ -413,6 +414,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   </div>
 </div>
 
+<div class="alerta-perfil" id="alerta-perfil" hidden role="status"><span>⚠️ <b>Falta completar seu perfil.</b> Sem ele você não participa do sorteio da inscrição e não aparece para a liderança.</span><a class="btn forte" href="#perfil">Completar agora</a></div>
 <main>
   <section class="aba" id="aba-inicio">
     <div class="hero card" aria-labelledby="hero-titulo"><div class="hero-wrap sem-fotos" id="hero-wrap"><div class="hero-txt">
@@ -725,6 +727,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       <div class="g-sec" id="g-dados" hidden>
         <p class="aviso">Dados pessoais dos cadastros. Só a liderança vê esta área. Use para planejar o cuidado com cada jovem.</p>
         <div class="kp g-kp" id="pd-kp"></div>
+        <div class="card ev-sec" id="pd-semperfil-card" hidden><h2>Contas sem perfil completo</h2><p class="aviso">Criaram a conta mas não preencheram o "Meu perfil". Dê um toque para completarem.</p><div class="ev-lista" id="pd-semperfil"></div></div>
         <div class="grid2">
           <div class="card"><h2>Quem se cadastrou</h2><div class="hb" id="pd-tipo"></div></div>
           <div class="card"><h2>Jovens por congregação</h2><div class="hb" id="pd-congr"></div></div>
@@ -985,7 +988,9 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   $('#tm-imprimir').onclick=function(){imprimirTermo(null)};
   function norm(x){return (x||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim()}
   function termoDe(nome){var n=norm(nome);if(!n)return null;var pri=n.split(' ')[0];var achou=null;Object.keys(termos).forEach(function(u){var tj=norm(termos[u].jovem);if(tj===n||(tj.split(' ')[0]===pri&&(tj.indexOf(n)>=0||n.indexOf(tj)>=0)))achou=termos[u]});return achou}
-  var inscricoes={},denuncias={},contasRes=null;
+  var inscricoes={},denuncias={},contasRes=null,cadChecado=false,semPerfil=null;
+  function desenharAlertaPerfil(){var a=$('#alerta-perfil');if(!a)return;var falta=!!(meuId&&(cadChecado||editor)&&!cadastros[meuId]);a.hidden=!falta||location.hash==='#perfil'}
+  window.addEventListener('hashchange',function(){try{desenharAlertaPerfil()}catch(e){}});
   function idadeEm(nasc,ref){if(!nasc)return null;var n=new Date(nasc+'T12:00:00'),r=new Date(ref+'T12:00:00');var a=r.getFullYear()-n.getFullYear();if(r.getMonth()<n.getMonth()||(r.getMonth()===n.getMonth()&&r.getDate()<n.getDate()))a--;return a}
   function desenharRetiro(){montarRetiro();var logado=!!(meuId&&podeLancarProprio);var minha=meuId&&inscricoes[meuId];
     $('#ret-entrar').hidden=logado;$('#form-ret').hidden=!logado||!!(minha&&!$('#form-ret').dataset.editar);
@@ -1048,6 +1053,8 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     var jov=ids.filter(function(u){return cadastros[u].tipo==='jovem'});var sete=new Date(Date.now()-7*864e5).toISOString().slice(0,10);
     var ativos=jov.filter(function(u){return ((leituras[u]&&leituras[u].dias)||[]).some(function(d){return d>=sete})});
     if(contasRes===null&&window.sbJovens){contasRes={};window.sbJovens.rpc('contas_resumo').then(function(r){contasRes=r.data||{};desenharDados()},function(){})}
+    if(semPerfil===null&&window.sbJovens){semPerfil=[];window.sbJovens.rpc('contas_sem_perfil').then(function(r){semPerfil=r.data||[];desenharDados()},function(){})}
+    if(semPerfil&&semPerfil.length){$('#pd-semperfil-card').hidden=false;var sp=$('#pd-semperfil');sp.replaceChildren();semPerfil.forEach(function(x){var r=document.createElement('div');r.className='ev-lin';r.style.cursor='default';var d=document.createElement('div');d.textContent=x.nome||x.email;var sm=document.createElement('small');sm.textContent=(x.nome?x.email+' · ':'')+'conta criada em '+new Date(x.criado).toLocaleDateString('pt-BR')+(x.tipo?' · '+x.tipo:'');d.appendChild(sm);var st=document.createElement('span');st.className='ev-st pendente';st.textContent='Sem perfil';r.append(d,st);sp.appendChild(r)})}
     var kc=(contasRes&&contasRes.contas)?[[contasRes.contas,'contas criadas'],[Math.max(0,contasRes.contas-ids.length),'ainda sem perfil completo',contasRes.contas-ids.length>0?'alerta':'']]:[];
     kps($('#pd-kp'),kc.concat([[ids.length,'perfis completos'],[jov.length,'jovens'],[jov.filter(function(u){return cadastros[u].genero==='M'}).length,'rapazes'],[jov.filter(function(u){return cadastros[u].genero==='F'}).length,'moças'],[jov.filter(function(u){return /^Sim/.test(cadastros[u].congregacao||'')}).length,'jovens membros'],[ativos.length,'leram nos últimos 7 dias','ok']]));
     var pt=por('tipo');hbarras($('#pd-tipo'),Object.keys(TIPO_NOME).map(function(k){return [TIPO_NOME[k],pt[k]||0]}));
@@ -1818,12 +1825,12 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     if(meuId)assinarPosts(meuId);
     db.collection('inscricoes').onSnapshot(function(s){inscricoes={};s.docs.forEach(function(d){inscricoes[d.id]=d.data()});desenharRetiro();desenharGestao();desenharCampanha()},function(){});
     if(meuId&&!editor)db.doc('inscricoes/'+meuId).onSnapshot(function(s){if(s.exists){inscricoes[meuId]=s.data();desenharRetiro();desenharCampanha()}},function(){});
-    if(editor){db.collection('cadastro').onSnapshot(function(s){cadastros={};s.docs.forEach(function(d){cadastros[d.id]=d.data()});desenharPerfil();listaJovensDatalist();desenharGestao()},function(){});
+    if(editor){db.collection('cadastro').onSnapshot(function(s){cadastros={};s.docs.forEach(function(d){cadastros[d.id]=d.data()});cadChecado=true;desenharPerfil();listaJovensDatalist();desenharGestao();desenharAlertaPerfil()},function(){});
       db.collection('pagamentos').onSnapshot(function(s){pagamentos={};s.docs.forEach(function(d){pagamentos[d.id]=d.data()});desenharGestao()},function(){});
       db.collection('acoes').onSnapshot(function(s){acoesPlano={};s.docs.forEach(function(d){acoesPlano[d.id]=d.data()});desenharGestao()},function(){});
       db.collection('pedidos').onSnapshot(function(s){pedidos={};s.docs.forEach(function(d){pedidos[d.id]=d.data()});desenharGestao()},function(){});
       db.collection('admins').onSnapshot(function(s){admins={};s.docs.forEach(function(d){admins[d.id]=d.data()});desenharGestao()},function(){})}
-    else if(meuId){db.doc('cadastro/'+meuId).onSnapshot(function(s){if(s.exists){cadastros[meuId]=s.data();delete $('#form-perfil').dataset.carregado;desenharPerfil()}},function(){});
+    else if(meuId){db.doc('cadastro/'+meuId).onSnapshot(function(s){cadChecado=true;if(s.exists){cadastros[meuId]=s.data();delete $('#form-perfil').dataset.carregado;desenharPerfil()}desenharAlertaPerfil()},function(){});
       db.doc('pedidos/'+meuId).onSnapshot(function(s){if(s.exists)pedidos[meuId]=s.data();else delete pedidos[meuId];desenharPedido()},function(){})}
     db.doc('retiro/config').onSnapshot(function(s){if(s.exists){retConf=Object.assign({valor:0,vagas:40,prazo:'',pix:'',aberto:true},s.data());desenharRetConf();desenharRetiro();desenharGestao()}},function(){});
     db.collection('avisos').onSnapshot(function(s){avisos=s.docs.map(function(d){return Object.assign({id:d.id},d.data())});desenharAvisosHome();try{desenharCampanha()}catch(e){}desenharGestao()},function(){});
