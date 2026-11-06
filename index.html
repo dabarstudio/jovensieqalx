@@ -377,6 +377,24 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
 .campo{font-size:13px}.campo input,.campo textarea,.campo select{font-size:16px;padding:12px;min-height:48px}
 .grupo>small{font-size:12px}
 .rostos div{font-size:12px}
+.ig-sem{display:grid;gap:10px;margin-top:16px}
+.ig-dia{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--linha);border-radius:16px;padding:14px 16px}
+.ig-dia.hoje{border-color:var(--amar);box-shadow:0 0 0 1px var(--amar) inset}
+.ig-nome{min-width:92px;font-weight:800}
+.ig-nome small{display:block;font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--amar)}
+.ig-hrs{display:flex;flex-wrap:wrap;gap:8px}
+.ig-h{border:1px solid var(--linha);border-radius:999px;padding:6px 12px;font-weight:800;font-size:14px}
+.ig-h em{font-style:normal;font-weight:600;color:var(--apagado);font-size:12px;margin-left:6px}
+.ig-h.jov{border-color:var(--verm);background:rgba(224,38,63,.14)}
+.ig-dia.folga{opacity:.55}
+.ig-prox{margin-top:18px;background:linear-gradient(135deg,rgba(58,123,213,.22),rgba(242,183,5,.12));border:1px solid var(--linha);border-radius:18px;padding:18px}
+.ig-prox b{font-size:22px;display:block;margin-top:4px}
+.ig-info{display:grid;gap:12px;margin-top:18px}
+@media(min-width:760px){.ig-info{grid-template-columns:1fr 1fr}}
+.ig-info .card p{margin:6px 0 12px;color:var(--apagado)}
+.ig-atalho{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0 4px;text-decoration:none;color:var(--texto)}
+.ig-atalho span{color:var(--apagado);font-size:13px}
+.ig-info .btn{min-height:0;padding:9px 16px;font-size:13px}
 </style>
 
 <header class="topo">
@@ -389,6 +407,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       <a href="#rolagem" data-aba="rolagem">Rolagem bíblica</a>
       <a href="#leitura" data-aba="leitura">Plano de leitura</a>
       <a href="#agenda" data-aba="agenda">Agenda</a>
+      <a href="#igreja" data-aba="igreja">Igreja</a>
       <a href="#mural" data-aba="mural">Mural</a>
       <a href="#gincana" data-aba="gincana">Gincana</a>
       <a href="#lideranca" data-aba="lideranca">Liderança</a>
@@ -410,6 +429,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   <div class="mm-in" role="menu" aria-label="Mais seções">
     <a role="menuitem" href="#biblia">📖<span>Bíblia<small>Leia qualquer livro e capítulo</small></span></a>
     <a role="menuitem" href="#rolagem">📱<span>Rolagem bíblica<small>Versículos para rolar</small></span></a>
+    <a role="menuitem" href="#igreja">⛪<span>Programação da Igreja<small>Cultos da semana na IEQ Alexânia</small></span></a>
     <a role="menuitem" href="#gincana">🏆<span>Gincana<small>Corrida da Fé</small></span></a>
     <a role="menuitem" href="#financas">⛺<span>Rumo ao Retiro<small>Nossa jornada até o acampamento</small></span></a>
     <a role="menuitem" href="#lideranca">💑<span>Liderança<small>Quem cuida da turma</small></span></a>
@@ -660,12 +680,25 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     <div class="eb">Programação de cultos · sábados às 19h30</div>
     <h1>Agenda</h1>
     <p class="lead">Cada mês tem uma série de mensagens. O culto em destaque é o próximo.</p>
+    <a class="card ig-atalho" href="#igreja"><div><b>⛪ Programação da Igreja</b><br><span>Cultos de domingo a sábado na IEQ Alexânia</span></div><span aria-hidden="true">→</span></a>
     <div class="leg-ag"><span><i style="background:var(--amar)"></i>Próximo culto</span><span><i style="background:var(--verm)"></i>Evento especial</span><span><i style="background:rgba(255,253,246,.25)"></i>Já aconteceu</span></div>
     <div class="ag-ctrl"><div class="chips" role="group" aria-label="Filtrar agenda"><button type="button" class="chip on" data-f="todos" aria-pressed="true">Todos</button><button type="button" class="chip" data-f="esp" aria-pressed="false">Só eventos especiais</button><button type="button" class="chip" data-f="prox" aria-pressed="false">Daqui pra frente</button></div><span class="assinar" data-feed="agenda.ics" data-rot="cultos"></span></div>
     <p class="aviso">Toque num culto para ver horário, local e salvar na sua agenda.</p>
     <div class="meses" id="meses"><p class="vazio">Carregando a agenda…</p></div>
   </section>
 
+  <section class="aba" id="aba-igreja" hidden>
+    <div class="eb">IEQ Alexânia · programação oficial</div>
+    <h1>Programação da Igreja</h1>
+    <p class="lead">Além do culto de jovens, a igreja se reúne a semana toda. Vem com a gente! “Não deixemos de congregar-nos” (Hebreus 10:25).</p>
+    <div class="ig-prox" id="ig-prox"></div>
+    <div class="ig-sem" id="ig-sem"></div>
+    <div class="ig-info">
+      <div class="card"><b>📍 Sede</b><p>Rua 15 de Novembro, Qd. 05, Lt. 07, Setor 13 de Maio, Centro · Alexânia-GO</p><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Igreja%20do%20Evangelho%20Quadrangular%20Alex%C3%A2nia&amp;query_place_id=ChIJhUFIkk3iW5MRUSaQnMCwf_g">Abrir no mapa</a></div>
+      <div class="card"><b>🙏 Pastores</b><p>Pastora Ivadeth Passos e Pr. Joel</p><a class="btn" target="_blank" rel="noopener" href="https://www.instagram.com/ieqalexania/">Seguir @ieqalexania</a></div>
+    </div>
+    <p class="aviso" style="margin-top:14px">Horários conforme o perfil oficial da igreja. Congregações Nova Flórida e Morada Nova: confirme os horários com a liderança.</p>
+  </section>
   <section class="aba" id="aba-mural" hidden>
     <div class="eb">Somos um só corpo · 1 Coríntios 12:27</div>
     <h1>Mural dos jovens</h1>
@@ -944,12 +977,19 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   var meuId=null,jovens={},posts={},postSubs={},agenda=null,perfis=[],pontos=[],gconf={nome:'Corrida da Fé',a:'Equipe A',b:'Equipe B',meta:1000,premio:'A definir pela liderança.'},fin=null;
 
   // ---------- abas ----------
-  var ABAS=['inicio','rolagem','leitura','agenda','mural','gincana','lideranca','equipe','financas','perfil','gestao','biblia'];
+  var ABAS=['inicio','rolagem','leitura','agenda','igreja','mural','gincana','lideranca','equipe','financas','perfil','gestao','biblia'];
   var versoAlvo=null;
+  var IGREJA=[{d:0,h:['09:00','19:30']},{d:1,h:[]},{d:2,h:['19:30']},{d:3,h:[]},{d:4,h:['19:30']},{d:5,h:['19:30']},{d:6,h:['08:00','19:30'],jov:'19:30'}];
+  function desenharIgreja(){var nomes=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];var box=$('#ig-sem');if(!box)return;box.replaceChildren();var agora=new Date(),hd=agora.getDay(),min=agora.getHours()*60+agora.getMinutes();
+    [1,2,3,4,5,6,0].forEach(function(d){var it=IGREJA[d];var el=document.createElement('div');el.className='ig-dia'+(d===hd?' hoje':'')+(it.h.length?'':' folga');var n=document.createElement('div');n.className='ig-nome';n.textContent=nomes[d];if(d===hd){var sm=document.createElement('small');sm.textContent='hoje';n.prepend(sm)}el.appendChild(n);var hs=document.createElement('div');hs.className='ig-hrs';
+      if(!it.h.length){var f=document.createElement('span');f.className='aviso';f.textContent='Sem culto';hs.appendChild(f)}
+      it.h.forEach(function(h){var c=document.createElement('span');c.className='ig-h'+(it.jov===h?' jov':'');c.textContent=h.replace(':00','h').replace(':','h');if(it.jov===h){var e=document.createElement('em');e.textContent='🔥 Culto de Jovens';c.appendChild(e)}hs.appendChild(c)});el.appendChild(hs);box.appendChild(el)});
+    var px=null;for(var k=0;k<8&&!px;k++){var dd=(hd+k)%7;IGREJA[dd].h.some(function(h){var m=+h.slice(0,2)*60+ +h.slice(3);if(k>0||m>min){px={k:k,d:dd,h:h};return true}})}
+    var pb=$('#ig-prox');pb.replaceChildren();if(px){var t=document.createElement('div');t.className='eb';t.textContent='Próximo culto na igreja';var b=document.createElement('b');b.textContent=(px.k===0?'Hoje':px.k===1?'Amanhã':nomes[px.d])+' às '+px.h.replace(':00','h').replace(':','h')+(IGREJA[px.d].jov===px.h?' · Culto de Jovens 🔥':'');var s2=document.createElement('span');s2.className='aviso';s2.textContent='IEQ Alexânia · Sede';pb.append(t,b,s2)}}
   function mostrarAba(){var h=(location.hash||'').slice(1);if(/^v=/.test(h)){versoAlvo=decodeURIComponent(h.slice(2));h='rolagem';rolMontada=false}if(ABAS.indexOf(h)<0)h='inicio';
     ABAS.forEach(function(a){$('#aba-'+a).hidden=a!==h;var l=document.querySelector('[data-aba="'+a+'"]');if(a===h)l.setAttribute('aria-current','page');else l.removeAttribute('aria-current')});
     document.querySelectorAll('.barra [data-b]').forEach(function(l){if(l.dataset.b===h)l.setAttribute('aria-current','page');else l.removeAttribute('aria-current')});var bm=$('#b-mais');if(['inicio','agenda','leitura','mural'].indexOf(h)<0)bm.setAttribute('aria-current','page');else bm.removeAttribute('aria-current');fecharMais();
-    if(h==='rolagem'){if(!rolMontada)montarRolagem();else setTimeout(ajustarRolagem,0)}if(h==='leitura')desenharLeitura();if(h==='financas'){desenharFin();desenharRetiro();desenharTermo()}if(h==='gestao'){ativarGestao();desenharGestao()}if(h==='biblia')desenharBiblia();if(h==='perfil')desenharPerfil();if(h==='gincana')desenharGincana();window.scrollTo(0,0);}
+    if(h==='rolagem'){if(!rolMontada)montarRolagem();else setTimeout(ajustarRolagem,0)}if(h==='leitura')desenharLeitura();if(h==='financas'){desenharFin();desenharRetiro();desenharTermo()}if(h==='gestao'){ativarGestao();desenharGestao()}if(h==='biblia')desenharBiblia();if(h==='perfil')desenharPerfil();if(h==='gincana')desenharGincana();if(h==='igreja')desenharIgreja();window.scrollTo(0,0);}
   function fecharMais(){var m=$('#menu-mais');if(!m)return;m.hidden=true;$('#b-mais').setAttribute('aria-expanded','false')}
   $('#b-mais').onclick=function(){var m=$('#menu-mais');var abrir=m.hidden;m.hidden=!abrir;this.setAttribute('aria-expanded',String(abrir));if(abrir)m.querySelector('a').focus()};
   $('#menu-mais').addEventListener('click',function(e){if(e.target===this)fecharMais()});
@@ -964,7 +1004,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   function ics(titulo,ini,fim,local){var t=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Jovens27//PT','BEGIN:VEVENT','UID:'+ini+'@jovens27','DTSTAMP:20260101T000000Z','DTSTART;TZID=America/Sao_Paulo:'+ini,'DTEND;TZID=America/Sao_Paulo:'+fim,'SUMMARY:'+titulo,'LOCATION:'+(local||'').replace(/,/g,'\\,'),'END:VEVENT','END:VCALENDAR'].join('\r\n');return 'data:text/calendar;charset=utf-8,'+encodeURIComponent(t)}
   function dtc(iso,h){return iso.replace(/-/g,'')+'T'+h}
   function proxSabadoISO(){var hj=new Date();var ad=(6-hj.getDay()+7)%7;var d=new Date(hj.getFullYear(),hj.getMonth(),hj.getDate()+ad);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-  (function(){var host=(location.protocol==='https:'&&/netlify\.app$|github\.io$|jovens/.test(location.host))?location.host+location.pathname.replace(/\/[^\/]*$/,''):'jovensieqalx.netlify.app';
+  (function(){var host=(location.protocol==='https:'&&/netlify\.app$|github\.io$|jovens/.test(location.host))?location.host+location.pathname.replace(/\/[^\/]*$/,''):'dabarstudio.github.io/jovensieqalx';
     document.querySelectorAll('.assinar').forEach(function(sp){var f=sp.dataset.feed;var g=document.createElement('a');g.className='btn';g.target='_blank';g.rel='noopener';g.href='https://calendar.google.com/calendar/r?cid='+encodeURIComponent('webcal://'+host+'/'+f);g.textContent='📅 Google Agenda';
       var i2=document.createElement('a');i2.className='btn';i2.href='webcal://'+host+'/'+f;i2.textContent='📅 iPhone';sp.append(g,i2);sp.title=sp.dataset.rot==='leitura'?'Adiciona a leitura de cada dia na sua agenda, com aviso às 7h':'Adiciona todos os cultos e eventos na sua agenda, com aviso 2h antes. Se a agenda mudar, atualiza sozinho.'})})();
   function detalheCulto(c){var d=document.createElement('div');d.className='culto-det';var esp=!!c.fim;
@@ -1161,7 +1201,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   document.querySelectorAll('#aba-biblia [data-t]').forEach(function(b){b.onclick=function(){bibTest=b.dataset.t;document.querySelectorAll('#aba-biblia [data-t]').forEach(function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-selected',String(on))});$('#bib-caps-card').hidden=true;desenharBiblia()}});
 
   // ---------- compartilhar versículo ----------
-  var compAtual=null;var SITE_PUB=(location.protocol==='https:'&&/netlify\.app$|github\.io$/.test(location.host))?(location.origin+location.pathname.replace(/\/[^\/]*$/,'')):'https://jovensieqalx.netlify.app';
+  var compAtual=null;var SITE_PUB=(location.protocol==='https:'&&/netlify\.app$|github\.io$/.test(location.host))?(location.origin+location.pathname.replace(/\/[^\/]*$/,'')):'https://dabarstudio.github.io/jovensieqalx';
   function quebrar(ctx,txt,larg){var ps=txt.split(' '),ls=[],l='';ps.forEach(function(p){var t=l?l+' '+p:p;if(ctx.measureText(t).width>larg&&l){ls.push(l);l=p}else l=t});if(l)ls.push(l);return ls}
   function carregarImg(src){return new Promise(function(ok,no){var im=new Image();im.crossOrigin='anonymous';im.onload=function(){ok(im)};im.onerror=no;im.src=src})}
   async function gerarStory(c,g){var W=1080,H=1920;var cv=document.createElement('canvas');cv.width=W;cv.height=H;var x=cv.getContext('2d');
