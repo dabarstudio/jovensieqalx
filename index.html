@@ -1020,7 +1020,8 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   var IGREJA=[[{h:'09:00',n:'Culto da Família'},{h:'19:30',n:'Culto da Família'}],[],[{h:'19:30',n:'Escola Bíblica'}],[{h:'15:00',n:'Hora Nona'}],[{h:'19:30',n:'Culto de Homens e Culto de Mulheres'}],[{h:'19:30',n:'Culto de Libertação'}],[{h:'08:00',fim:'10:00',n:'Jejum'},{h:'19:30',n:'Culto de Jovens',jov:1}]];
   var IG_ORACAO={h:'06:00',fim:'07:00',n:'Semana de Oração'};
   var IG_JOV_VOLTA='2027-02-13';/* cultos de jovens pausados até essa data */
-  var IG_ESPECIAIS={'2026-11-07':[{n:'Congresso de Mulheres',esp:1,tira:'jov'}]};/* eventos especiais por data */
+  var IG_ESPECIAIS={};/* eventos especiais por data, vindos do banco (igreja/especiais) */
+  function igCarregarEspeciais(d){IG_ESPECIAIS={};((d&&d.itens)||[]).forEach(function(e){if(!e||!e.data||!e.n)return;(IG_ESPECIAIS[e.data]=IG_ESPECIAIS[e.data]||[]).push({h:e.h||'',fim:e.fim||'',n:e.n+(e.local&&e.local!=='Sede'?' · '+e.local:''),esp:1,tira:e.tira||''})});Object.keys(IG_ESPECIAIS).forEach(function(k){IG_ESPECIAIS[k].sort(function(a,b){return (a.h||'99').localeCompare(b.h||'99')})});try{desenharIgreja()}catch(x){}}
   function igHr(h){return h.replace(':00','h').replace(':','h')}
   function igSemanaOracao(base){/* semana (seg a sáb) antes do 1º domingo do mês */var r=null;for(var m=0;m<3&&!r;m++){var d=new Date(base.getFullYear(),base.getMonth()+m,1);while(d.getDay()!==0)d.setDate(d.getDate()+1);var fim=new Date(d);fim.setDate(d.getDate()-1);var ini=new Date(d);ini.setDate(d.getDate()-6);var hoje0=new Date(base.getFullYear(),base.getMonth(),base.getDate());if(fim>=hoje0)r={ini:ini,fim:fim}}return r}
   function igDM(d){return ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)}
@@ -2000,7 +2001,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     else if(meuId){db.doc('cadastro/'+meuId).onSnapshot(function(s){cadChecado=true;if(s.exists){cadastros[meuId]=s.data();delete $('#form-perfil').dataset.carregado;desenharPerfil()}desenharAlertaPerfil()},function(){});
       db.doc('pedidos/'+meuId).onSnapshot(function(s){if(s.exists)pedidos[meuId]=s.data();else delete pedidos[meuId];desenharPedido()},function(){})}
     db.doc('retiro/config').onSnapshot(function(s){if(s.exists){retConf=Object.assign({valor:0,vagas:40,prazo:'',pix:'',aberto:true},s.data());desenharRetConf();desenharRetiro();desenharGestao()}},function(){});
-    db.collection('avisos').onSnapshot(function(s){avisos=s.docs.map(function(d){return Object.assign({id:d.id},d.data())});desenharAvisosHome();try{desenharCampanha()}catch(e){}desenharGestao()},function(){});
+    db.doc('igreja/especiais').onSnapshot(function(x){igCarregarEspeciais(x.exists?x.data():null)},function(){});db.collection('avisos').onSnapshot(function(s){avisos=s.docs.map(function(d){return Object.assign({id:d.id},d.data())});desenharAvisosHome();try{desenharCampanha()}catch(e){}desenharGestao()},function(){});
     db.collection('galeria').onSnapshot(function(s){galeria=s.docs.map(function(d){return Object.assign({id:d.id},d.data())});desenharGaleria();desenharGestao()},function(){});
     db.doc('retiro/status').onSnapshot(function(s){if(s.exists){retStatus=Object.assign({vagas:40,inscritos:0},s.data());desenharVagas()}},function(){});
     db.collection('termos').onSnapshot(function(s){termos={};s.docs.forEach(function(d){termos[d.id]=d.data()});desenharTermo();desenharRetiro()},function(){});
