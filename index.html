@@ -396,6 +396,23 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
 .ig-atalho{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0 4px;text-decoration:none;color:var(--texto)}
 .ig-atalho span{color:var(--apagado);font-size:13px}
 .ig-info .btn{min-height:0;padding:9px 16px;font-size:13px}
+.aniv-card{margin-top:14px}
+.aniv-card h2{font-size:20px;margin:0 0 4px}
+.aniv-lista{display:grid;gap:8px;margin-top:12px}
+.aniv-it{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:12px;border:1px solid var(--linha)}
+.aniv-it.hoje{border-color:var(--amar);background:rgba(242,183,5,.12)}
+.aniv-it.foi{opacity:.55}
+.aniv-it .dia{margin-left:auto;font-weight:800;font-size:13px;color:var(--apagado)}
+.aniv-it.hoje .dia{color:var(--amar)}
+.aniv-festa{margin-top:14px;border-radius:18px;padding:18px;border:1px solid var(--amar);background:linear-gradient(135deg,rgba(242,183,5,.20),rgba(224,38,63,.16) 60%,rgba(58,123,213,.16))}
+.aniv-festa h2{margin:2px 0 6px;font-size:22px}
+.aniv-festa .linha{display:flex;align-items:center;gap:12px}
+.aniv-festa textarea{width:100%;margin-top:10px;min-height:64px;border-radius:12px;border:1px solid var(--linha);background:rgba(0,0,0,.25);color:var(--texto);padding:10px;font:inherit;box-sizing:border-box}
+.aniv-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.aniv-msgs{display:grid;gap:8px;margin-top:12px}
+.aniv-msg{background:rgba(0,0,0,.22);border-radius:12px;padding:10px 12px}
+.aniv-msg b{display:block;font-size:13px}
+.aniv-ok{margin-top:10px;font-weight:800;color:var(--amar)}
 </style>
 
 <header class="topo">
@@ -458,6 +475,8 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       <p class="hero-lid" id="hero-lid" hidden>Os cultos de 2026, conduzidos por <a href="#lideranca" id="hero-lid-nomes">Fábio e Gabriel</a>, se encerram com o Congresso Incendiados. A nova liderança assume em 2027.</p>
     </div><div class="hero-fotos" id="hero-fotos" aria-label="Fotos dos últimos cultos e ações"></div></div></div>
     <div class="avisos-home" id="avisos-home"></div>
+    <div id="aniv-hoje"></div>
+    <div class="card aniv-card" id="aniv-card" hidden></div>
     <div class="card camp" id="camp-card" hidden>
       <span class="selo">Sorteio</span>
       <div class="eb">Retiro de Carnaval 2027</div>
@@ -818,6 +837,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
         <div style="display:flex;flex-direction:column;gap:0;min-width:0">
           <label class="campo">Tipo de perfil<select id="pf-tipo" required><option value="">Escolha</option><option value="jovem">Sou jovem</option><option value="pastor">Pastor(a)</option><option value="pais">Pai, mãe ou responsável</option><option value="colaborador">Colaborador(a)</option></select></label>
           <label class="campo">Nome<input id="pf-nome" type="text" maxlength="60" required></label>
+          <label class="campo">Data de nascimento<input id="pf-nasc" type="date" required min="1930-01-01"></label>
           <label class="campo">Gênero<select id="pf-genero" required><option value="">Escolha</option><option value="M">Masculino</option><option value="F">Feminino</option></select></label>
           <label class="campo" id="pf-dejovem-l" hidden>Responsável por qual jovem?<input id="pf-dejovem" type="text" list="lista-jovens" maxlength="120" placeholder="Nome do(s) jovem(ns)"></label>
           <label class="campo">Sobre mim<textarea id="pf-bio" maxlength="400" placeholder="Conte um pouco sobre você"></textarea></label>
@@ -995,6 +1015,24 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     var px=null;for(var k=0;k<8&&!px;k++){var dd=(hd+k)%7;doDia(dd,k).some(function(c){var m=+c.h.slice(0,2)*60+ +c.h.slice(3);if(k>0||m>min){px={k:k,d:dd,c:c};return true}})}
     var pb=$('#ig-prox');pb.replaceChildren();if(px){var t=document.createElement('div');t.className='eb';t.textContent='Próximo encontro na igreja';var b=document.createElement('b');b.textContent=(px.k===0?'Hoje':px.k===1?'Amanhã':nomes[px.d])+' às '+igHr(px.c.h)+' · '+px.c.n+(px.c.jov?' 🔥':'');var s2=document.createElement('span');s2.className='aviso';s2.textContent='IEQ Alexânia · Sede';pb.append(t,b,s2)}
     var ob=$('#ig-oracao');if(ob&&so){ob.replaceChildren();var t2=document.createElement('b');t2.textContent=emOracao?'🙏 Estamos na Semana de Oração!':'🙏 Próxima Semana de Oração';var p2=document.createElement('p');p2.textContent=igDM(so.ini)+' a '+igDM(so.fim)+' · todas as manhãs, das 6h às 7h. É sempre a semana antes do 1º domingo do mês.';ob.append(t2,p2)}}
+  var parabens={};var MESES_N=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  function anivHoje(){return hojeISO().slice(5)}
+  function anivChave(id){return id+'@'+hojeISO().slice(0,4)}
+  function recadosPara(id){var k=anivChave(id),out=[];Object.keys(parabens).forEach(function(autor){var l=(parabens[autor]&&parabens[autor].lista)||{};if(l[k])out.push(Object.assign({autor:autor},l[k]))});return out.sort(function(a,b){return (a.em||'').localeCompare(b.em||'')})}
+  function desenharAniversarios(){var card=$('#aniv-card'),fx=$('#aniv-hoje');if(!card||!fx)return;fx.replaceChildren();var logado=!!(meuId&&podeLancarProprio);if(!logado){card.hidden=true;return}
+    var mes=hojeISO().slice(5,7),hd=anivHoje();var ids=Object.keys(jovens).filter(function(id){return jovens[id].aniv&&jovens[id].aniv.slice(0,2)===mes}).sort(function(a,b){return jovens[a].aniv.localeCompare(jovens[b].aniv)||(jovens[a].nome||'').localeCompare(jovens[b].nome||'')});
+    card.hidden=false;card.replaceChildren();var t=document.createElement('div');t.className='eb';t.textContent='Mural de aniversariantes';var h=document.createElement('h2');h.textContent='🎂 Aniversariantes de '+MESES_N[+mes-1];card.append(t,h);
+    if(!ids.length){var v=document.createElement('p');v.className='aviso';v.textContent='Ninguém da turma faz aniversário este mês (ainda!).';card.appendChild(v)}
+    var l=document.createElement('div');l.className='aniv-lista';ids.forEach(function(id){var j=jovens[id];var it=document.createElement('div');var eh=j.aniv===hd;it.className='aniv-it'+(eh?' hoje':'')+(j.aniv<hd?' foi':'');var f=document.createElement('div');fotoJovem(f,j,'p');var n=document.createElement('span');n.textContent=j.nome||'';var d=document.createElement('span');d.className='dia';d.textContent=eh?'🎉 Hoje!':j.aniv.slice(3)+'/'+j.aniv.slice(0,2);it.append(f,n,d);l.appendChild(it)});card.appendChild(l);
+    var meu=jovens[meuId]||{};if(!meu.aniv){var c=document.createElement('p');c.className='aviso';c.style.marginTop='10px';var a=document.createElement('a');a.href='#perfil';a.textContent='Coloque sua data de nascimento no perfil';c.append(a,document.createTextNode(' para aparecer no mural. 🎈'));card.appendChild(c)}
+    Object.keys(jovens).filter(function(id){return jovens[id].aniv===hd}).forEach(function(id){fx.appendChild(id===meuId?cardMeuAniv(id):cardDarParabens(id))})}
+  function cardMeuAniv(id){var j=jovens[id];var b=document.createElement('div');b.className='aniv-festa';var t=document.createElement('div');t.className='eb';t.textContent='Hoje é o seu dia';var h=document.createElement('h2');h.textContent='🎂 Feliz aniversário, '+((j.nome||'').split(' ')[0])+'!';var p=document.createElement('p');p.style.margin='0';p.textContent='“O Senhor te abençoe e te guarde; o Senhor faça resplandecer o seu rosto sobre ti.” (Números 6:24-25). A turma toda celebra a sua vida! 🎉';b.append(t,h,p);var rs=recadosPara(id);var q=document.createElement('div');q.className='aniv-ok';q.textContent=rs.length?('💌 '+rs.length+(rs.length>1?' pessoas já te deram':' pessoa já te deu')+' parabéns:'):'Os recados de parabéns da turma vão aparecer aqui. 💌';b.appendChild(q);var m=document.createElement('div');m.className='aniv-msgs';rs.forEach(function(r){var x=document.createElement('div');x.className='aniv-msg';var n=document.createElement('b');n.textContent=r.nome||'Alguém da turma';var tx=document.createElement('span');tx.textContent=r.msg;x.append(n,tx);m.appendChild(x)});b.appendChild(m);return b}
+  function cardDarParabens(id){var j=jovens[id];var b=document.createElement('div');b.className='aniv-festa';var lin=document.createElement('div');lin.className='linha';var f=document.createElement('div');fotoJovem(f,j,'p');var tt=document.createElement('div');var t=document.createElement('div');t.className='eb';t.textContent='Aniversário hoje 🎉';var h=document.createElement('h2');h.style.margin='2px 0 0';h.textContent=j.nome||'';tt.append(t,h);lin.append(f,tt);b.appendChild(lin);
+    var rs=recadosPara(id),meuR=rs.filter(function(r){return r.autor===meuId})[0];var cont=document.createElement('p');cont.className='aviso';cont.style.marginTop='8px';cont.textContent=rs.length?(rs.length+(rs.length>1?' pessoas já deram':' pessoa já deu')+' parabéns'):'Seja o primeiro a dar parabéns!';b.appendChild(cont);
+    if(meuR){var ok=document.createElement('div');ok.className='aniv-ok';ok.textContent='✅ Você já deu parabéns: “'+meuR.msg+'”';b.appendChild(ok);return b}
+    var ta=document.createElement('textarea');ta.maxLength=280;ta.placeholder='Escreva seus parabéns para '+((j.nome||'').split(' ')[0])+'…';var ch=document.createElement('div');ch.className='aniv-chips';['Parabéns! Deus te abençoe muito! 🎉','Feliz aniversário! Que o Senhor te guarde 🙏','Muitos anos de vida e de fé! 🎂'].forEach(function(s){var c=document.createElement('button');c.type='button';c.className='chip';c.textContent=s;c.onclick=function(){ta.value=s;ta.focus()};ch.appendChild(c)});
+    var bt=document.createElement('button');bt.type='button';bt.className='btn forte';bt.style.marginTop='10px';bt.textContent='🎉 Enviar parabéns';bt.onclick=async function(){var msg=ta.value.trim();if(!msg){toast('Escreva ou escolha uma mensagem');return}bt.disabled=true;try{var meu=parabens[meuId]||{lista:{}};var lista=Object.assign({},meu.lista||{});var k=anivChave(id);lista[k]={msg:msg,nome:(jovens[meuId]&&jovens[meuId].nome)||'',em:new Date().toISOString()};var hoje=hojeISO().slice(0,4);Object.keys(lista).forEach(function(c){if(c.split('@')[1]<String(+hoje-1))delete lista[c]});await db.doc('parabens/'+meuId).set({lista:lista});parabens[meuId]={lista:lista};toast('Parabéns enviados! 🎉');desenharAniversarios()}catch(e){bt.disabled=false;toast('Não foi possível enviar')}};
+    b.append(ta,ch,bt);return b}
   function mostrarAba(){var h=(location.hash||'').slice(1);if(/^v=/.test(h)){versoAlvo=decodeURIComponent(h.slice(2));h='rolagem';rolMontada=false}if(ABAS.indexOf(h)<0)h='inicio';
     ABAS.forEach(function(a){$('#aba-'+a).hidden=a!==h;var l=document.querySelector('[data-aba="'+a+'"]');if(a===h)l.setAttribute('aria-current','page');else l.removeAttribute('aria-current')});
     document.querySelectorAll('.barra [data-b]').forEach(function(l){if(l.dataset.b===h)l.setAttribute('aria-current','page');else l.removeAttribute('aria-current')});var bm=$('#b-mais');if(['inicio','agenda','leitura','mural'].indexOf(h)<0)bm.setAttribute('aria-current','page');else bm.removeAttribute('aria-current');fecharMais();
@@ -1861,15 +1899,15 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   var fotoNova=null;
   function desenharPerfil(){var meu=meuId?jovens[meuId]:null;var logado=!!(meuId&&podeLancarProprio);var be=$('#btn-entrar');if(be)be.textContent=logado?'Meu perfil':'Entrar';var cv=$('#convite');if(cv)cv.hidden=logado;try{desenharPedido()}catch(e){}
     $('#perfil-sem').hidden=!!meuId&&podeLancarProprio;$('#form-perfil').hidden=!(meuId&&podeLancarProprio);
-    if(meuId&&podeLancarProprio&&!$('#form-perfil').dataset.carregado){$('#pf-nome').value=(meu&&meu.nome)||'';$('#pf-bio').value=(meu&&meu.bio)||'';$('#pf-vers').value=(meu&&meu.versiculo)||'';var cd=cadastros[meuId]||{};$('#pf-congr').value=cd.congregacao||'';$('#pf-batismo').value=cd.batismo||'';$('#pf-genero').value=cd.genero||'';$('#pf-termo').checked=!!cd.termo;$('#pf-tipo').value=cd.tipo||tipoConta||'';$('#pf-dejovem').value=cd.deJovem||deJovemConta||'';ajustarTipo();fotoJovem($('#pf-foto'),meu||{nome:$('#pf-nome').value||'?'},'g');if(meu)$('#form-perfil').dataset.carregado='1'}
+    if(meuId&&podeLancarProprio&&!$('#form-perfil').dataset.carregado){$('#pf-nome').value=(meu&&meu.nome)||'';$('#pf-bio').value=(meu&&meu.bio)||'';$('#pf-vers').value=(meu&&meu.versiculo)||'';var cd=cadastros[meuId]||{};$('#pf-congr').value=cd.congregacao||'';$('#pf-batismo').value=cd.batismo||'';$('#pf-genero').value=cd.genero||'';$('#pf-nasc').value=cd.nascimento||'';$('#pf-termo').checked=!!cd.termo;$('#pf-tipo').value=cd.tipo||tipoConta||'';$('#pf-dejovem').value=cd.deJovem||deJovemConta||'';ajustarTipo();fotoJovem($('#pf-foto'),meu||{nome:$('#pf-nome').value||'?'},'g');if(meu)$('#form-perfil').dataset.carregado='1'}
     var r=$('#rostos');var ids=Object.keys(jovens);if(ids.length){r.replaceChildren();ids.sort(function(a,b){return (jovens[a].nome||'').localeCompare(jovens[b].nome||'')}).forEach(function(id){var j=jovens[id];var d=document.createElement('div');var f=document.createElement('div');fotoJovem(f,j,'p');var n=document.createElement('span');n.textContent=j.nome||'';d.append(f,n);var cj=cadastros[id];if(editor&&cj){var q=document.createElement('em');q.className='rosto-info';q.textContent=[TIPO_NOME[cj.tipo],cj.deJovem?'de '+cj.deJovem:'',cj.congregacao,cj.batismo].filter(Boolean).join(' · ');d.appendChild(q)}r.appendChild(d)})}
-    $('#compor').hidden=!(meuId&&podeLancarProprio);$('#mural-aviso').hidden=!!(meuId&&podeLancarProprio)}
+    $('#compor').hidden=!(meuId&&podeLancarProprio);$('#mural-aviso').hidden=!!(meuId&&podeLancarProprio);try{desenharAniversarios()}catch(e){}}
   var TIPO_NOME={jovem:'Jovem',pastor:'Pastor(a)',pais:'Responsável',colaborador:'Colaborador(a)'};var tipoConta='',deJovemConta='';var cadastros={},pedidos={},acoesPlano={},admins={},souDono=false,meuEmail='';
   function ajustarTipo(){var t=$('#pf-tipo').value;$('#pf-dejovem-l').hidden=t!=='pais';$('#pf-batismo-l').hidden=t!=='jovem';$('#pf-batismo').required=t==='jovem'}
   $('#pf-tipo').addEventListener('change',ajustarTipo);
   $('#pf-arq').addEventListener('change',async function(){var f=this.files[0];if(!f)return;try{fotoNova=await comprimir(f,360,0.8);fotoJovem($('#pf-foto'),{foto:fotoNova},'g')}catch(e){toast('Não consegui ler essa imagem')}});
   $('#form-perfil').addEventListener('submit',async function(ev){ev.preventDefault();if(!db||!meuId)return;var b=$('#pf-salvar');b.disabled=true;
-    try{var meu=jovens[meuId]||{};var cad0=cadastros[meuId]||{};var dados={nome:$('#pf-nome').value.trim(),bio:$('#pf-bio').value.trim(),versiculo:$('#pf-vers').value.trim(),foto:(fotoNova?await guardarFoto(fotoNova,'perfil'):null)||meu.foto||null,atualizado:hojeISO()};var cad={nome:dados.nome,tipo:$('#pf-tipo').value,deJovem:$('#pf-tipo').value==='pais'?$('#pf-dejovem').value.trim():'',congregacao:$('#pf-congr').value,genero:$('#pf-genero').value,batismo:$('#pf-tipo').value==='jovem'?$('#pf-batismo').value:($('#pf-batismo').value||''),termo:$('#pf-termo').checked,termoEm:(cad0.termoEm||hojeISO()),atualizado:hojeISO()};
+    try{var meu=jovens[meuId]||{};var cad0=cadastros[meuId]||{};var dados={nome:$('#pf-nome').value.trim(),bio:$('#pf-bio').value.trim(),versiculo:$('#pf-vers').value.trim(),foto:(fotoNova?await guardarFoto(fotoNova,'perfil'):null)||meu.foto||null,atualizado:hojeISO()};var nasc=$('#pf-nasc').value;if(nasc)dados.aniv=nasc.slice(5);var cad={nome:dados.nome,nascimento:nasc,tipo:$('#pf-tipo').value,deJovem:$('#pf-tipo').value==='pais'?$('#pf-dejovem').value.trim():'',congregacao:$('#pf-congr').value,genero:$('#pf-genero').value,batismo:$('#pf-tipo').value==='jovem'?$('#pf-batismo').value:($('#pf-batismo').value||''),termo:$('#pf-termo').checked,termoEm:(cad0.termoEm||hojeISO()),atualizado:hojeISO()};
       await db.doc('cadastro/'+meuId).set(cad);cadastros[meuId]=cad;await db.doc('jovens/'+meuId).set(dados);fotoNova=null;toast('Perfil salvo')}catch(e){toast('Não foi possível salvar o perfil')}b.disabled=false});
   function assinarPosts(uid){if(postSubs[uid]||!db)return;postSubs[uid]=db.collection('mural/'+uid+'/posts').orderBy('quando','desc').limit(30).onSnapshot(function(s){posts[uid]=s.docs.map(function(d){return Object.assign({id:d.id,autor:uid},d.data())});desenharMural();if(editor&&document.querySelector('#aba-leitura:not([hidden])'))desenharSecreto()},function(){})}
   function desenharMural(){var box=$('#feed-mural');var todos=[];Object.keys(posts).forEach(function(u){todos=todos.concat(posts[u])});todos.sort(function(a,b){return (b.quando||'').localeCompare(a.quando||'')});
@@ -1930,7 +1968,8 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     db.doc('gincana/config').onSnapshot(function(s){if(s.exists)gconf=Object.assign(gconf,s.data());desenharGincana()},function(){});
     db.collection('leitura').onSnapshot(function(s){leituras={};s.docs.forEach(function(d){leituras[d.id]=d.data()});minhas=(meuId&&leituras[meuId]&&leituras[meuId].dias)||[];mergeMinhas();desenharLeitura();desenharCampanha();desenharGestao()},function(){});
     db.doc('agenda/2027').onSnapshot(function(s){if(s.exists){agenda=s.data();desenharAgenda()}},function(){});
-    db.collection('jovens').onSnapshot(function(s){jovens={};s.docs.forEach(function(d){jovens[d.id]=d.data()});try{desenharCampanha()}catch(e){}Object.keys(jovens).forEach(assinarPosts);try{listaJovensDatalist()}catch(e){}if(meuId)assinarPosts(meuId);desenharPerfil();desenharMural();desenharLeitura()},function(){});
+    db.collection('jovens').onSnapshot(function(s){jovens={};s.docs.forEach(function(d){jovens[d.id]=d.data()});try{desenharCampanha()}catch(e){}Object.keys(jovens).forEach(assinarPosts);try{listaJovensDatalist()}catch(e){}if(meuId)assinarPosts(meuId);desenharPerfil();desenharMural();desenharLeitura();try{desenharAniversarios()}catch(e){}},function(){});
+    db.collection('parabens').onSnapshot(function(s){parabens={};s.docs.forEach(function(d){parabens[d.id]=d.data()});try{desenharAniversarios()}catch(e){}},function(){});
     if(meuId)assinarPosts(meuId);
     db.collection('inscricoes').onSnapshot(function(s){inscricoes={};s.docs.forEach(function(d){inscricoes[d.id]=d.data()});desenharRetiro();desenharGestao();desenharCampanha()},function(){});
     if(meuId)db.doc('diario/'+meuId).onSnapshot(function(s){meuDiario=s.exists?Object.assign({notas:{},pv:{},dec:{}},s.data()):{notas:{},pv:{},dec:{}};setTimeout(perguntarPublicar,1500);mergeMinhas();var nt=$('#lt-nota');if(nt)delete nt.dataset.dia;var pt=$('#lt-pv');if(pt)delete pt.dataset.dia;desenharLeitura()},function(){});
