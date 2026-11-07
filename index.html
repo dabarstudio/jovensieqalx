@@ -388,6 +388,8 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
 #ig-oracao p{margin:6px 0 0;color:var(--apagado)}
 .ig-h.jov{border-color:var(--verm);background:rgba(224,38,63,.14)}
 .ig-dia.folga{opacity:.55}
+.ig-h.esp{border-color:#E879B9;background:rgba(232,121,185,.16)}
+.ig-h.pausa{opacity:.6;border-style:dashed}
 .ig-prox{margin-top:18px;background:linear-gradient(135deg,rgba(58,123,213,.22),rgba(242,183,5,.12));border:1px solid var(--linha);border-radius:18px;padding:18px}
 .ig-prox b{font-size:22px;display:block;margin-top:4px}
 .ig-info{display:grid;gap:12px;margin-top:18px}
@@ -1017,17 +1019,19 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   var versoAlvo=null;
   var IGREJA=[[{h:'09:00',n:'Culto da Família'},{h:'19:30',n:'Culto da Família'}],[],[{h:'19:30',n:'Escola Bíblica'}],[{h:'15:00',n:'Hora Nona'}],[{h:'19:30',n:'Culto de Homens e Culto de Mulheres'}],[{h:'19:30',n:'Culto de Libertação'}],[{h:'08:00',fim:'10:00',n:'Jejum'},{h:'19:30',n:'Culto de Jovens',jov:1}]];
   var IG_ORACAO={h:'06:00',fim:'07:00',n:'Semana de Oração'};
+  var IG_JOV_VOLTA='2027-02-13';/* cultos de jovens pausados até essa data */
+  var IG_ESPECIAIS={'2026-11-07':[{n:'Congresso de Mulheres',esp:1,tira:'jov'}]};/* eventos especiais por data */
   function igHr(h){return h.replace(':00','h').replace(':','h')}
   function igSemanaOracao(base){/* semana (seg a sáb) antes do 1º domingo do mês */var r=null;for(var m=0;m<3&&!r;m++){var d=new Date(base.getFullYear(),base.getMonth()+m,1);while(d.getDay()!==0)d.setDate(d.getDate()+1);var fim=new Date(d);fim.setDate(d.getDate()-1);var ini=new Date(d);ini.setDate(d.getDate()-6);var hoje0=new Date(base.getFullYear(),base.getMonth(),base.getDate());if(fim>=hoje0)r={ini:ini,fim:fim}}return r}
   function igDM(d){return ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)}
   function desenharIgreja(){var nomes=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];var box=$('#ig-sem');if(!box)return;box.replaceChildren();var agora=new Date(),hd=agora.getDay(),min=agora.getHours()*60+agora.getMinutes();
     var so=igSemanaOracao(agora),hoje0=new Date(agora.getFullYear(),agora.getMonth(),agora.getDate());var emOracao=so&&hoje0>=so.ini&&hoje0<=so.fim;
-    function doDia(dd,k){var l=IGREJA[dd].slice();if(so){var dt=new Date(hoje0);dt.setDate(dt.getDate()+k);if(dt>=so.ini&&dt<=so.fim)l.unshift(IG_ORACAO)}return l}
+    function doDia(dd,k){var dt=new Date(hoje0);dt.setDate(dt.getDate()+k);var iso=dt.getFullYear()+'-'+('0'+(dt.getMonth()+1)).slice(-2)+'-'+('0'+dt.getDate()).slice(-2);var esp=IG_ESPECIAIS[iso]||[];var l=IGREJA[dd].filter(function(c){return !(c.jov&&esp.some(function(e){return e.tira==='jov'}))}).map(function(c){return c.jov&&iso<IG_JOV_VOLTA?Object.assign({},c,{pausa:1}):c});esp.forEach(function(e){l.push(e)});if(so&&dt>=so.ini&&dt<=so.fim)l.unshift(IG_ORACAO);return l}
     [1,2,3,4,5,6,0].forEach(function(d){var k=(d-hd+7)%7;var it=doDia(d,k);var el=document.createElement('div');el.className='ig-dia'+(d===hd?' hoje':'')+(it.length?'':' folga');var n=document.createElement('div');n.className='ig-nome';n.textContent=nomes[d];if(d===hd){var sm=document.createElement('small');sm.textContent='hoje';n.prepend(sm)}el.appendChild(n);var hs=document.createElement('div');hs.className='ig-hrs';
       if(!it.length){var f=document.createElement('span');f.className='aviso';f.textContent='Sem programação';hs.appendChild(f)}
-      it.forEach(function(c0){var c=document.createElement('span');c.className='ig-h'+(c0.jov?' jov':'');c.textContent=igHr(c0.h)+(c0.fim?' às '+igHr(c0.fim):'');var e=document.createElement('em');e.textContent=(c0.jov?'🔥 ':'')+c0.n;c.appendChild(e);hs.appendChild(c)});el.appendChild(hs);box.appendChild(el)});
-    var px=null;for(var k=0;k<8&&!px;k++){var dd=(hd+k)%7;doDia(dd,k).some(function(c){var m=+c.h.slice(0,2)*60+ +c.h.slice(3);if(k>0||m>min){px={k:k,d:dd,c:c};return true}})}
-    var pb=$('#ig-prox');pb.replaceChildren();if(px){var t=document.createElement('div');t.className='eb';t.textContent='Próximo encontro na igreja';var b=document.createElement('b');b.textContent=(px.k===0?'Hoje':px.k===1?'Amanhã':nomes[px.d])+' às '+igHr(px.c.h)+' · '+px.c.n+(px.c.jov?' 🔥':'');var s2=document.createElement('span');s2.className='aviso';s2.textContent='IEQ Alexânia · Sede';pb.append(t,b,s2)}
+      it.forEach(function(c0){var c=document.createElement('span');c.className='ig-h'+(c0.jov&&!c0.pausa?' jov':'')+(c0.esp?' esp':'')+(c0.pausa?' pausa':'');c.textContent=c0.h?igHr(c0.h)+(c0.fim?' às '+igHr(c0.fim):''):'🌸 Especial';var e=document.createElement('em');e.textContent=(c0.jov&&!c0.pausa?'🔥 ':'')+c0.n+(c0.pausa?' · volta em '+IG_JOV_VOLTA.slice(8)+'/'+IG_JOV_VOLTA.slice(5,7):'');c.appendChild(e);hs.appendChild(c)});el.appendChild(hs);box.appendChild(el)});
+    var px=null;for(var k=0;k<8&&!px;k++){var dd=(hd+k)%7;doDia(dd,k).some(function(c){if(c.pausa)return false;var m=c.h?+c.h.slice(0,2)*60+ +c.h.slice(3):1439;if(k>0||m>min){px={k:k,d:dd,c:c};return true}})}
+    var pb=$('#ig-prox');pb.replaceChildren();if(px){var t=document.createElement('div');t.className='eb';t.textContent='Próximo encontro na igreja';var b=document.createElement('b');b.textContent=(px.k===0?'Hoje':px.k===1?'Amanhã':nomes[px.d])+(px.c.h?' às '+igHr(px.c.h):'')+' · '+px.c.n+(px.c.jov?' 🔥':'')+(px.c.esp?' 🌸':'');var s2=document.createElement('span');s2.className='aviso';s2.textContent='IEQ Alexânia · Sede';pb.append(t,b,s2)}
     var ob=$('#ig-oracao');if(ob&&so){ob.replaceChildren();var t2=document.createElement('b');t2.textContent=emOracao?'🙏 Estamos na Semana de Oração!':'🙏 Próxima Semana de Oração';var p2=document.createElement('p');p2.textContent=igDM(so.ini)+' a '+igDM(so.fim)+' · todas as manhãs, das 6h às 7h. É sempre a semana antes do 1º domingo do mês.';ob.append(t2,p2)}}
   var parabens={};var MESES_N=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
   function anivHoje(){return hojeISO().slice(5)}
