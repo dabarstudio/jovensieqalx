@@ -1718,6 +1718,90 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       for(var q=0;q<4;q++)p+=pessoa(W*(0.3+q*0.12),H*0.8-(q%2)*4,0.55,q===1?'mao':'x',c)}
     return '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMax slice" width="100%" height="100%" aria-hidden="true">'+p+'</svg>'}
 
+  function cenaTema(c,i,W,H){var ref=(c.ref||''),tg=(c.tag||'').toLowerCase(),C='rgba(10,8,18,.9)',C2='rgba(10,8,18,.6)',L='#FFFDF6',p='',b=H*0.98;
+    function svg(x){return '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMax slice" width="100%" height="100%" aria-hidden="true">'+x+'</svg>'}
+    function sol(x,y,r,o,cor){return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+(cor||'#FFD45A')+'" opacity="'+(o||.5)+'"/>'}
+    function morro(y0,y1,cor){return '<path d="M0 '+y0+' Q'+(W*0.5)+' '+y1+' '+W+' '+y0+' L'+W+' '+H+' L0 '+H+'Z" fill="'+(cor||C)+'"/>'}
+    function cruz(x,y,h,w,cor){var t=h*0.1;return '<path d="M'+(x-t/2)+' '+(y-h)+'h'+t+'v'+(h*0.26)+'h'+(w/2-t/2)+'v'+t+'h-'+(w/2-t/2)+'v'+(h*0.64)+'h-'+t+'v-'+(h*0.64)+'h-'+(w/2-t/2)+'v-'+t+'h'+(w/2-t/2)+'z" fill="'+(cor||C)+'"/>'}
+    function raios(x,y,n,o){var r='';for(var k=0;k<n;k++){var a=Math.PI*(0.1+0.8*k/(n-1));r+='<path d="M'+x+' '+y+' L'+(x-Math.cos(a)*W*0.9-14)+' '+(y-Math.sin(a)*H*0.9)+' L'+(x-Math.cos(a)*W*0.9+14)+' '+(y-Math.sin(a)*H*0.9)+'Z" fill="'+L+'" opacity="'+(o||.07)+'"/>'}return r}
+    function pomba(x,y,s,cor){return '<path transform="translate('+x+' '+y+') scale('+s+')" d="M0 0 C-14 -10 -30 -12 -44 -4 C-30 -6 -20 -2 -14 4 C-22 6 -30 12 -34 20 C-22 14 -10 10 0 8 C8 12 16 12 22 8 L32 6 L24 2 C20 -4 12 -6 6 -4 C14 -14 26 -20 40 -20 C24 -26 8 -18 0 0Z" fill="'+(cor||L)+'"/>'}
+    // salvação, cruz, graça, cristo no centro → calvário
+    if(/salva|crucific|cristo no centro|tema do ano/.test(tg)||/João 3:16|Gálatas 2:20|Efésios 2:8|Colossenses 1:18|Hebreus 13:8/.test(ref)){
+      p+=raios(W*0.5,H*0.55,9,.06)+sol(W*0.5,H*0.6,W*0.3,.45);
+      p+=morro(b-H*0.12,b-H*0.36);
+      p+=cruz(W*0.5,b-H*0.3,H*0.42,H*0.24)+cruz(W*0.26,b-H*0.2,H*0.26,H*0.15,C2)+cruz(W*0.74,b-H*0.2,H*0.26,H*0.15,C2);
+      return svg(p)}
+    // nova criatura, renovação → túmulo vazio ao amanhecer
+    if(/identidade/.test(tg)){
+      p+=raios(W*0.62,H*0.62,7,.06)+sol(W*0.62,H*0.62,W*0.2,.6);
+      p+=morro(b-H*0.1,b-H*0.2);
+      p+='<path d="M'+(W*0.08)+' '+b+' L'+(W*0.08)+' '+(b-H*0.3)+' Q'+(W*0.32)+' '+(b-H*0.52)+' '+(W*0.56)+' '+(b-H*0.3)+' L'+(W*0.56)+' '+b+'Z" fill="'+C+'"/>';
+      p+='<path d="M'+(W*0.22)+' '+b+' L'+(W*0.22)+' '+(b-H*0.17)+' Q'+(W*0.32)+' '+(b-H*0.26)+' '+(W*0.42)+' '+(b-H*0.17)+' L'+(W*0.42)+' '+b+'Z" fill="#FFD45A" opacity=".55"/>';
+      p+='<circle cx="'+(W*0.68)+'" cy="'+(b-H*0.12)+'" r="'+(H*0.12)+'" fill="'+C+'"/>';
+      return svg(p)}
+    // palavra → bíblia aberta com luz
+    if(/palavra/.test(tg)){
+      p+=raios(W*0.5,b-H*0.24,9,.08)+sol(W*0.5,b-H*0.26,W*0.18,.35);
+      var y=b-H*0.14;p+='<path d="M'+(W*0.16)+' '+y+' Q'+(W*0.33)+' '+(y-H*0.12)+' '+(W*0.5)+' '+(y-H*0.04)+' Q'+(W*0.67)+' '+(y-H*0.12)+' '+(W*0.84)+' '+y+' L'+(W*0.84)+' '+(y+H*0.1)+' Q'+(W*0.67)+' '+(y+H*0.02)+' '+(W*0.5)+' '+(y+H*0.08)+' Q'+(W*0.33)+' '+(y+H*0.02)+' '+(W*0.16)+' '+(y+H*0.1)+'Z" fill="'+C+'"/>';
+      p+='<path d="M'+(W*0.5)+' '+(y-H*0.04)+' L'+(W*0.5)+' '+(y+H*0.08)+'" stroke="#FFD45A" stroke-width="2" opacity=".6"/>';
+      return svg(p)}
+    // força, coragem → montanhas, águia e alguém no topo
+    if(/força|coragem/.test(tg)){
+      p+=sol(W*0.78,H*0.3,W*0.1,.5);
+      p+='<path d="M0 '+b+' L'+(W*0.3)+' '+(b-H*0.42)+' L'+(W*0.46)+' '+(b-H*0.28)+' L'+(W*0.62)+' '+(b-H*0.52)+' L'+W+' '+b+'Z" fill="'+C+'"/>';
+      p+='<path d="M'+(W*0.3)+' '+(b-H*0.42)+' L'+(W*0.36)+' '+(b-H*0.36)+' L'+(W*0.25)+' '+(b-H*0.36)+'Z M'+(W*0.62)+' '+(b-H*0.52)+' L'+(W*0.69)+' '+(b-H*0.44)+' L'+(W*0.56)+' '+(b-H*0.44)+'Z" fill="'+L+'" opacity=".35"/>';
+      p+=pessoa(W*0.62,b-H*0.52,0.55,'maos',C);
+      p+='<path d="M'+(W*0.2)+' '+(H*0.32)+' q14 -12 28 0 q14 -12 28 0" stroke="'+C+'" stroke-width="4" fill="none" stroke-linecap="round"/>';
+      return svg(p)}
+    // confiança, jesus é o caminho → estrada até a luz
+    if(/confian|^jesus$/.test(tg)){
+      p+=raios(W*0.5,H*0.5,7,.07)+sol(W*0.5,H*0.52,W*0.16,.6);
+      p+=morro(b-H*0.2,b-H*0.26);
+      p+='<path d="M'+(W*0.3)+' '+H+' L'+(W*0.48)+' '+(b-H*0.24)+' L'+(W*0.52)+' '+(b-H*0.24)+' L'+(W*0.7)+' '+H+'Z" fill="#FFD45A" opacity=".35"/>';
+      p+=pessoa(W*0.56,b-H*0.08,0.9,'x',C);
+      return svg(p)}
+    // missão → cidade iluminada no monte
+    if(/miss/.test(tg)){
+      p+=morro(b-H*0.14,b-H*0.4);
+      for(var k=0;k<7;k++){var x=W*(0.3+k*0.06),h=H*(0.08+((k*37)%5)*0.03);p+='<rect x="'+x+'" y="'+(b-H*0.3-h)+'" width="'+(W*0.05)+'" height="'+(h+H*0.06)+'" fill="'+C+'"/><rect x="'+(x+W*0.015)+'" y="'+(b-H*0.3-h+8)+'" width="5" height="6" fill="#FFD45A" opacity=".9"/>'}
+      p+=sol(W*0.5,b-H*0.42,W*0.28,.18);
+      return svg(p)}
+    // espírito santo → pomba e fogo
+    if(/espírito/.test(tg)){
+      p+=raios(W*0.5,0,8,.07);p+=pomba(W*0.55,H*0.34,1.6);
+      for(var k2=0;k2<7;k2++)p+=pessoa(W*(0.08+k2*0.14),b,1.2,k2%2?'maos':'mao',k2%2?C:C2);
+      return svg(p)}
+    // paz → lago calmo com pomba e lua
+    if(/paz/.test(tg)){
+      p+=sol(W*0.72,H*0.3,W*0.09,.75,'#FFFDF6');
+      p+='<path d="M0 '+(b-H*0.18)+' Q'+(W*0.25)+' '+(b-H*0.3)+' '+(W*0.5)+' '+(b-H*0.2)+' T'+W+' '+(b-H*0.22)+' L'+W+' '+(b-H*0.14)+' L0 '+(b-H*0.14)+'Z" fill="'+C2+'"/>';
+      p+='<rect x="0" y="'+(b-H*0.14)+'" width="'+W+'" height="'+(H*0.16)+'" fill="'+C+'"/>';
+      for(var k3=0;k3<4;k3++)p+='<rect x="'+(W*0.66)+'" y="'+(b-H*0.11+k3*9)+'" width="'+(W*(0.12-k3*0.02))+'" height="2" fill="#FFFDF6" opacity=".35"/>';
+      p+=pomba(W*0.32,H*0.42,1.1);
+      return svg(p)}
+    // cuidado (Salmo 23) → pastor e ovelhas
+    if(/cuidado/.test(tg)){
+      p+=sol(W*0.8,H*0.36,W*0.12,.45);p+=morro(b-H*0.12,b-H*0.26);
+      p+=pessoa(W*0.3,b-H*0.14,1.3,'x',C)+'<path d="M'+(W*0.36)+' '+(b-H*0.14)+' L'+(W*0.36)+' '+(b-H*0.5)+' q0 -16 -14 -12" stroke="'+C+'" stroke-width="5" fill="none" stroke-linecap="round"/>';
+      for(var k4=0;k4<4;k4++){var ox=W*(0.5+k4*0.11),oy=b-H*(0.1+(k4%2)*0.02);p+='<ellipse cx="'+ox+'" cy="'+oy+'" rx="20" ry="13" fill="'+C+'"/><circle cx="'+(ox+18)+'" cy="'+(oy-6)+'" r="7" fill="'+C+'"/>'}
+      return svg(p)}
+    // graça (misericórdias a cada manhã) → nascer do sol
+    if(/graça/.test(tg)){
+      p+=raios(W*0.5,b-H*0.2,9,.08)+sol(W*0.5,b-H*0.2,W*0.24,.7);
+      p+=morro(b-H*0.14,b-H*0.24)+'<path d="M0 '+b+' L'+(W*0.2)+' '+(b-H*0.1)+' L'+(W*0.36)+' '+b+'Z M'+(W*0.6)+' '+b+' L'+(W*0.82)+' '+(b-H*0.12)+' L'+W+' '+b+'Z" fill="'+C+'"/>';
+      return svg(p)}
+    // gincana (carreira) → corredores
+    if(/gincana/.test(tg)||/Hebreus 12:1/.test(ref)){
+      p+='<rect x="0" y="'+(b-H*0.06)+'" width="'+W+'" height="3" fill="'+L+'" opacity=".3"/><rect x="'+(W*0.88)+'" y="'+(b-H*0.4)+'" width="4" height="'+(H*0.36)+'" fill="'+C+'"/><path d="M'+(W*0.88+4)+' '+(b-H*0.4)+' h40 l-10 12 l10 12 h-40z" fill="#FFD45A" opacity=".7"/>';
+      for(var k5=0;k5<3;k5++){var rx=W*(0.18+k5*0.22),ry=b-H*0.06;p+='<g transform="translate('+rx+' '+ry+') scale(1.3)" fill="none" stroke="'+C+'" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="-58" r="7" fill="'+C+'" stroke="none"/><path d="M2 -48 L-4 -22 L-18 -4 M-4 -22 L10 -10 L4 4 M0 -42 L16 -32 L24 -40 M0 -42 L-14 -34 L-20 -44"/></g>'}
+      return svg(p)}
+    // jesus voltará → nuvens e luz
+    if(/voltar/.test(tg)){
+      p+=raios(W*0.5,H*0.2,11,.08)+sol(W*0.5,H*0.22,W*0.14,.55,'#FFFDF6');
+      for(var k6=0;k6<5;k6++){var cx=W*(0.08+k6*0.21),cy=H*0.38+((k6*29)%3)*10;p+='<ellipse cx="'+cx+'" cy="'+cy+'" rx="58" ry="20" fill="#FFFDF6" opacity=".22"/>'}
+      for(var k7=0;k7<8;k7++)p+=pessoa(W*(0.05+k7*0.13),b,1.1,k7%3?'maos':'mao',k7%2?C:C2);
+      return svg(p)}
+    return null}
   // ---------- rolagem bíblica ----------
   var VERSOS=[
    ['João 3:16','Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna.','Salvação'],
@@ -1766,7 +1850,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     lista.forEach(function(c,i){var g=GRADS[i%GRADS.length];var el=document.createElement('article');el.className='vc';el.dataset.id=c.id;
       el.style.background='radial-gradient(120% 90% at 0% 0%,'+g[0]+' 0%,transparent 60%),linear-gradient(160deg,'+g[1]+','+g[0]+')';
       var ilu=document.createElement('div');ilu.className='ilu';
-      if(c.foto){ilu.classList.add('foto-bg');ilu.style.backgroundImage='url('+c.foto+')'}else ilu.innerHTML=cena(i,420,380);
+      if(c.foto){ilu.classList.add('foto-bg');ilu.style.backgroundImage='url('+c.foto+')'}else ilu.innerHTML=cenaTema(c,i,420,380)||cena(i,420,380);
       el.appendChild(ilu);
       var tag=document.createElement('div');tag.className='tag';tag.textContent=c.tag;el.appendChild(tag);
       if(c.autor){var j=jovens[c.autor]||{};var au=document.createElement('div');au.className='autor';var f=document.createElement('div');fotoJovem(f,j,'xp');var n=document.createElement('span');n.textContent=j.nome||'Jovem';au.append(f,n);el.appendChild(au)}
