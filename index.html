@@ -419,6 +419,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
 .aniv-msg{background:rgba(0,0,0,.22);border-radius:12px;padding:10px 12px}
 .aniv-msg b{display:block;font-size:13px}
 .aniv-ok{margin-top:10px;font-weight:800;color:var(--amar)}
+.aviso-img{display:block;width:100%;max-width:540px;border-radius:14px;margin-top:12px;border:1px solid var(--linha)}
 </style>
 
 <header class="topo">
@@ -1475,7 +1476,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     for(var k=0;k<fs.length;k++){try{var du=await comprimir(fs[k],1000,0.75);var url=await guardarFoto(du,'galeria');await db.collection('galeria').add({url:url,legenda:'',criado:new Date().toISOString()});n++}catch(e){}}this.value='';toast(n+' foto(s) adicionada(s)')});
   function desenharAvisosHome(){var box=$('#avisos-home');if(!box)return;box.replaceChildren();var hoje=hojeISO();avisos.filter(function(a){return !a.ate||a.ate>=hoje}).sort(function(a,b){return (b.destaque?1:0)-(a.destaque?1:0)||(b.criado||'').localeCompare(a.criado||'')}).forEach(function(a){
       var c=document.createElement(a.link?'a':'div');c.className='card aviso-h'+(a.destaque?' destaque':'');if(a.link){c.href=a.link;if(/^https?:/.test(a.link)){c.target='_blank';c.rel='noopener'}}
-      var e=document.createElement('div');e.className='eb';e.textContent=a.destaque?'🔥 Aviso importante':'📣 Aviso da liderança';var h=document.createElement('h2');h.textContent=a.titulo;c.append(e,h);if(a.texto){var p=document.createElement('p');p.textContent=a.texto;c.appendChild(p)}box.appendChild(c)})}
+      var e=document.createElement('div');e.className='eb';e.textContent=a.destaque?'🔥 Aviso importante':'📣 Aviso da liderança';var h=document.createElement('h2');h.textContent=a.titulo;c.append(e,h);if(a.texto){var p=document.createElement('p');p.textContent=a.texto;c.appendChild(p)}if(a.imagem){var im=new Image();im.src=a.imagem;im.alt=a.titulo||'';im.loading='lazy';im.className='aviso-img';c.appendChild(im)}box.appendChild(c)})}
   var hfIdx=0,hfTimer=null;
   function desenharGaleria(){var box=$('#hero-fotos');if(!box)return;box.replaceChildren();clearInterval(hfTimer);$('#hero-wrap').classList.toggle('sem-fotos',!galeria.length);if(!galeria.length)return;
     var lista=galeria.slice().sort(function(a,b){return (b.criado||'').localeCompare(a.criado||'')});var figs=[],dots=document.createElement('div');dots.className='hf-dots';
