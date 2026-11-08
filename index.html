@@ -436,6 +436,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
 .amem-l small{color:var(--apagado);font-size:12px}
 .push-c{flex-wrap:wrap}
 .push-x{background:none;border:0;color:var(--apagado);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;padding:6px 0;margin-left:auto}
+.ico-em{font-size:20px;line-height:1;display:inline-block;width:22px;text-align:center}
 </style>
 
 <header class="topo">
@@ -1759,7 +1760,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     var mur=[];Object.keys(posts).forEach(function(u){posts[u].forEach(function(p){if((p.texto&&p.texto.length<260)||p.foto)mur.push({id:'m'+u+p.id,ref:p.ref||'',texto:p.texto||'',tag:'Do mural · '+(p.tipo||''),autor:u,foto:p.foto||null})})});
     if(!ordemRol){var dia=+hojeISO().replace(/-/g,'');ordemRol=cs.map(function(c,i){return [((i+1)*7919*dia)%1009,c]}).sort(function(a,b){return a[0]-b[0]}).map(function(x){return x[1]})}
     var out=[],k=0;ordemRol.forEach(function(c,i){out.push(c);if(i%3===2&&mur[k])out.push(mur[k++])});return out}
-  var ICO_AMEM='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg>';
+  var ICO_AMEM='<span class="ico-em" aria-hidden="true">🙏</span>';
   var ICO_COP='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>';
   function montarRolagem(){var box=$('#rol-feed');var lista=cardsRolagem();if(versoAlvo){var ix=lista.findIndex(function(c){return c.id===versoAlvo});if(ix>0){var alvo=lista.splice(ix,1)[0];lista.unshift(alvo)}}box.replaceChildren();box.scrollTop=0;
     lista.forEach(function(c,i){var g=GRADS[i%GRADS.length];var el=document.createElement('article');el.className='vc';el.dataset.id=c.id;
