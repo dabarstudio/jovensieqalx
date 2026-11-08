@@ -420,6 +420,20 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
 .aniv-msg b{display:block;font-size:13px}
 .aniv-ok{margin-top:10px;font-weight:800;color:var(--amar)}
 .aviso-img{display:block;width:100%;max-width:540px;border-radius:14px;margin-top:12px;border:1px solid var(--linha)}
+[data-aba="mural"],.barra a[data-b="mural"]{position:relative!important}
+.bolha{position:absolute;top:-4px;right:-10px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--verm);color:#fff;font:800 11px/18px var(--corpo,sans-serif);text-align:center;box-shadow:0 0 0 2px var(--fundo)}
+[data-b="mural"] .bolha{top:2px;right:calc(50% - 22px)}
+.nov-card{margin-top:14px;display:flex;align-items:center;gap:14px;border-color:var(--amar)}
+.nov-card .sino{font-size:26px}
+.nov-card p{margin:2px 0 0;color:var(--apagado);font-size:14px}
+.nov-card .btn{margin-left:auto;white-space:nowrap;min-height:0;padding:9px 16px}
+.post.novo{box-shadow:0 0 0 2px var(--amar);position:relative}
+.post.novo::after{content:"NOVO";position:absolute;top:10px;left:10px;background:var(--amar);color:#111;font-weight:800;font-size:11px;letter-spacing:.12em;padding:3px 8px;border-radius:6px}
+.amem-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.amem{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:6px 14px;border-radius:999px;border:1px solid var(--linha);background:transparent;color:var(--texto);font:inherit;font-weight:800;cursor:pointer}
+.amem b{background:var(--fundo2);border-radius:999px;padding:1px 8px;font-size:12px}
+.amem.on{border-color:var(--amar);background:rgba(242,183,5,.14);color:var(--amar)}
+.amem-l small{color:var(--apagado);font-size:12px}
 </style>
 
 <header class="topo">
@@ -433,7 +447,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       <a href="#leitura" data-aba="leitura">Plano de leitura</a>
       <a href="#agenda" data-aba="agenda">Agenda</a>
       <a href="#igreja" data-aba="igreja">Igreja</a>
-      <a href="#mural" data-aba="mural">Mural</a>
+      <a href="#mural" data-aba="mural">Mural<b class="bolha" hidden></b></a>
       <a href="#gincana" data-aba="gincana">Gincana</a>
       <a href="#lideranca" data-aba="lideranca">Liderança</a>
       <a href="#equipe" data-aba="equipe">Equipe</a>
@@ -447,7 +461,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
   <a href="#inicio" data-b="inicio"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/></svg><span>Início</span></a>
   <a href="#agenda" data-b="agenda"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Agenda</span></a>
   <a href="#leitura" data-b="leitura"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M12 6.5C10 5 7 4.5 3.5 5v13.5c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5zM12 6.5V20"/></svg><span>Leitura</span></a>
-  <a href="#mural" data-b="mural"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Mural</span></a>
+  <a href="#mural" data-b="mural"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Mural</span><b class="bolha" hidden></b></a>
   <button type="button" id="b-mais" aria-expanded="false" aria-controls="menu-mais"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span>Mais</span></button>
 </nav>
 <div class="menu-mais" id="menu-mais" hidden>
@@ -482,6 +496,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       <p class="hero-lid" id="hero-lid" hidden>Os cultos de 2026, conduzidos por <a href="#lideranca" id="hero-lid-nomes">Fábio e Gabriel</a>, se encerram com o Congresso Incendiados. A nova liderança assume em 2027.</p>
     </div><div class="hero-fotos" id="hero-fotos" aria-label="Fotos dos últimos cultos e ações"></div></div></div>
     <div class="avisos-home" id="avisos-home"></div>
+    <div id="novidades"></div>
     <div id="aniv-hoje"></div>
     <div class="card aniv-card" id="aniv-card" hidden></div>
     <div class="card camp" id="camp-card" hidden>
@@ -1053,10 +1068,26 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     var ta=document.createElement('textarea');ta.maxLength=280;ta.placeholder='Escreva seus parabéns para '+((j.nome||'').split(' ')[0])+'…';var ch=document.createElement('div');ch.className='aniv-chips';['Parabéns! Deus te abençoe muito! 🎉','Feliz aniversário! Que o Senhor te guarde 🙏','Muitos anos de vida e de fé! 🎂'].forEach(function(s){var c=document.createElement('button');c.type='button';c.className='chip';c.textContent=s;c.onclick=function(){ta.value=s;ta.focus()};ch.appendChild(c)});
     var bt=document.createElement('button');bt.type='button';bt.className='btn forte';bt.style.marginTop='10px';bt.textContent='🎉 Enviar parabéns';bt.onclick=async function(){var msg=ta.value.trim();if(!msg){toast('Escreva ou escolha uma mensagem');return}bt.disabled=true;try{var meu=parabens[meuId]||{lista:{}};var lista=Object.assign({},meu.lista||{});var k=anivChave(id);lista[k]={msg:msg,nome:(jovens[meuId]&&jovens[meuId].nome)||'',em:new Date().toISOString()};var hoje=hojeISO().slice(0,4);Object.keys(lista).forEach(function(c){if(c.split('@')[1]<String(+hoje-1))delete lista[c]});await db.doc('parabens/'+meuId).set({lista:lista});parabens[meuId]={lista:lista};toast('Parabéns enviados! 🎉');desenharAniversarios()}catch(e){bt.disabled=false;toast('Não foi possível enviar')}};
     b.append(ta,ch,bt);return b}
+  var NOV_K='muralVisto',muralVistoAnterior='';
+  function lerVisto(){try{return localStorage.getItem(NOV_K)||''}catch(e){return ''}}
+  function marcarVisto(){try{localStorage.setItem(NOV_K,new Date().toISOString())}catch(e){}}
+  var amens={};function chaveAmem(p){return p.autor+'|'+p.id}
+  function quemAmem(p){var k=chaveAmem(p),q=[];Object.keys(amens).forEach(function(u){var l=(amens[u]&&amens[u].lista)||{};if(l[k])q.push({u:u,em:l[k]})});return q}
+  function botaoAmem(p){var q=quemAmem(p),eu=q.some(function(x){return x.u===meuId});var w=document.createElement('div');w.className='amem-l';var b=document.createElement('button');b.type='button';b.className='amem'+(eu?' on':'');b.setAttribute('aria-pressed',eu?'true':'false');var ic=document.createElement('span');ic.setAttribute('aria-hidden','true');ic.textContent='🙏';var tx=document.createElement('span');tx.textContent=eu?'Amém!':'Amém';b.append(ic,tx);if(q.length){var n=document.createElement('b');n.textContent=String(q.length);b.appendChild(n)}
+    b.onclick=async function(){if(!(meuId&&podeLancarProprio)){toast('Entre para dizer Amém');return}if(b.disabled)return;b.disabled=true;var meu=Object.assign({},(amens[meuId]&&amens[meuId].lista)||{});var k=chaveAmem(p);if(meu[k])delete meu[k];else meu[k]=new Date().toISOString();var ks=Object.keys(meu).sort(function(a,c){return meu[c].localeCompare(meu[a])}).slice(0,400);var nl={};ks.forEach(function(x){nl[x]=meu[x]});try{await db.doc('amens/'+meuId).set({lista:nl});amens[meuId]={lista:nl};desenharMural()}catch(e){b.disabled=false;toast('Não foi possível registrar')}};
+    w.appendChild(b);if(q.length){var nomes=q.map(function(x){return x.u===meuId?'Você':((jovens[x.u]||{}).nome||'').split(' ')[0]}).filter(Boolean);var ds=document.createElement('small');ds.textContent=nomes.length>3?nomes.slice(0,3).join(', ')+' e mais '+(nomes.length-3):nomes.join(', ');w.appendChild(ds)}return w}
+  function amensNovosNosMeus(visto){var n=0,quem=[];if(!meuId)return {n:0,quem:[]};var meus={};(posts[meuId]||[]).forEach(function(p){meus[chaveAmem(p)]=1});Object.keys(amens).forEach(function(u){if(u===meuId)return;var l=(amens[u]&&amens[u].lista)||{};Object.keys(l).forEach(function(k){if(meus[k]&&l[k]>visto){n++;var nm=((jovens[u]||{}).nome||'').split(' ')[0];if(nm&&quem.indexOf(nm)<0)quem.push(nm)}})});return {n:n,quem:quem}}
+  function atualizarNovidades(){var visto=lerVisto();if(!visto){var d=new Date();d.setDate(d.getDate()-3);visto=d.toISOString()}
+    var novos=[];Object.keys(posts).forEach(function(u){if(u===meuId)return;(posts[u]||[]).forEach(function(p){if((p.quando||'')>visto)novos.push(p)})});
+    var noMural=!!document.querySelector('#aba-mural:not([hidden])');var n=noMural?0:novos.length;var am=noMural?{n:0,quem:[]}:amensNovosNosMeus(visto);
+    var tot=n+am.n;document.querySelectorAll('.bolha').forEach(function(b){b.hidden=!tot;b.textContent=tot>9?'9+':String(tot)});
+    var box=$('#novidades');if(!box)return;box.replaceChildren();if(!(meuId&&podeLancarProprio))return;if(am.n){var ca=document.createElement('div');ca.className='card nov-card';var s1=document.createElement('span');s1.className='sino';s1.setAttribute('aria-hidden','true');s1.textContent='🙏';var t1=document.createElement('div');var h1=document.createElement('b');h1.textContent=am.n===1?'1 Amém nas suas postagens':am.n+' Améns nas suas postagens';var p1=document.createElement('p');p1.textContent=am.quem.length?('De '+(am.quem.length>3?am.quem.slice(0,3).join(', ')+' e mais '+(am.quem.length-3):am.quem.join(', '))+'.'):'';t1.append(h1,p1);var a1=document.createElement('a');a1.className='btn';a1.href='#mural';a1.textContent='Ver';ca.append(s1,t1,a1);box.appendChild(ca)}if(!n)return;
+    var nomes=[];novos.forEach(function(p){var nm=((jovens[p.autor]||{}).nome||'').split(' ')[0];if(nm&&nomes.indexOf(nm)<0)nomes.push(nm)});
+    var c=document.createElement('div');c.className='card nov-card';var si=document.createElement('span');si.className='sino';si.setAttribute('aria-hidden','true');si.textContent='🔔';var tx=document.createElement('div');var h=document.createElement('b');h.textContent=n===1?'1 postagem nova no Mural':n+' postagens novas no Mural';var p=document.createElement('p');p.textContent=nomes.length?('De '+(nomes.length>3?nomes.slice(0,3).join(', ')+' e mais '+(nomes.length-3):nomes.join(nomes.length===2?' e ':', ').replace(/, ([^,]*)$/,' e $1'))+', desde a sua última visita.'):'Desde a sua última visita.';tx.append(h,p);var a=document.createElement('a');a.className='btn';a.href='#mural';a.textContent='Ver agora';c.append(si,tx,a);box.appendChild(c)}
   function mostrarAba(){var h=(location.hash||'').slice(1);if(/^v=/.test(h)){versoAlvo=decodeURIComponent(h.slice(2));h='rolagem';rolMontada=false}if(ABAS.indexOf(h)<0)h='inicio';
     ABAS.forEach(function(a){$('#aba-'+a).hidden=a!==h;var l=document.querySelector('[data-aba="'+a+'"]');if(a===h)l.setAttribute('aria-current','page');else l.removeAttribute('aria-current')});
     document.querySelectorAll('.barra [data-b]').forEach(function(l){if(l.dataset.b===h)l.setAttribute('aria-current','page');else l.removeAttribute('aria-current')});var bm=$('#b-mais');if(['inicio','agenda','leitura','mural'].indexOf(h)<0)bm.setAttribute('aria-current','page');else bm.removeAttribute('aria-current');fecharMais();
-    if(h==='rolagem'){if(!rolMontada)montarRolagem();else setTimeout(ajustarRolagem,0)}if(h==='leitura')desenharLeitura();if(h==='financas'){desenharFin();desenharRetiro();desenharTermo()}if(h==='gestao'){ativarGestao();desenharGestao()}if(h==='biblia')desenharBiblia();if(h==='perfil')desenharPerfil();if(h==='gincana')desenharGincana();if(h==='igreja')desenharIgreja();window.scrollTo(0,0);}
+    if(h==='rolagem'){if(!rolMontada)montarRolagem();else setTimeout(ajustarRolagem,0)}if(h==='leitura')desenharLeitura();if(h==='financas'){desenharFin();desenharRetiro();desenharTermo()}if(h==='gestao'){ativarGestao();desenharGestao()}if(h==='biblia')desenharBiblia();if(h==='perfil')desenharPerfil();if(h==='gincana')desenharGincana();if(h==='igreja')desenharIgreja();if(h==='mural'){muralVistoAnterior=lerVisto()||muralVistoAnterior;marcarVisto();try{desenharMural()}catch(e){}}window.scrollTo(0,0);}
   function fecharMais(){var m=$('#menu-mais');if(!m)return;m.hidden=true;$('#b-mais').setAttribute('aria-expanded','false')}
   $('#b-mais').onclick=function(){var m=$('#menu-mais');var abrir=m.hidden;m.hidden=!abrir;this.setAttribute('aria-expanded',String(abrir));if(abrir)m.querySelector('a').focus()};
   $('#menu-mais').addEventListener('click',function(e){if(e.target===this)fecharMais()});
@@ -1930,14 +1961,15 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     try{var meu=jovens[meuId]||{};var cad0=cadastros[meuId]||{};var dados={nome:$('#pf-nome').value.trim(),bio:$('#pf-bio').value.trim(),versiculo:$('#pf-vers').value.trim(),foto:(fotoNova?await guardarFoto(fotoNova,'perfil'):null)||meu.foto||null,atualizado:hojeISO()};var nasc=$('#pf-nasc').value;if(nasc)dados.aniv=nasc.slice(5);var cad={nome:dados.nome,nascimento:nasc,tipo:$('#pf-tipo').value,deJovem:$('#pf-tipo').value==='pais'?$('#pf-dejovem').value.trim():'',congregacao:$('#pf-congr').value,genero:$('#pf-genero').value,batismo:$('#pf-tipo').value==='jovem'?$('#pf-batismo').value:($('#pf-batismo').value||''),termo:$('#pf-termo').checked,termoEm:(cad0.termoEm||hojeISO()),atualizado:hojeISO()};
       await db.doc('cadastro/'+meuId).set(cad);cadastros[meuId]=cad;await db.doc('jovens/'+meuId).set(dados);fotoNova=null;toast('Perfil salvo')}catch(e){toast('Não foi possível salvar o perfil')}b.disabled=false});
   function assinarPosts(uid){if(postSubs[uid]||!db)return;postSubs[uid]=db.collection('mural/'+uid+'/posts').orderBy('quando','desc').limit(30).onSnapshot(function(s){posts[uid]=s.docs.map(function(d){return Object.assign({id:d.id,autor:uid},d.data())});desenharMural();if(editor&&document.querySelector('#aba-leitura:not([hidden])'))desenharSecreto()},function(){})}
-  function desenharMural(){var box=$('#feed-mural');var todos=[];Object.keys(posts).forEach(function(u){todos=todos.concat(posts[u])});todos.sort(function(a,b){return (b.quando||'').localeCompare(a.quando||'')});
+  function desenharMural(){try{atualizarNovidades()}catch(e){}var box=$('#feed-mural');var todos=[];Object.keys(posts).forEach(function(u){todos=todos.concat(posts[u])});todos.sort(function(a,b){return (b.quando||'').localeCompare(a.quando||'')});
     box.replaceChildren();if(!todos.length){var v=document.createElement('p');v.className='vazio';v.textContent='Ainda não há publicações. Seja o primeiro a compartilhar uma palavra.';box.appendChild(v);return}
-    todos.slice(0,120).forEach(function(p){var j=jovens[p.autor]||{nome:'Jovem'};var c=document.createElement('article');c.className='post';
+    todos.slice(0,120).forEach(function(p){var j=jovens[p.autor]||{nome:'Jovem'};var c=document.createElement('article');c.className='post'+(muralVistoAnterior&&(p.quando||'')>muralVistoAnterior&&p.autor!==meuId?' novo':'');
       if(p.foto){var im=new Image();im.alt='Foto compartilhada por '+(j.nome||'um jovem');im.loading='lazy';im.src=p.foto;c.appendChild(im)}
       var pc=document.createElement('div');pc.className='pc';var au=document.createElement('div');au.className='au';var f=document.createElement('div');fotoJovem(f,j,'xp');var nm=document.createElement('div');nm.textContent=j.nome||'Jovem';var sm=document.createElement('small');sm.textContent=(p.quando||'').slice(0,10).split('-').reverse().join('/');nm.appendChild(sm);au.append(f,nm);
       var tp=document.createElement('div');tp.className='tipo';tp.textContent=p.tipo||'';pc.append(au,tp);
       if(p.ref){var rf=document.createElement('div');rf.className='ref';rf.textContent=p.ref;pc.appendChild(rf)}
       if(p.texto){var tx=document.createElement('p');tx.textContent=p.texto;pc.appendChild(tx)}
+      pc.appendChild(botaoAmem(p));
       if(p.autor===meuId||editor){var x=document.createElement('button');x.className='del';x.type='button';x.textContent='Apagar';x.onclick=async function(){if(x.dataset.c!=='1'){x.dataset.c='1';x.textContent='Toque de novo para apagar';return}try{await db.doc('mural/'+p.autor+'/posts/'+p.id).delete();toast('Publicação apagada')}catch(e){toast('Não foi possível apagar')}};pc.appendChild(x)}
       else if(meuId){var dn=document.createElement('button');dn.className='del';dn.type='button';dn.textContent='Denunciar';dn.onclick=async function(){if(dn.dataset.c!=='1'){dn.dataset.c='1';dn.textContent='Confirmar denúncia?';return}try{var atual=(denuncias[meuId]&&denuncias[meuId].itens)||[];await db.doc('denuncias/'+meuId).set({itens:atual.concat([{autor:p.autor,post:p.id,quando:new Date().toISOString()}]).slice(-50)});dn.textContent='Denunciado. A liderança vai ver.';dn.disabled=true}catch(e){toast('Não foi possível enviar')}};pc.appendChild(dn)}
       if(editor){var nd=0;Object.keys(denuncias).forEach(function(u){(denuncias[u].itens||[]).forEach(function(it){if(it.post===p.id&&it.autor===p.autor)nd++})});if(nd){var al=document.createElement('div');al.className='alerta';al.textContent='⚠ '+nd+(nd>1?' denúncias':' denúncia')+' · revise esta publicação';pc.insertBefore(al,pc.firstChild)}}
@@ -1989,6 +2021,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     db.collection('leitura').onSnapshot(function(s){leituras={};s.docs.forEach(function(d){leituras[d.id]=d.data()});minhas=(meuId&&leituras[meuId]&&leituras[meuId].dias)||[];mergeMinhas();desenharLeitura();desenharCampanha();desenharGestao()},function(){});
     db.doc('agenda/2027').onSnapshot(function(s){if(s.exists){agenda=s.data();desenharAgenda()}},function(){});
     db.collection('jovens').onSnapshot(function(s){jovens={};s.docs.forEach(function(d){jovens[d.id]=d.data()});try{desenharCampanha()}catch(e){}Object.keys(jovens).forEach(assinarPosts);try{listaJovensDatalist()}catch(e){}if(meuId)assinarPosts(meuId);desenharPerfil();desenharMural();desenharLeitura();try{desenharAniversarios()}catch(e){}},function(){});
+    db.collection('amens').onSnapshot(function(s){amens={};s.docs.forEach(function(d){amens[d.id]=d.data()});try{desenharMural()}catch(e){}},function(){});
     db.collection('parabens').onSnapshot(function(s){parabens={};s.docs.forEach(function(d){parabens[d.id]=d.data()});try{desenharAniversarios()}catch(e){}},function(){});
     if(meuId)assinarPosts(meuId);
     db.collection('inscricoes').onSnapshot(function(s){inscricoes={};s.docs.forEach(function(d){inscricoes[d.id]=d.data()});desenharRetiro();desenharGestao();desenharCampanha()},function(){});
