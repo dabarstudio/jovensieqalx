@@ -434,6 +434,8 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
 .amem b{background:var(--fundo2);border-radius:999px;padding:1px 8px;font-size:12px}
 .amem.on{border-color:var(--amar);background:rgba(242,183,5,.14);color:var(--amar)}
 .amem-l small{color:var(--apagado);font-size:12px}
+.push-c{flex-wrap:wrap}
+.push-x{background:none;border:0;color:var(--apagado);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;padding:6px 0;margin-left:auto}
 </style>
 
 <header class="topo">
@@ -496,6 +498,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
       <p class="hero-lid" id="hero-lid" hidden>Os cultos de 2026, conduzidos por <a href="#lideranca" id="hero-lid-nomes">Fábio e Gabriel</a>, se encerram com o Congresso Incendiados. A nova liderança assume em 2027.</p>
     </div><div class="hero-fotos" id="hero-fotos" aria-label="Fotos dos últimos cultos e ações"></div></div></div>
     <div class="avisos-home" id="avisos-home"></div>
+    <div id="push-card"></div>
     <div id="novidades"></div>
     <div id="aniv-hoje"></div>
     <div class="card aniv-card" id="aniv-card" hidden></div>
@@ -1084,6 +1087,25 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     var box=$('#novidades');if(!box)return;box.replaceChildren();if(!(meuId&&podeLancarProprio))return;if(am.n){var ca=document.createElement('div');ca.className='card nov-card';var s1=document.createElement('span');s1.className='sino';s1.setAttribute('aria-hidden','true');s1.textContent='🙏';var t1=document.createElement('div');var h1=document.createElement('b');h1.textContent=am.n===1?'1 Amém nas suas postagens':am.n+' Améns nas suas postagens';var p1=document.createElement('p');p1.textContent=am.quem.length?('De '+(am.quem.length>3?am.quem.slice(0,3).join(', ')+' e mais '+(am.quem.length-3):am.quem.join(', '))+'.'):'';t1.append(h1,p1);var a1=document.createElement('a');a1.className='btn';a1.href='#mural';a1.textContent='Ver';ca.append(s1,t1,a1);box.appendChild(ca)}if(!n)return;
     var nomes=[];novos.forEach(function(p){var nm=((jovens[p.autor]||{}).nome||'').split(' ')[0];if(nm&&nomes.indexOf(nm)<0)nomes.push(nm)});
     var c=document.createElement('div');c.className='card nov-card';var si=document.createElement('span');si.className='sino';si.setAttribute('aria-hidden','true');si.textContent='🔔';var tx=document.createElement('div');var h=document.createElement('b');h.textContent=n===1?'1 postagem nova no Mural':n+' postagens novas no Mural';var p=document.createElement('p');p.textContent=nomes.length?('De '+(nomes.length>3?nomes.slice(0,3).join(', ')+' e mais '+(nomes.length-3):nomes.join(nomes.length===2?' e ':', ').replace(/, ([^,]*)$/,' e $1'))+', desde a sua última visita.'):'Desde a sua última visita.';tx.append(h,p);var a=document.createElement('a');a.className='btn';a.href='#mural';a.textContent='Ver agora';c.append(si,tx,a);box.appendChild(c)}
+  var VAPID_PUB='BKAmdRNK_gYXuUG7vBJx5qQZI7LBhpxc5tDxTFFNqVJbc3FpwnumcTH_fTGLhbr5NulfD4UXTomY_XstUYD8wuw';
+  function pushSuportado(){return 'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window&&location.protocol==='https:'&&!!(window.supabase||window.SUPA_URL||document.querySelector('script[src*="supabase"]'))}
+  function ehIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent)}
+  function instalado(){return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}
+  function b64u(b){var p='='.repeat((4-b.length%4)%4);var r=atob((b+p).replace(/-/g,'+').replace(/_/g,'/'));var o=new Uint8Array(r.length);for(var i=0;i<r.length;i++)o[i]=r.charCodeAt(i);return o}
+  function pushAdiado(){try{return +(localStorage.getItem('pushAdiar')||0)>Date.now()}catch(e){return false}}
+  async function ativarPush(bt){if(bt)bt.disabled=true;try{var perm=await Notification.requestPermission();if(perm!=='granted'){toast('As notificações ficaram bloqueadas. Dá para liberar nas configurações do navegador.');desenharPushCard();return}
+      var reg=await navigator.serviceWorker.ready;var sub=await reg.pushManager.getSubscription()||await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(VAPID_PUB)});var j=sub.toJSON();
+      var atual=null;try{atual=await new Promise(function(ok){var un=db.doc('push/'+meuId).onSnapshot(function(x){ok(x.exists?x.data():null);try{un&&un()}catch(e){}},function(){ok(null)})})}catch(e){}
+      var subs=((atual&&atual.subs)||[]).filter(function(s){return s.endpoint!==j.endpoint});subs.push({endpoint:j.endpoint,keys:j.keys,em:new Date().toISOString(),ua:navigator.userAgent.slice(0,120)});
+      await db.doc('push/'+meuId).set({subs:subs.slice(-5)});try{localStorage.setItem('pushOk','1')}catch(e){}toast('Notificações ativadas! 🔔');desenharPushCard()}
+    catch(e){toast('Não foi possível ativar agora');if(bt)bt.disabled=false}}
+  async function desenharPushCard(){var box=$('#push-card');if(!box)return;box.replaceChildren();if(!(meuId&&podeLancarProprio)||pushAdiado())return;
+    var iosSemApp=ehIOS()&&!instalado();if(!iosSemApp&&!pushSuportado())return;
+    if(!iosSemApp){if(Notification.permission==='granted'){try{var reg=await navigator.serviceWorker.ready;var sub=await reg.pushManager.getSubscription();if(sub){var ok=false;try{ok=localStorage.getItem('pushOk')==='1'}catch(e){}if(ok)return;ativarPush();return}}catch(e){}}if(Notification.permission==='denied')return}
+    var c=document.createElement('div');c.className='card nov-card push-c';var si=document.createElement('span');si.className='sino';si.setAttribute('aria-hidden','true');si.textContent='🔔';var tx=document.createElement('div');var h=document.createElement('b');h.textContent='Receba os avisos no celular';var p=document.createElement('p');
+    if(iosSemApp){p.textContent='No iPhone: toque em Compartilhar (□↑) → "Adicionar à Tela de Início". Depois abra o site pelo ícone e ative aqui.';tx.append(h,p);c.append(si,tx)}
+    else{p.textContent='Postagens novas no Mural, avisos da liderança e quando alguém disser Amém para você.';tx.append(h,p);var bt=document.createElement('button');bt.type='button';bt.className='btn forte';bt.textContent='Ativar';bt.onclick=function(){ativarPush(bt)};c.append(si,tx,bt)}
+    var x=document.createElement('button');x.type='button';x.className='push-x';x.setAttribute('aria-label','Agora não');x.textContent='Agora não';x.onclick=function(){try{localStorage.setItem('pushAdiar',String(Date.now()+7*864e5))}catch(e){}box.replaceChildren()};c.appendChild(x);box.appendChild(c)}
   function mostrarAba(){var h=(location.hash||'').slice(1);if(/^v=/.test(h)){versoAlvo=decodeURIComponent(h.slice(2));h='rolagem';rolMontada=false}if(ABAS.indexOf(h)<0)h='inicio';
     ABAS.forEach(function(a){$('#aba-'+a).hidden=a!==h;var l=document.querySelector('[data-aba="'+a+'"]');if(a===h)l.setAttribute('aria-current','page');else l.removeAttribute('aria-current')});
     document.querySelectorAll('.barra [data-b]').forEach(function(l){if(l.dataset.b===h)l.setAttribute('aria-current','page');else l.removeAttribute('aria-current')});var bm=$('#b-mais');if(['inicio','agenda','leitura','mural'].indexOf(h)<0)bm.setAttribute('aria-current','page');else bm.removeAttribute('aria-current');fecharMais();
@@ -1952,7 +1974,7 @@ button.link{all:unset;color:var(--amar);font-weight:800;cursor:pointer;text-deco
     $('#perfil-sem').hidden=!!meuId&&podeLancarProprio;$('#form-perfil').hidden=!(meuId&&podeLancarProprio);
     if(meuId&&podeLancarProprio&&!$('#form-perfil').dataset.carregado){$('#pf-nome').value=(meu&&meu.nome)||'';$('#pf-bio').value=(meu&&meu.bio)||'';$('#pf-vers').value=(meu&&meu.versiculo)||'';var cd=cadastros[meuId]||{};$('#pf-congr').value=cd.congregacao||'';$('#pf-batismo').value=cd.batismo||'';$('#pf-genero').value=cd.genero||'';$('#pf-nasc').value=cd.nascimento||'';$('#pf-termo').checked=!!cd.termo;$('#pf-tipo').value=cd.tipo||tipoConta||'';$('#pf-dejovem').value=cd.deJovem||deJovemConta||'';ajustarTipo();fotoJovem($('#pf-foto'),meu||{nome:$('#pf-nome').value||'?'},'g');if(meu)$('#form-perfil').dataset.carregado='1'}
     var r=$('#rostos');var ids=Object.keys(jovens);if(ids.length){r.replaceChildren();ids.sort(function(a,b){return (jovens[a].nome||'').localeCompare(jovens[b].nome||'')}).forEach(function(id){var j=jovens[id];var d=document.createElement('div');var f=document.createElement('div');fotoJovem(f,j,'p');var n=document.createElement('span');n.textContent=j.nome||'';d.append(f,n);var cj=cadastros[id];if(editor&&cj){var q=document.createElement('em');q.className='rosto-info';q.textContent=[TIPO_NOME[cj.tipo],cj.deJovem?'de '+cj.deJovem:'',cj.congregacao,cj.batismo].filter(Boolean).join(' · ');d.appendChild(q)}r.appendChild(d)})}
-    $('#compor').hidden=!(meuId&&podeLancarProprio);$('#mural-aviso').hidden=!!(meuId&&podeLancarProprio);try{desenharAniversarios()}catch(e){}}
+    $('#compor').hidden=!(meuId&&podeLancarProprio);$('#mural-aviso').hidden=!!(meuId&&podeLancarProprio);try{desenharAniversarios()}catch(e){}try{desenharPushCard()}catch(e){}}
   var TIPO_NOME={jovem:'Jovem',pastor:'Pastor(a)',pais:'Responsável',colaborador:'Colaborador(a)'};var tipoConta='',deJovemConta='';var cadastros={},pedidos={},acoesPlano={},admins={},souDono=false,meuEmail='';
   function ajustarTipo(){var t=$('#pf-tipo').value;$('#pf-dejovem-l').hidden=t!=='pais';$('#pf-batismo-l').hidden=t!=='jovem';$('#pf-batismo').required=t==='jovem'}
   $('#pf-tipo').addEventListener('change',ajustarTipo);
